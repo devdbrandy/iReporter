@@ -180,9 +180,11 @@ main.signin {
   align-items: center;
 }
 
-.signin--or .bar {
+.signin--or::before,
+.signin--or::after {
+  content: '';
   flex: auto;
-  border-color: #aaa;
+  border: 1px inset #aaa;
 }
 
 .signin--or span {
@@ -233,22 +235,45 @@ main.signin {
 }
 
 /* SIGNUP POPUP */
-.signup--popup {
+#signup-popup {
   display: none;
   z-index: 9;
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+hr.dash {
+  width: 10%;
+  border: 1px inset var(--primary-color);
+  border-radius: 2px;
+}
 
-@media only screen and (max-width: 768px) {
+.signup--form p {
+  margin-bottom: 1.6rem;
+  text-align: center;
+}
+
+
+
+/* MEDIA QUERIES - Device Breakpoints */
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  html, body {
+    font-size: 8px;
+  }
+
   .showcase {
     display: none;
   }
-}
+} 
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {} 
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {} 
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {}
+@media only screen and (min-width: 992px) {} 
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {

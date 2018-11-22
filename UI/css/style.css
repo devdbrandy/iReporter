@@ -85,13 +85,19 @@ button:focus {
   outline: none;
 }
 
+.primary-text {
+  color: var(--primary-color);
+}
+
+/* SIGNIN */
 .signin {
   flex: 1;
   height: 100vh;
 }
 
 .showcase {
-  flex: 2;
+  flex: 1;
+  height: 100vh;
 }
 
 .signin--content {
@@ -101,6 +107,14 @@ button:focus {
 
 .signin--header {
   margin-bottom: 6rem;
+}
+
+.signin--header h2 {
+  font-size: 4.8em;
+}
+
+.signin--header .primary-text {
+  font-weight: bold;
 }
 
 .signin--form {
@@ -186,4 +200,47 @@ button:focus {
 
 .signin--footer a {
   color: var(--primary-color);
+}
+
+/* SIGNIN SHOWCASE */
+.showcase {
+  text-align: center;
+  background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%)
+}
+
+.showcase--content {
+  padding: 2rem;
+}
+
+.showcase h1 {
+  font-size: 5.8rem;
+  width: 100%;
+}
+
+.showcase .btn-secondary {
+  width: 60%;
+  margin: auto;
+}
+
+.showcase strong {
+  font-weight: bold;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+@media only screen and (max-width: 768px) {
+  .showcase {
+    display: none;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .showcase {
+    flex: 2;
+  }
 }

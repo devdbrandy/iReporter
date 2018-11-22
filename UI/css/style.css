@@ -53,6 +53,10 @@ a {
   align-items: center;
 }
 
+.end {
+  justify-content: flex-end;
+}
+
 .btn-primary {
   padding: 1.2rem 1.6rem;
   display: block;
@@ -102,6 +106,37 @@ button:focus {
 
 .primary-text {
   color: var(--primary-color);
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  font-family: inherit;
+  font-size: 1.6rem;
+  border: 1px solid var(--gray80);
+  border-radius: 0.4rem;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 1px solid var(--gray80);
+  border-radius: 0.4rem;
+  resize: none;
+  font-family: inherit;
+  font-size: 1.6rem;
+}
+
+label {
+  font-family: inherit;
+  font-size: 1.6rem;
+}
+
+.form-control {
+  margin-bottom: 1.2rem;
 }
 
 main.signin {
@@ -282,14 +317,13 @@ hr.dash {
 }
 
 .navbar--logo {
-  flex: 1;
+  /* flex: 1; */
   font-size: 3.2rem;
   padding: 1rem 2rem 1rem 0;
 }
 
 .navbar--search {
-  flex: auto;
-  width: 15%;
+  width: 100%;
 }
 
 .navbar--search input {
@@ -313,7 +347,6 @@ hr.dash {
 }
 
 .navbar--right {
-  flex: 1;
   justify-content: flex-end;
 }
 
@@ -423,6 +456,31 @@ hr.dash {
 .tag-intervention {
   background: var(--blue);
 }
+
+/* RECORD STYLES */
+.record--heading h3 {
+  font-size: 5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.record--heading span.details {
+  font-size: 1.2rem;
+  color: var(--darkgray);
+}
+
+.record--content {
+  margin: 1.6rem 0;
+}
+
+.record--comments {
+  margin: 1.6rem 0;
+}
+
+.record--comments .panel--heading {
+  background: #7B9BA6;
+}
+
 
 /* MEDIA QUERIES - Device Breakpoints */
 

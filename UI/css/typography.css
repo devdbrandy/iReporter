@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300|ABeeZee:400');
+
+:root {
+  --header-font: Roboto, sans-serif;
+  --text-font: ABeeZee, sans-serif;
+}
+
+html,
+body {
+  font-size: 10px;
+  font-family: var(--text-font);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 2rem;
+  font-family: var(--header-font);
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0em;
+}
+
+h1 {font-size: 3.6em;}
+
+h2 {font-size: 3.15em;}
+
+h3 {font-size: 2.75em;}
+
+h4 {font-size: 2.4em;}
+
+h5 {font-size: 2.1em}
+
+h6 {font-size: 1.84em;}
+
+p {
+  font-size: 1.6em;
+  margin-bottom: 1.6em;
+}
+
+@media screen and (min-width: 600px) {
+  h1 {font-size: 4.8em;}
+}

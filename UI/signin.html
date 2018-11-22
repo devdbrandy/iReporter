@@ -16,7 +16,7 @@
           <header class="signin--header">
             <h2><span class="primary-text">i</span>Reporter</h2>
           </header>
-          <div class="signin--view row">
+          <div id="signin-view" class="row">
             <div class="column center">
               <form class="signin--form">
                 <div>
@@ -34,20 +34,19 @@
               </div>
               <div class="row center">
                 <div class="row signin--or">
-                  <hr class="bar">
                   <span>or</span>
-                  <hr class="bar">
                 </div>
               </div>
-              <button class="btn-secondary" onclick="openForm()">Create account</button>
+              <button class="btn-secondary open">Create account</button>
             </div>
           </div>
 
           <!-- SIGNUP POPUP -->
-          <div class="signup--popup row">
+          <div id="signup-popup" class="row">
             <div class="column center">
               <form class="signup--form">
                 <p>Fill the form below to create an account</p>
+                <hr class="dash">
                 <div>
                   <label for="firstname">First Name</label>
                   <input type="text" id="firstname">
@@ -65,7 +64,7 @@
                   <input type="password" id="signup-password">
                 </div>
                 <div>
-                  <label for="signup-password2">Password</label>
+                  <label for="signup-password2">Repeat Password</label>
                   <input type="password" id="signup-password2">
                 </div>
                 <button type="submit" class="btn-primary">Register</button>
@@ -77,7 +76,7 @@
                   <hr class="bar">
                 </div>
               </div>
-              <button class="btn-secondary" onclick="closeForm()">Sign In</button>
+              <button class="btn-secondary close">Sign In</button>
             </div>
           </div>
         </div>
@@ -96,15 +95,23 @@
   </main>
 
   <script>
-    function openForm() {
-      document.querySelector('.signup--popup').style.display = 'block';
-      document.querySelector('.signin--view').style.display = 'none';
-    }
+    const signupPopup = document.getElementById('signup-popup');
+    const signinView = document.getElementById('signin-view');
+    const openButton = document.querySelector('.open');
+    const closeButton = document.querySelector('.close');
 
-    function closeForm() {
-      document.querySelector('.signup--popup').style.display = 'none';
-      document.querySelector('.signin--view').style.display = 'block';
-    }
+    const openForm = () => {
+      signupPopup.style.display = 'block';
+      signinView.style.display = 'none';
+    };
+
+    const closeForm = () => {
+      signupPopup.style.display = 'none';
+      signinView.style.display = 'block';
+    };
+
+    openButton.addEventListener('click', openForm);
+    closeButton.addEventListener('click', closeForm);
   </script>
 </body>
 </html>

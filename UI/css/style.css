@@ -498,7 +498,9 @@ hr.dash {
 }
 
 .record--comments .panel--heading {
-  background: #7B9BA6;
+  background: var(--flat-blue);
+  color: var(var(--white));
+  font-size: 1.2rem;
 }
 
 /* USER PROFILE */

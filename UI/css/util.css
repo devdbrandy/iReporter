@@ -1,0 +1,50 @@
+/* ----- Layout ----- */
+.container {
+  width: 70%;
+  margin: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+/* ----- End Layout ----- */
+
+
+/* ----- Alignment ----- */
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.middle {
+  align-items: center;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+/* ----- End Alignment ----- */
+
+
+/* ----- Margin ----- */
+
+.ml-20 {
+  margin-left: 2rem;
+}
+
+.mr-20 {
+  margin-right: 2rem;
+}
+
+/* ----- End Margin -----*/

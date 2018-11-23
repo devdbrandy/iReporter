@@ -17,6 +17,7 @@
   --black: #24292e;
   --red: #F44336;
   --blue: #2196F3;
+  --green: #4CAF50;
 
   --flat-blue: #607D8B;
 }
@@ -107,6 +108,21 @@ a {
 
 button:focus {
   outline: none;
+}
+
+.btn-back {
+  padding: 0.5rem 1rem;
+  display: block;
+  border: 0;
+  border-radius: 2px;
+  background: var(--flat-blue);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 1.6rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .primary-text {

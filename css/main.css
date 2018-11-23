@@ -48,6 +48,16 @@
   .home--signup {
     display: none;
   }
+
+  .md-hide {
+    display: flex;
+  }
+}
+
+@media (min-width: 800px) {
+  .md-hide {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 1200px) {

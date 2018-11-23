@@ -4,7 +4,7 @@
 @import 'typography.css';
 @import 'util.css';
 
-/* Variables */
+/* ----- VARIABLES ----- */
 :root {
   /* Colors */
   --primary-color: #e74c3c;
@@ -20,10 +20,10 @@
   --flat-blue: #607D8B;
   --info: #00BCD4;
 }
+/* ----- END VARIABLE ----- */
 
-/* UTILITIES */
-
-a {
+/* ----- UTILITIES ----- */
+a, button {
   text-decoration: none;
   font-family: inherit;
   cursor: pointer;
@@ -147,8 +147,9 @@ main.signin {
   background: var(--lightgray);
   color: var(--white);
 }
+/* -----END UTILITIES ----- */
 
-/* SIGNIN */
+/* ----- SIGNIN ----- */
 .signin {
   flex: 1;
   height: 100vh;
@@ -271,6 +272,7 @@ main.signin {
 .signin--footer a {
   color: var(--primary-color);
 }
+/* ----- END SIGNIN ----- */
 
 /* SIGNIN SHOWCASE */
 .showcase {
@@ -295,8 +297,9 @@ main.signin {
 .showcase strong {
   font-weight: bold;
 }
+/* ----- END SIGNIN SHOWCASE ----- */
 
-/* SIGNUP POPUP */
+/* ----- SIGNUP POPUP ----- */
 #signup-popup {
   display: none;
   z-index: 9;
@@ -312,8 +315,9 @@ hr.dash {
   margin-bottom: 1.6rem;
   text-align: center;
 }
+/* END SIGNUP POPUP ----- */
 
-/* MAIN NAVBAR STYLE */
+/* ----- MAIN NAVBAR ----- */
 .main--navbar {
   background: var(--black);
   width: 100vw;
@@ -388,8 +392,9 @@ hr.dash {
 .navbar--icons .fas {
   color: var(--white);
 }
+/* ----- END MAIN NAVBAR ----- */
 
-/* PANEL */
+/* ----- PANEL ----- */
 .panel {
   width: 100%;
   margin-top: 2rem;
@@ -413,7 +418,9 @@ hr.dash {
   border-top: 0;
   padding: 1rem 1.6rem;
 }
+/* ----- END PANEL ----- */
 
+/* ----- CARD ----- */
 .card {
   padding: 2px 16px;
   border-radius: 2px;
@@ -428,6 +435,9 @@ hr.dash {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
+/* ----- END CARD ----- */
+
+/* ----- DAHSBOARD ----- */
 .overview span.count {
   font-size: 6rem;
   font-weight: bold;
@@ -443,6 +453,10 @@ hr.dash {
 
 .record .card {
   padding: 2rem;
+}
+
+.record .card h3 {
+  color: var(--black);
 }
 
 .record--links button,
@@ -496,11 +510,13 @@ hr.dash {
 .tag-intervention {
   background: var(--blue);
 }
+/* ----- DASHBOARD ----- */
 
-/* RECORD STYLES */
+/* ----- RECORD STYLES ----- */
 .record--heading h3 {
   font-size: 5rem;
   font-weight: bold;
+  color: var(--black);
   margin-bottom: 0;
 }
 
@@ -522,8 +538,9 @@ hr.dash {
   color: var(var(--white));
   font-size: 1.2rem;
 }
+/* ----- END RECORD ----- */
 
-/* USER PROFILE */
+/* ----- USER PROFILE ----- */
 .user--avatar img {
   width: 25rem;
   height: 25rem;
@@ -568,13 +585,9 @@ hr.dash {
   font-size: 1.4rem;
   font-weight: 600;
 }
+/* ----- END USER PROFILE */
 
-/* SIDEBAR */
-section.sidebar {
-  width: 100px;
-}
-
-/* PAGINATION LINKS */
+/* ----- PAGINATION LINKS ----- */
 .pagination {
   margin: 2rem 0;
 }
@@ -596,10 +609,10 @@ section.sidebar {
 .pagination a:hover:not(.active) {
   background-color: var(--gray80);
 }
+/* ----- PAGINATION LINKS ----- */
 
 
-
-/* MEDIA QUERIES - Device Breakpoints */
+/* ----- MEDIA QUERIES ----- */
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

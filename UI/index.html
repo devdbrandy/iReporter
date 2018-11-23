@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Home - iReporter</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <nav class="main--navbar">
+    <div class="container">
+      <div class="row middle">
+        <div class="column">
+          <div class="navbar--logo">
+            <a href="#!"><span class="primary-text">i</span>Reporter</a>
+          </div>
+        </div>
+        <nav class="navbar--links">
+          <a href="reports.html">Browse Incidents</a>
+        </nav>
+        <div class="column">
+          <div class="navbar--search">
+            <input type="search" name="search" placeholder="Search records...">
+          </div>
+        </div>
+        <div class="column">
+          <div class="navbar--right row middle">
+            <a href="signin.html" class="btn-primary">sign in</a>
+            <a href="signin.html" class="btn-primary">sign up</a>
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="snackbar" onclick="snackbar()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="home--header">
+    <div class="row">
+      <div class="column">
+        <div class="jumbotron">
+          <h1><span class="primary-text">i</span>Reporter Community</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nemo minus doloremque, in mollitia ea magni ab. Eaque, accusantium dolorum libero dolorem, suscipit distinctio repellat architecto, soluta quibusdam corrupti natus?
+          </p>
+          <div class="row md-hide">
+            <a href="signin.html" class="btn-primary block">Sign In</a>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="home--signup">
+          <form action="dashboard.html" class="home--signup--form">
+            <div>
+              <input type="text" placeholder="First Name">
+            </div>
+            <div>
+              <input type="text" placeholder="Last Name">
+            </div>
+            <div>
+              <input type="text" placeholder="Email address">
+            </div>
+            <div>
+              <input type="password" placeholder="Password">
+            </div>
+            <div>
+              <input type="password" placeholder="Repeat Password">
+            </div>
+            <button type="submit" class="btn-primary">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <script>
+    function snackbar() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
+</body>
+</html>

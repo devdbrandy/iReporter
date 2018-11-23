@@ -206,7 +206,8 @@ main.signin {
 }
 
 .signin--form input,
-.signup--form input {
+.signup--form input,
+.home--signup--form input {
   width: 100%;
   border-radius: 2px;
   border: 1px solid #555;
@@ -219,12 +220,14 @@ main.signin {
 }
 
 .signin--form input:hover,
-.signup--form input:hover {
+.signup--form input:hover,
+.home--signup--form input:hover {
   border-color: var(--primary-color);
 }
 
 .signin--form input:focus,
-.signup--form input:focus {
+.signup--form input:focus,
+.home--signup--form input:focus {
   outline: none;
   border-color: var(--primary-color);
 }
@@ -289,7 +292,7 @@ main.signin {
 /* SIGNIN SHOWCASE */
 .showcase {
   text-align: center;
-  background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%)
+  background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%);
 }
 
 .showcase--content {
@@ -331,6 +334,8 @@ hr.dash {
 .main--navbar {
   background: var(--black);
   width: 100vw;
+
+  overflow: hidden;
 }
 
 .main--navbar a {
@@ -384,7 +389,8 @@ hr.dash {
 
 .navbar--right .btn-primary {
   padding: 0.8rem 1.6rem;
-  margin-right: 2rem
+  margin-right: 2rem;
+  display: none;
 }
 
 .navbar--icons .far,
@@ -395,10 +401,6 @@ hr.dash {
 
 .navbar--right .fas {
   color: var(--primary-color);
-}
-
-.navbar--right .circle-add {
-  display: none;
 }
 
 .navbar--icons .fas {
@@ -608,25 +610,65 @@ section.sidebar {
   }
 }
 
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {} 
+
 /* Medium devices (phones, 768px and down) */
 @media only screen and (max-width: 768px) {
-  .navbar--right .circle-add {
-    display: inline-block;
+  .main--navbar div:not(:first-child) {display: none;}
+  .main--navbar a.snackbar {
+    float: right;
+    display: block;
   }
 
-  .navbar--right .btn-primary {
+  .main--navbar.responsive {position: relative;}
+  .main--navbar.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .main--navbar.responsive div {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+
+  .navbar--right {
+    display: none;
+  }
+
+  .navbar--search {
     display: none;
   }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {} 
+@media (max-width: 900px) {
+  .user-profile {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 950px) {}
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {} 
+@media only screen and (min-width: 768px) {}
+
+@media only screen and (max-width: 1200px) {
+  .container {
+    width: 90%;
+  }
+}
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {} 
+@media only screen and (min-width: 992px) {
+  .nav-right .circle-add {
+    display: none;
+  }
+
+  /* .navbar--right .btn-primary {
+    display: inline-block;
+  } */
+} 
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {

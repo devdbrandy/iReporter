@@ -31,6 +31,10 @@
             <a href="signin.html" class="btn-primary">sign up</a>
           </div>
         </div>
+
+        <a href="javascript:void(0);" class="snackbar" onclick="snackbar()">
+          <i class="fa fa-bars"></i>
+        </a>
       </div>
     </div>
   </nav>
@@ -69,5 +73,16 @@
       </div>
     </div>
   </header>
+
+  <script>
+    function snackbar() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
 </body>
 </html>

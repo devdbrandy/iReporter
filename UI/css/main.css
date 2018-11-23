@@ -42,3 +42,34 @@
 .home--signup--form button[type=submit] {
   width: 100%;
 }
+
+/* Medium devices (phones, 768px and down) */
+@media (max-width: 768px) {
+  .home--signup {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .home--header .jumbotron {
+    width: 100%;
+  }
+
+  .jumbotron h1 {
+    font-size: 7.1rem;
+    line-height: 1.2;
+    margin-bottom: 3.2rem;
+  }
+
+  .home--signup--form {
+    width: 80%;
+    padding: 4.5rem;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .showcase {
+    flex: 2;
+  }
+}

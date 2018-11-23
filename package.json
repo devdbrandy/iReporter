@@ -1,0 +1,21 @@
+{
+  "name": "iReporter",
+  "version": "1.0.0",
+  "description": "iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public",
+  "main": "index.js",
+  "scripts": {
+    "gh:deploy": "gh-pages -d UI"
+  },
+  "keywords": [
+    "reports",
+    "corruption",
+    "intervention",
+    "red flag",
+    "citizens"
+  ],
+  "author": "Harry Dbrandy",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
+}

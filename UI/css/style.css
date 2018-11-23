@@ -57,6 +57,11 @@ a {
   justify-content: flex-end;
 }
 
+/* MARGIN HELPERS */
+.ml-20 {
+  margin-left: 2rem;
+}
+
 .btn-primary {
   padding: 1.2rem 1.6rem;
   display: block;
@@ -369,6 +374,10 @@ hr.dash {
   display: none;
 }
 
+.navbar--icons .fas {
+  color: var(--white);
+}
+
 /* PANEL */
 .panel {
   width: 100%;
@@ -479,6 +488,57 @@ hr.dash {
 
 .record--comments .panel--heading {
   background: #7B9BA6;
+}
+
+/* USER PROFILE */
+.user--avatar img {
+  width: 25rem;
+  height: 25rem;
+  border: 0.5rem solid var(--gray80);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile--image img {
+  width: 5rem;
+  height: 5rem;
+  border: 1px solid var(--gray80);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user--detail h3 {
+  font-weight: bold;
+  font-size: 6.1rem;
+  margin-bottom: 0;
+}
+
+.user--detail .btn-primary {
+  margin-bottom: 2rem;
+}
+
+.user--bio {
+  text-align: center;
+  text-justify: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.user--stat .wrapper {
+  display: flex;
+  flex-direction: column;
+  border-left: 0.2rem solid var(--primary-color);
+  padding: 2rem 2.8rem;
+}
+
+.user--stat span {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* SIDEBAR */
+section.sidebar {
+  width: 100px;
 }
 
 

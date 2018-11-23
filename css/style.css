@@ -206,7 +206,8 @@ main.signin {
 }
 
 .signin--form input,
-.signup--form input {
+.signup--form input,
+.home--signup--form input {
   width: 100%;
   border-radius: 2px;
   border: 1px solid #555;
@@ -219,12 +220,14 @@ main.signin {
 }
 
 .signin--form input:hover,
-.signup--form input:hover {
+.signup--form input:hover,
+.home--signup--form input:hover {
   border-color: var(--primary-color);
 }
 
 .signin--form input:focus,
-.signup--form input:focus {
+.signup--form input:focus,
+.home--signup--form input:focus {
   outline: none;
   border-color: var(--primary-color);
 }
@@ -289,7 +292,7 @@ main.signin {
 /* SIGNIN SHOWCASE */
 .showcase {
   text-align: center;
-  background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%)
+  background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%);
 }
 
 .showcase--content {

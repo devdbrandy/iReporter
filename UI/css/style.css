@@ -552,6 +552,30 @@ section.sidebar {
   width: 100px;
 }
 
+/* PAGINATION LINKS */
+.pagination {
+  margin: 2rem 0;
+}
+
+.pagination a {
+  font-size: 1.6rem;
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+.pagination a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: var(--gray80);
+}
+
+
 
 /* MEDIA QUERIES - Device Breakpoints */
 

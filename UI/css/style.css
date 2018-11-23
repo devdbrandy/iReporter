@@ -322,9 +322,20 @@ hr.dash {
 }
 
 .navbar--logo {
-  /* flex: 1; */
   font-size: 3.2rem;
   padding: 1rem 2rem 1rem 0;
+}
+
+.navbar--links a {
+  font-size: 1.6rem;
+  margin: 0 1.6rem;
+  border-bottom: 2px solid var(--primary-color);
+  transition: all 0.5s;
+}
+
+.navbar--links a:hover {
+  color: var(--primary-color);
+  border-bottom-color: var(--gray80);
 }
 
 .navbar--search {
@@ -363,7 +374,7 @@ hr.dash {
 .navbar--icons .far,
 .navbar--right .fas {
   font-size: 2.8rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.8rem;
 }
 
 .navbar--right .fas {

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Admin Dashboard - iReporter</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <nav class="main--navbar">
+    <div class="container">
+      <div class="row middle">
+        <div class="navbar--logo">
+          <a href="#!"><span class="primary-text">i</span>Reporter</a>
+        </div>
+        <nav class="navbar--links">
+          <a href="reports.html">Visit App</a>
+        </nav>
+        <div class="column">
+          <div class="navbar--search">
+            <input type="search" name="search" placeholder="Search records...">
+          </div>
+        </div>
+        <div class="column">
+          <div class="navbar--right row middle">
+            <!-- TODO: add menu -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <main class="row">
+      <div class="column">
+        <div class="panel">
+          <div class="panel--heading">
+            <h3>Manage Records</h3>
+          </div>
+          <div class="panel--body">
+            <div class="overview">
+              <div class="row">
+                <div class="card column">
+                  <span class="count">15</span>
+                  <h5>Total Records</h5>
+                </div>
+                <div class="card column">
+                  <span class="count">5</span>
+                  <h5>Resolved</h5>
+                </div>
+                <div class="card column">
+                  <span class="count">10</span>
+                  <h5>Under Investigation</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="records--table">
+              <div class="row">
+                <table>
+                  <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Comments</th>
+                    <th>Created By</th>
+                    <th>Status</th>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">Bad Roads</a></td>
+                    <td><span class="tag tag-redflag">Red Flag</span></td>
+                    <td>5</td>
+                    <td>John Doe</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation" selected>under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved">resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Robbery Attack</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>6</td>
+                    <td>Joe Harts</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation" selected>under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved">resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Bad Water</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>21</td>
+                    <td>Kelvin Stone</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lack of Transportation</td>
+                    <td><span class="tag tag-redflag">red flag</span></td>
+                    <td>20</td>
+                    <td>Joe Wartson</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation" selected>under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" >resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Citizens Kidnapp</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>2</td>
+                    <td>Mimi Stanley</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lorem ipsum dolor sit amet, consectetur</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>11</td>
+                    <td>Spike Johnny</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lorem, ipsum dolor.</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>6</td>
+                    <td>Willy Pompie</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>ipsum dolor sit.</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>15</td>
+                    <td>Mary Tracy</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Education Sector</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>8</td>
+                    <td>John Doe</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Molestiae, assumenda.</td>
+                    <td><span class="tag tag-intervention">Intervention</span></td>
+                    <td>4</td>
+                    <td>Tim Godfrey</td>
+                    <td>
+                      <div class="row admin--record--status">
+                        <div class="column">
+                          <select name="status">
+                            <option value="under-investigation">under investigation</option>
+                            <option value="rejected">rejected</option>
+                            <option value="resolved" selected>resolved</option>
+                          </select>
+                        </div>
+                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="row">
+                  <div class="pagination">
+                      <a href="#">&laquo;</a>
+                      <a href="#">1</a>
+                      <a class="active" href="#">2</a>
+                      <a href="#">3</a>
+                      <a href="#">4</a>
+                      <a href="#">5</a>
+                      <a href="#">6</a>
+                      <a href="#">&raquo;</a>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

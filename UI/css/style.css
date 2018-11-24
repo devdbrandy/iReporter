@@ -395,6 +395,10 @@ hr.dash {
 .navbar--icons .fas {
   color: var(--white);
 }
+
+.navbar--right a:nth-child(2n) {
+  display: none;
+}
 /* ----- END MAIN NAVBAR ----- */
 
 /* ----- PANEL ----- */

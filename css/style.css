@@ -396,7 +396,7 @@ hr.dash {
   color: var(--white);
 }
 
-.navbar--right .btn-primary {
+.navbar--right a:nth-child(2n) {
   display: none;
 }
 /* ----- END MAIN NAVBAR ----- */

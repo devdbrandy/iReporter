@@ -78,6 +78,7 @@
   padding: 0.5rem 1rem;
   cursor: pointer;
   margin-right: 2px;
+  text-transform: lowercase;
 }
 
 .label-default {
@@ -85,7 +86,7 @@
 }
 
 .label-primary {
-  background: var(--primary-color);
+  background: var(--lightblue);
   color: white;
 }
 
@@ -99,5 +100,5 @@
 }
 
 .label .fa-comment {
-  color: #5998C5;
+  color: var(--blue);
 }

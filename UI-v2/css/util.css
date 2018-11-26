@@ -43,6 +43,7 @@
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 3px 3px 0 #ccc;
+  margin: 5px 0;
 }
 
 .card--header img {
@@ -53,6 +54,10 @@
 
 .card--body, .card--footer {
   padding: 1.5rem;
+}
+
+.card--footer {
+  font-size: 16px;
 }
 
 /* ----- End Component ----- */
@@ -66,13 +71,13 @@
 }
 
 .label {
-  font-family: inherit;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 400;
   border-radius: 2px;
   text-align: center;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  margin-right: 2px;
 }
 
 .label-default {
@@ -87,4 +92,12 @@
 .label-danger {
   background: var(--red);
   color: white;
+}
+
+.label .fa-heart {
+  color: var(--red);
+}
+
+.label .fa-comment {
+  color: #5998C5;
 }

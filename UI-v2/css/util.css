@@ -51,7 +51,7 @@
   object-fit: cover;
 }
 
-.card--body {
+.card--body, .card--footer {
   padding: 1.5rem;
 }
 

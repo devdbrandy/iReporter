@@ -136,7 +136,7 @@ select {
 }
 
 .dropdown--button {
-  color: white;
+  color: var(--gray80);
   border: none;
   font-size: 2.8rem;
   margin-top: 1rem;
@@ -187,11 +187,3 @@ select {
   padding: 1rem 0;
 }
 /* ----- END MAIN TOP MENU ICONS ----- */
-
-/* ----- END MAIN TOP MENU ICONS ----- */
-
-.main--content {
-  display: flex;
-  justify-content: center;
-  flex: 1;
-}

@@ -39,9 +39,18 @@
 /* Components */
 .card {
   width: 100%;
-  padding: 1.5rem;
   background: white;
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 3px 3px 0 #ccc;
+}
+
+.card--header img {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  object-fit: cover;
+}
+
+.card--body {
+  padding: 1.5rem;
 }

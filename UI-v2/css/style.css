@@ -290,6 +290,10 @@ main.wrapper {
   margin-bottom: 5px;
 }
 
+.sidebar--nav a:hover {
+  color: #555;
+}
+
 .sidebar--nav .card {
   box-shadow: none;
 }
@@ -302,3 +306,20 @@ main.wrapper {
 .sidebar--nav .featured-report li .label {
   font-size: 1.4em;
 }
+
+/* ----- END ----- */
+
+/* ----- FOOTER ----- */
+.main--footer {
+  display: flex;
+  background: var(--black);
+  color: var(--gray80);
+  padding: 3rem;
+  margin-top: 3rem;
+}
+
+.footer--content p {
+  font-size: 1.32em;
+}
+
+/* ----- END FOOTER ----- */

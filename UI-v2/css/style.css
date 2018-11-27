@@ -416,6 +416,10 @@ section#dashboard .records-list .card {
 }
 
 @media (max-width: 768px) {
+  main#dashboard .main--content {
+    flex: 2;
+  }
+  
   .sidebar--nav {
     height: 100%;
     width: 0;

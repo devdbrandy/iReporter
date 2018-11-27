@@ -129,7 +129,7 @@ img {
   background: white;
   min-width: 20rem;
   box-shadow: 0px 4px 5px 1px rgba(97, 95, 95, 0.18);
-  z-index: 2;
+  z-index: 999;
   border-radius: 3px;
   margin-top: 2px;
   padding: 0.5rem 0.5rem;
@@ -282,7 +282,9 @@ section#report span.published-at {
 }
 
 section#report span.published-at::before {
-  content: ' - ';
+  content: '-';
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 section#report .report-content {
@@ -355,7 +357,7 @@ section#report .report-content {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 1;
     top: 50px;
     left: 0;
     background-color: white;
@@ -388,12 +390,20 @@ section#report .report-content {
 
   .main--sidebar {
     width: 28rem;
-    margin-left: 1.5rem;
+    margin-right: 1.5rem;
   }
 
   .main--sidebar .wrapper {
     width: 100%;
     margin: 0;
+  }
+
+  .main--content {
+    order: 2;
+  }
+
+  .main--sidebar {
+    order: 1;
   }
 
   .sidebar--nav {

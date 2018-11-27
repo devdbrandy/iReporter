@@ -115,7 +115,7 @@ select {
 }
 
 .navbar--logo a {
-  font-size: 3.2rem;
+  font-size: 3em;
   padding: 0;
 }
 
@@ -172,9 +172,10 @@ select {
 .dropdown--button {
   color: var(--gray80);
   border: none;
-  font-size: 2.8rem;
-  margin-top: 1rem;
-  text-align: center;
+}
+
+.dropdown--button .fa {
+  font-size: 1.8em;
 }
 
 .dropdown--menu {
@@ -293,26 +294,11 @@ main.wrapper {
   box-shadow: none;
 }
 
-.sidebar--nav .featured-report li {
-  padding: 5px 0 10px;
-
-}
-
 .sidebar--nav .featured-report li a {
-  font-size: 1.6rem;
+  font-size: 1.6em;
   font-weight: bold;
 }
 
 .sidebar--nav .featured-report li .label {
-  font-size: 1.4rem;
-}
-
-.sidebar--nav .featured-report li:not(:last-child) {
-  border-bottom: 1px solid #ddd;
-}
-
-
-@media screen and (max-height: 450px) {
-  /* .main--sidebar {padding-top: 15px;}
-  .main--sidebar a {font-size: 18px;} */
+  font-size: 1.4em;
 }

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iReporter - Bad Road</title>
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <nav class="navbar">
+    <div class="wrapper">
+      <div class="row middle">
+        <div class="navbar--logo">
+          <a href="index.html"><span class="primary-text">i</span>Reporter</a>
+        </div>
+        <div class="navbar--searchbox">
+          <form>
+            <input type="text" placeholder="search...">
+          </form>
+        </div>
+        <div class="navbar--links">
+          <a href="add-record.html" class="btn btn-primary">Make A Report</a>
+          <a href="#!"><i class="fa fa-bell"></i></a>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown--button">
+            <i class="fa fa-th"></i>
+          </button>
+          <div class="dropdown--menu">
+            <a href="dashboard.html">
+              <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+            <a href="profile.html">
+              <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="settings.html">
+              <i class="fa fa-gear"></i> Settings
+            </a>
+            <a href="signin.html">
+              <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrapper">
+    <div class="menu--icons">
+      <div class="row">
+        <button class="sidebar-menu" id="sidebarOpen">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <!-- MAIN CONTENT -->
+      <section class="main--content" id="report">
+        <div class="column">
+          <article class="row">
+            <div class="card">
+              <header class="card--header">
+                <img src="img/cover-img.jpeg" alt="cover-img">
+              </header>
+              <div class="card--body">
+                <h3>The Most terrible havoc just happened in an unknown area</h3>
+
+                <div class="summary row">
+                  <div class="avatar">
+                    <a href="profile.html">
+                      <img src="img/avatar.jpg" alt="user avatar" class="circle-img">
+                    </a>
+                  </div>
+                  <div class="column">
+                    <div class="report-user">
+                      <a href="profile.html">
+                        <span class="name">Mike Spook</span>
+                        <span class="published-at"> Dec 3</span>
+                      </a>
+                    </div>
+                    <div class="tags">
+                      <a href="#!"><span class="label label-primary">Intervention</span></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-content">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque ducimus fugiat voluptatibus dolorum atque? Ratione laborum consectetur voluptatum explicabo error dolore totam? Quam voluptas numquam inventore qui obcaecati totam corrupti itaque dolores? Explicabo, saepe libero rerum dicta consectetur eius fugiat fugit tenetur nobis delectus voluptatem labore magnam, porro quibusdam sequi?</p>
+                </div>
+              </div>
+              <div class="card--footer">
+                <div class="row">
+                  <div class="column">
+                    <div class="comments">
+                      <div class="comments--form">
+                        <form>
+                          <textarea></textarea>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="column">
+                    <ul class="comments-lists">
+                      <li class="comment">
+                        <div class="card card-noshadow">
+                          <div class="card--body">
+                            <div class="author">
+                              <div class="row middle">
+                                <a href="#!">
+                                  <span class="avatar">
+                                    <img src="img/avatar.jpg" alt="" class="circle-img">
+                                  </span>
+                                  <span class="name">Eddy Young</span>
+                                </a>
+                                <span class="published-at">Dec 3</span>
+                              </div>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, quisquam?</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="comment">
+                        <div class="card card-noshadow">
+                          <div class="card--body">
+                            <div class="author">
+                              <div class="row middle">
+                                <a href="#!">
+                                  <span class="avatar">
+                                    <img src="img/avatar.jpg" alt="" class="circle-img">
+                                  </span>
+                                  <span class="name">Mike Posnan</span>
+                                </a>
+                                <span class="published-at">Dec 1</span>
+                              </div>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati, quisquam?</p>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+  
+      <!-- SIDEBAR -->
+      <aside class="main--sidebar">
+        <div id="mainSidebar" class="sidebar--nav">
+          <div class="wrapper">
+            <div class="top-item">
+              <div class="card card-primary">
+                <div class="card--body">
+                  <!-- author -->
+                  <div class="author">
+                    <a href="#!">
+                      <span class="avatar">
+                        <img src="img/avatar.jpg" alt="" class="circle-img">
+                      </span>
+                      <span class="name">John Doe</span>
+                    </a>
+                  </div>
+                  <!-- author joined date -->
+
+                  <!-- hr -->
+
+                  <!-- report flag/status -->
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar--overlay" id="sidebarOverlay"></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main--footer center">
+    <div class="footer--content">
+      <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const sidebarOpenBtn = document.getElementById('sidebarOpen');
+    const mainSidebar = document.getElementById('mainSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    const openSideMenu = () => {
+      mainSidebar.style.width = '28rem';
+      sidebarOverlay.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    };
+    const closeSideMenu = () => {
+      mainSidebar.style.width = '0';
+      sidebarOverlay.style.width = '0';
+      document.body.style.overflow = 'auto';
+    };
+
+    sidebarOpenBtn.addEventListener('click', openSideMenu);
+    sidebarOverlay.addEventListener('click', closeSideMenu);
+  </script>
+</body>
+</html>

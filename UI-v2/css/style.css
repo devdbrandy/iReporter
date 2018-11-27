@@ -189,7 +189,7 @@ main.wrapper {
 .main--content .card--body .avatar {
   width: 5rem;
   height: 5rem;
-  margin-right: 1.5rem;
+  margin-right: 1.2rem;
 }
 
 .main--content .card--body .report-user {
@@ -262,6 +262,65 @@ main.wrapper {
 /* ----- END FOOTER ----- */
 
 
+/* ----- RECORD ----- */
+section#report span.published-at {
+  font-size: 2rem;
+}
+
+section#report span.published-at::before {
+  content: ' - ';
+}
+
+section#report .report-content {
+  margin-top: 2rem;
+}
+
+.comment .author .avatar img {
+  width: 4rem;
+  height: 4rem;
+}
+
+.comment .report-user a {
+  font-size: 1.6rem;
+}
+
+.comments-lists {
+  margin-top: 2rem;
+}
+
+.comment .author .name {
+  padding: 0;
+}
+
+.comment .author .avatar {
+  margin: 0;
+}
+
+.author a {
+  display: flex;
+  align-items: center;
+}
+
+.author a:hover {
+  color: #777;
+}
+
+.author .avatar img {
+  width: 5rem;
+  height: 5rem;
+}
+
+.author .name {
+  font-size: 2.4rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.author .published-at {
+  font-weight: bold;
+}
+
+
 /* ----- MEDIA QUERIES ----- */
 @media (max-width: 400px) {
   .navbar--searchbox form {
@@ -323,7 +382,6 @@ main.wrapper {
 
   .sidebar--nav {
     width: 28rem;
-    z-index: -1;
     position: fixed;
     background-color: white;
     transition: 0.2s;

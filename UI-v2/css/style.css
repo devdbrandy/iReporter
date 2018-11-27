@@ -234,17 +234,22 @@ main.wrapper {
   margin-bottom: 5px;
 }
 
-.sidebar--nav a:not(.btn):hover {
-  color: #555;
-}
-
 .sidebar--nav .card {
   box-shadow: none;
 }
 
-.sidebar--nav .featured-report li a {
+.sidebar--nav .featured-report .tag a {
+  display: inline-block;
+}
+
+.sidebar--nav .featured-report li h5 {
+  font-family: inherit;
   font-size: 1.6em;
   font-weight: bold;
+}
+
+.sidebar--nav .featured-report li:hover h5 {
+  color: #555;
 }
 
 .sidebar--nav .featured-report li .label {

@@ -161,7 +161,7 @@ img {
 /* ----- END MAIN NAVBAR ----- */
 
 /* ----- MAIN TOP MENU ICONS (mobile) ----- */
-.main--icons button {
+.menu--icons button {
   font-size: 2.5rem;
   padding: 1rem 0;
 }
@@ -204,19 +204,6 @@ main.wrapper {
 /* END MAIN CONTENT */
 
 /* ----- SIDEBAR ----- */
-.sidebar--nav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 2;
-  top: 50px;
-  left: 0;
-  background-color: white;
-  overflow: hidden;
-  border-right: 1px solid #ddd;
-  transition: 0.2s;
-}
-
 .sidebar--overlay {
   position: absolute;
   top: 0;
@@ -272,3 +259,60 @@ main.wrapper {
 }
 
 /* ----- END FOOTER ----- */
+
+
+/* ----- MEDIA QUERIES ----- */
+@media (max-width: 768px) {
+  .sidebar--nav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 50px;
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    border-right: 1px solid #ddd;
+    transition: 0.2s;
+  }
+}
+
+@media (min-width: 768px) {
+  .menu--icons {
+    display: none;
+  }
+
+  .wrapper {
+    width: 95%;
+  }
+
+  .main--content {
+    flex: 2;
+  }
+
+  .main--sidebar {
+    margin-left: 1.5rem;
+  }
+
+  .main--sidebar .wrapper {
+    width: 100%;
+    margin: 0;
+  }
+
+  .sidebar--nav {
+    width: 28rem;
+    background-color: white;
+    border-right: 1px solid #ddd;
+    transition: 0.2s;
+  }
+}
+
+@media (min-width: 992px) {
+  .wrapper {
+    width: 75%;
+  }
+
+  .navbar--searchbox form {
+    width: 60%;
+  }
+}

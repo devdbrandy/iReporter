@@ -244,6 +244,20 @@ main.wrapper {
   font-size: 1.4em;
 }
 
+.sidebar--nav .card p {
+  text-align: right;
+}
+
+.joined {
+  font-size: 1.3rem;
+}
+
+.joined-date {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
 /* ----- END ----- */
 
 /* ----- FOOTER ----- */
@@ -319,6 +333,8 @@ section#report .report-content {
 .author .published-at {
   font-weight: bold;
 }
+
+/* ----- END RECORD ----- */
 
 
 /* ----- MEDIA QUERIES ----- */

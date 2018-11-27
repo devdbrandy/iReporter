@@ -53,7 +53,7 @@
   <main class="wrapper">
     <div class="row">
       <div class="main--icons">
-        <button class="sidebar-menu">
+        <button class="sidebar-menu" id="sidebarOpen">
           <i class="fa fa-bars"></i>
         </button>
       </div>
@@ -61,36 +61,137 @@
     <div class="row">
       <!-- MAIN CONTENT -->
       <section class="main--content">
-        <div class="card">
-          <article>
-            <div class="cover-img">
-              <img src="img/cover-img.jpeg" alt="cover-img">
-            </div>
-            <h3>Bad Roads</h3>
-            <div class="row">
-              <div class="column">
-                <img src="img/avatar.jpg" alt="user-avatar" class="avatar">
+        <div class="column">
+          <article class="row">
+            <a href="#!link-wrapper">
+              <div class="card">
+                <header class="card--header">
+                  <img src="img/cover-img.jpeg" alt="cover-img">
+                </header>
+                <div class="card--body">
+                  <h3>The Most terrible havoc just happened in an unknown area</h3>
+                  <div class="summary row">
+                    <div class="avatar">
+                      <img src="img/avatar.jpg" alt="user avatar" class="circle-img">
+                    </div>
+                    <div class="column">
+                      <div class="report-user">
+                        <a href="#!">John Doe<span class="date"> - Dec 3</span></a>
+                      </div>
+                      <div class="tags">
+                        <a href="#!"><span class="label label-danger">Red Flag</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card--footer">
+                  <div class="row">
+                    <span class="label label-default">
+                      <i class="fa fa-comment"></i> 9
+                    </span>
+                    <span class="label label-default">
+                      <i class="fa fa-heart"></i> 120
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div class="column">
-                <h5>John Doe <span class="date">- Dec 3</span></h5>
-                <span class="label-redflag">Red Flag</span>
+            </a>
+          </article>
+          <article class="row">
+            <a href="#!link-wrapper">
+              <div class="card">
+                <div class="card--body">
+                  <h3>Light Restored to the people of Ijebu-Ijesha</h3>
+                  <div class="summary row">
+                    <div class="avatar">
+                      <img src="img/avatar.jpg" alt="user avatar" class="circle-img">
+                    </div>
+                    <div class="column">
+                      <div class="report-user">
+                        <a href="#!">Mike Spook<span class="date"> - Dec 3</span></a>
+                      </div>
+                      <div class="tags">
+                        <a href="#!"><span class="label label-primary">Intervention</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card--footer">
+                  <div class="row">
+                    <span class="label label-default">
+                      <i class="fa fa-comment"></i> 21
+                    </span>
+                    <span class="label label-default">
+                      <i class="fa fa-heart"></i> 98
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <button class="comments">
-                <i class="fa fa-comment"></i> 9
-              </button>
-              <button class="likes">
-                <i class="fa fa-heart"></i> 120
-              </button>
-            </div>
+            </a>
           </article>
         </div>
       </section>
   
       <!-- SIDEBAR -->
       <aside class="main--sidebar">
-        <!-- card -->
+        <div id="mainSidebar" class="sidebar--nav">
+          <div class="wrapper">
+            <div class="top-item">
+              <div class="card card-primary">
+                <div class="card--body">
+                  <a href="#!" class="btn btn-primary">Sign Up</a>
+                  <a href="#!" class="btn btn-primary">Sign In</a>
+                </div>
+              </div>
+            </div>
+            <div class="featured-report">
+              <div class="card">
+                <div class="card--body">
+                  <div class="tag">
+                    <a href="#!"><span class="label label-primary">Intervention</span></a>
+                  </div>
+                  <ul class="report-lists">
+                    <li>
+                      <a href="#!">Bad Roads</a>
+                      <span class="label label-default">
+                        <i class="fa fa-comment"></i> 21
+                      </span>
+                    </li>
+                    <li>
+                      <a href="#!">No electricity</a>
+                      <span class="label label-default">
+                        <i class="fa fa-comment"></i> 5
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card--body">
+                  <div class="tag">
+                    <a href="#!"><span class="label label-danger">Red Flag</span></a>
+                  </div>
+                  <ul class="report-lists">
+                    <li>
+                      <a href="#!">Bad Roads</a>
+                      <span class="label label-default">
+                        <i class="fa fa-comment"></i> 21
+                      </span>
+                    </li>
+                    <li>
+                      <a href="#!">No electricity</a>
+                      <span class="label label-default">
+                        <i class="fa fa-comment"></i> 5
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar--overlay" id="sidebarOverlay"></div>
       </aside>
     </div>
   </main>
@@ -103,5 +204,25 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    const sidebarOpenBtn = document.getElementById('sidebarOpen');
+    const mainSidebar = document.getElementById('mainSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    const openSideMenu = () => {
+      mainSidebar.style.width = '50%';
+      sidebarOverlay.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    };
+    const closeSideMenu = () => {
+      mainSidebar.style.width = '0';
+      sidebarOverlay.style.width = '0';
+      document.body.style.overflow = 'auto';
+    };
+
+    sidebarOpenBtn.addEventListener('click', openSideMenu);
+    sidebarOverlay.addEventListener('click', closeSideMenu);
+  </script>
 </body>
 </html>

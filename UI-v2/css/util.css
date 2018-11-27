@@ -56,13 +56,17 @@
   padding: 1.5rem;
 }
 
-.card--footer {
-  font-size: 16px;
+.card--footer span {
+  font-size: 1.6em;
 }
 
 .card-primary {
   border-color: var(--blue);
   box-shadow: 3px 3px 0 var(--blue);
+}
+
+.card-noshadow {
+  box-shadow: none;
 }
 
 /* ----- End Component ----- */
@@ -75,6 +79,7 @@
 input[type=text],
 input[type=email],
 input[type=password],
+textarea,
 select {
   width: 100%;
   /* padding: 0.5rem 1rem; */
@@ -82,6 +87,18 @@ select {
   font-size: 1.6rem;
   border: 1px solid var(--gray80);
   border-radius: 0.4rem;
+}
+
+textarea {
+  width: 100%;
+  height: 15rem;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 1px solid var(--gray80);
+  border-radius: 0.4rem;
+  resize: none;
+  font-family: inherit;
+  font-size: 1.6rem;
 }
 
 .btn {

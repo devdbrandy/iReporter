@@ -338,15 +338,78 @@ section#report .report-content {
 
 /* ----- END RECORD ----- */
 
+/* ----- DASHBOARD ----- */
+main#dashboard.wrapper {
+  padding-top: 2.5rem;
+}
+
+section#dashboard .records-list .card {
+  width: 99%;
+}
+
+.overview .card {
+  width: 98%;
+  text-align: center;
+}
+
+.overview span.count {
+  font-size: 6rem;
+  font-weight: bold;
+}
+
+.overview span.count {
+  font-weight: 900;
+}
+
+.records-list, .record--links {
+  margin-top: 2rem;
+}
+
+.record--links button,
+.record--links a,
+.record--links span {
+  display: inline-block;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.record--links span {
+  cursor: default;
+}
+
+.record--links .draft {
+  background: var(--blue);
+}
+
+.record--links .edit {
+  background: var(--green);
+}
+
+.record--links .delete {
+  background: var(--red);
+}
+
+.record--links .add-map {
+  background: var(--lightblue);
+}
+
+/* ----- END DASHBOARD ----- */
+
 
 /* ----- MEDIA QUERIES ----- */
-@media (max-width: 400px) {
+@media (max-width: 415px) {
   .navbar--searchbox form {
     display: none;
   }
 }
 
 @media (max-width: 575px) {
+  .overview .card--body {
+    font-size: 0.7rem;
+  }
+  
   .navbar--links .btn-primary {
     display: none;
   }

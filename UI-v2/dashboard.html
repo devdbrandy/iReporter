@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iReporter - Dashboard</title>
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <nav class="navbar">
+    <div class="wrapper">
+      <div class="row middle">
+        <div class="navbar--logo">
+          <a href="index.html"><span class="primary-text">i</span>Reporter</a>
+        </div>
+        <div class="navbar--searchbox">
+          <form>
+            <input type="text" placeholder="search...">
+          </form>
+        </div>
+        <div class="navbar--links">
+          <a href="add-record.html" class="btn btn-primary">Make A Report</a>
+          <a href="#!"><i class="fa fa-bell"></i></a>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown--button">
+            <i class="fa fa-th"></i>
+          </button>
+          <div class="dropdown--menu">
+            <a href="dashboard.html">
+              <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+            <a href="profile.html">
+              <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="settings.html">
+              <i class="fa fa-gear"></i> Settings
+            </a>
+            <a href="signin.html">
+              <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrapper" id="dashboard">
+    <div class="row">
+      <!-- MAIN CONTENT -->
+      <section class="main--content">
+        <div class="column">
+          <div class="panel">
+            <div class="panel--heading">
+              <h3>Manage Records</h3>
+            </div>
+            <div class="panel--body">
+              <div class="overview">
+                <div class="row">
+                  <div class="column">
+                    <div class="card card-noshadow">
+                      <div class="card--body">
+                        <span class="count">2</span>
+                        <h5>Total Records</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="card card-noshadow">
+                      <div class="card--body">
+                        <span class="count">1</span>
+                        <h5>Under investigation</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="dash">
+
+              <div class="records-list">
+                <div class="row">
+                  <div class="record">
+                    <div class="card card--primary">
+                      <div class="card--body">
+                        <a href="record-preview.html">
+                          <h3>Bad Roads <span class="tag tag-redflag">red-flag</span></h3>
+                        </a>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum repellendus repellat non laudantium inventore eveniet et iste iusto consectetur recusandae.</p>
+
+                        <div class="record--links">
+                          <span class="draft btn-primary">Draft</span>
+                          <a href="edit-record.html" class="edit btn-primary">Edit</a>
+                          <a href="#!" class="delete btn-primary">Delete</a>
+                          <a href="#!" class="add-map btn-primary">Add map</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="record">
+                    <div class="card card--primary">
+                      <div class="card--body">
+                        <a href="record-preview.html">
+                          <h3>Bad Roads <span class="tag tag-redflag">red-flag</span></h3>
+                        </a>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum repellendus repellat non laudantium inventore eveniet et iste iusto consectetur recusandae.</p>
+
+                        <div class="record--links">
+                          <span class="draft btn-primary">Draft</span>
+                          <a href="edit-record.html" class="edit btn-primary">Edit</a>
+                          <a href="#!" class="delete btn-primary">Delete</a>
+                          <a href="#!" class="add-map btn-primary">Add map</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+    </div>
+  </main>
+
+</body>
+</html>

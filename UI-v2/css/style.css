@@ -263,6 +263,18 @@ main.wrapper {
 
 
 /* ----- MEDIA QUERIES ----- */
+@media (max-width: 400px) {
+  .navbar--searchbox form {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar--links .btn-primary {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar--nav {
     height: 100%;
@@ -279,6 +291,14 @@ main.wrapper {
 }
 
 @media (min-width: 768px) {
+  .navbar--links .btn-primary {
+    display: block;
+  }
+  
+  main.wrapper {
+    padding-top: 2.5rem;
+  }
+  
   .menu--icons {
     display: none;
   }
@@ -292,6 +312,7 @@ main.wrapper {
   }
 
   .main--sidebar {
+    width: 28rem;
     margin-left: 1.5rem;
   }
 
@@ -302,8 +323,9 @@ main.wrapper {
 
   .sidebar--nav {
     width: 28rem;
+    z-index: -1;
+    position: fixed;
     background-color: white;
-    border-right: 1px solid #ddd;
     transition: 0.2s;
   }
 }

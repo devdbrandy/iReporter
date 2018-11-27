@@ -68,6 +68,59 @@
 /* ----- End Component ----- */
 
 /* ----- Stylus ----- */
+.primary-text {
+  color: var(--primary-color);
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+select {
+  width: 100%;
+  /* padding: 0.5rem 1rem; */
+  font-family: inherit;
+  font-size: 1.6rem;
+  border: 1px solid var(--gray80);
+  border-radius: 0.4rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  display: block;
+  border: 1px solid var(--gray80);
+  border-radius: 2px;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.5s;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  border: 0;
+  color: white;
+}
+
+.btn-primary:hover {
+  filter: brightness(120%);
+}
+
+.btn-secondary {
+  border: 1px solid #f4f4f4;
+  background: none;
+  color: white;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 1.6rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.5s;
+}
+
 .circle-img {
   width: 100%;
   height: 100%;

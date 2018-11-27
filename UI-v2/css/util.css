@@ -115,7 +115,7 @@ input[type=password],
 textarea,
 select {
   width: 100%;
-  /* padding: 0.5rem 1rem; */
+  padding: 1rem 2rem;
   font-family: inherit;
   font-size: 1.6rem;
   border: 1px solid var(--gray80);
@@ -132,6 +132,15 @@ textarea {
   resize: none;
   font-family: inherit;
   font-size: 1.6rem;
+}
+
+label {
+  font-family: inherit;
+  font-size: 1.6rem;
+}
+
+.form-control {
+  margin-bottom: 1.2rem;
 }
 
 .btn {

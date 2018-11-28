@@ -4,88 +4,228 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Home - iReporter</title>
+  <title>iReporter</title>
+  <link rel="stylesheet" href="css/font-awesome.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <nav class="main--navbar">
-    <div class="container">
+  <!-- TOP NAVBAR -->
+  <nav class="navbar">
+    <div class="wrapper">
       <div class="row middle">
-        <div class="column">
-          <div class="navbar--logo">
-            <a href="#!"><span class="primary-text">i</span>Reporter</a>
+        <div class="navbar--logo">
+          <a href="index.html"><span class="primary-text">i</span>Reporter</a>
+        </div>
+        <div class="navbar--searchbox">
+          <form>
+            <input type="text" placeholder="search...">
+          </form>
+        </div>
+        <div class="navbar--links">
+          <a href="add-record.html" class="btn btn-primary">Make A Report</a>
+          <a href="#!"><i class="fa fa-bell"></i></a>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown--button">
+            <i class="fa fa-th"></i>
+          </button>
+          <div class="dropdown--menu">
+            <a href="dashboard.html">
+              <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+            <a href="profile.html">
+              <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="settings.html">
+              <i class="fa fa-gear"></i> Settings
+            </a>
+            <a href="signin.html">
+              <i class="fa fa-sign-out"></i> Sign Out
+            </a>
           </div>
         </div>
-        <nav class="navbar--links">
-          <a href="records.html">Browse Incidents</a>
-        </nav>
-        <div class="column">
-          <div class="navbar--search">
-            <input type="search" name="search" placeholder="Search records...">
-          </div>
-        </div>
-        <div class="column">
-          <div class="navbar--right row middle">
-            <a href="signin.html" class="btn-primary">sign in</a>
-            <a href="signin.html" class="btn-primary">sign up</a>
-          </div>
-        </div>
-
-        <a href="javascript:void(0);" class="snackbar" onclick="snackbar()">
-          <i class="fa fa-bars"></i>
-        </a>
       </div>
     </div>
   </nav>
 
-  <header class="home--header">
-    <div class="row">
-      <div class="column">
-        <div class="jumbotron">
-          <h1><span class="primary-text">i</span>Reporter Community</h1>
-          <p>
-            iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public
-          </p>
-          <div class="row md-hide">
-            <a href="signin.html" class="btn-primary block">Sign In</a>
-          </div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="home--signup">
-          <form action="dashboard.html" class="home--signup--form">
-            <div>
-              <input type="text" placeholder="First Name">
-            </div>
-            <div>
-              <input type="text" placeholder="Last Name">
-            </div>
-            <div>
-              <input type="text" placeholder="Email address">
-            </div>
-            <div>
-              <input type="password" placeholder="Password">
-            </div>
-            <div>
-              <input type="password" placeholder="Repeat Password">
-            </div>
-            <button type="submit" class="btn-primary">Register</button>
-          </form>
-        </div>
+  <main class="wrapper">
+    <div class="menu--icons">
+      <div class="row">
+        <button class="sidebar-menu" id="sidebarOpen">
+          <i class="fa fa-bars"></i>
+        </button>
       </div>
     </div>
-  </header>
+    <div class="row">
+      <!-- MAIN CONTENT -->
+      <section class="main--content">
+        <div class="column">
+          <article class="row">
+            <a href="record.html">
+              <div class="card">
+                <header class="card--header">
+                  <img src="img/cover-img.jpeg" alt="cover-img">
+                </header>
+                <div class="card--body">
+                  <h3>The Most terrible havoc just happened in an unknown area</h3>
+                  <div class="summary row">
+                    <div class="avatar">
+                      <a href="profile.html">
+                        <img src="img/avatar.jpg" alt="user avatar" class="circle-img">
+                      </a>
+                    </div>
+                    <div class="column">
+                      <div class="report-user">
+                        <a href="profile.html">John Doe<span class="date"> - Dec 3</span></a>
+                      </div>
+                      <div class="tags">
+                        <a href="#!"><span class="label label-danger">Red Flag</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card--footer">
+                  <div class="row">
+                    <span class="label label-default">
+                      <i class="fa fa-comment"></i> 9
+                    </span>
+                    <span class="label label-default">
+                      <i class="fa fa-heart"></i> 120
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="row">
+            <a href="record.html">
+              <div class="card">
+                <div class="card--body">
+                  <h3>Light Restored to the people of Ijebu-Ijesha</h3>
+                  <div class="summary row">
+                    <div class="avatar">
+                      <a href="profile.html">
+                        <img src="img/avatar.jpg" alt="user avatar" class="circle-img">
+                      </a>
+                    </div>
+                    <div class="column">
+                      <div class="report-user">
+                        <a href="profile.html">Mike Spook<span class="published-at"> - Dec 3</span></a>
+                      </div>
+                      <div class="tags">
+                        <a href="#!"><span class="label label-primary">Intervention</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card--footer">
+                  <div class="row">
+                    <span class="label label-default">
+                      <i class="fa fa-comment"></i> 21
+                    </span>
+                    <span class="label label-default">
+                      <i class="fa fa-heart"></i> 98
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </article>
+        </div>
+      </section>
+  
+      <!-- SIDEBAR -->
+      <aside class="main--sidebar">
+        <div id="mainSidebar" class="sidebar--nav">
+          <div class="wrapper">
+            <div class="top-item">
+              <div class="card card-primary">
+                <div class="card--body">
+                  <a href="signin.html" class="btn btn-primary">Sign Up</a>
+                  <a href="signin.html" class="btn btn-primary">Sign In</a>
+                </div>
+              </div>
+            </div>
+            <div class="featured-report">
+              <div class="card">
+                <div class="card--body">
+                  <div class="tag">
+                    <a href="#!"><span class="label label-primary">Intervention</span></a>
+                  </div>
+                  <ul class="report-lists">
+                    <li>
+                      <div class="card">
+                        <div class="card--body">
+                          <a href="record.html">
+                            <h5 href="#!">Bad Roads</h5>
+                            <span class="label label-default">
+                              <i class="fa fa-comment"></i> 5
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="card">
+                        <div class="card--body">
+                          <a href="record.html">
+                            <h5 href="#!">No electricity</h5>
+                            <span class="label label-default">
+                              <i class="fa fa-comment"></i> 5
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="card">
+                        <div class="card--body">
+                          <a href="record.html">
+                            <h5 href="#!">No electricity</h5>
+                            <span class="label label-default">
+                              <i class="fa fa-comment"></i> 5
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar--overlay" id="sidebarOverlay"></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main--footer center">
+    <div class="footer--content">
+      <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+    </div>
+  </footer>
 
   <script>
-    function snackbar() {
-      var x = document.getElementById("myTopnav");
-      if (x.className === "topnav") {
-        x.className += " responsive";
-      } else {
-        x.className = "topnav";
-      }
-    }
+    const sidebarOpenBtn = document.getElementById('sidebarOpen');
+    const mainSidebar = document.getElementById('mainSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    const openSideMenu = () => {
+      mainSidebar.style.width = '28rem';
+      sidebarOverlay.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    };
+    const closeSideMenu = () => {
+      mainSidebar.style.width = '0';
+      sidebarOverlay.style.width = '0';
+      document.body.style.overflow = 'auto';
+    };
+
+    sidebarOpenBtn.addEventListener('click', openSideMenu);
+    sidebarOverlay.addEventListener('click', closeSideMenu);
   </script>
 </body>
 </html>

@@ -3,21 +3,13 @@
   margin: 2rem 0;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-  font-size: 1.4rem;
+.records--table .label {
+  font-size: 1.2rem;
 }
 
-th, td {
-  text-align: left;
-  padding: 1.2rem;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2
+.records--table a:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
 }
 
 .admin--record--status select {
@@ -25,11 +17,11 @@ tr:nth-child(even) {
   margin: 0;
 }
 
+.action--process .fa,
 .action--process .far,
 .action--process .fas {
   color: var(--green);
   font-size: 1.6rem;
-
   margin: 0 0.5rem;
   padding: 0.5rem;
   display: block;

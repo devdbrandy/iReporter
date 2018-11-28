@@ -1,4 +1,4 @@
 import * as log from 'loglevel';
-import app from './app';
+import server from './server';
 
-app.listen(3000, () => log.warn('compatible-debug'));
+server.listen(3000, () => log.warn('compatible-debug'));

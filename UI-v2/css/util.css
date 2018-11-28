@@ -1,4 +1,4 @@
-/* ----- Layout ----- */
+/* ----- LAYOUT ----- */
 .wrapper {
   width: 95%;
   margin: auto;
@@ -17,10 +17,10 @@
   flex: 1;
 }
 
-/* ----- End Layout ----- */
+/* ----- END LAYOUT ----- */
 
 
-/* ----- Alignment ----- */
+/* ----- ALIGNMENT ----- */
 .center {
   align-items: center;
   justify-content: center;
@@ -34,9 +34,9 @@
   justify-content: flex-end;
 }
 
-/* ----- End Alignment ----- */
+/* ----- END ALIGNMENT ----- */
 
-/* Components */
+/* COMPONENTS */
 .card {
   width: 100%;
   background: white;
@@ -94,9 +94,53 @@
   padding: 1.6rem 1.6rem;
 }
 
-/* ----- End Component ----- */
+/* ----- pagination links ----- */
+.pagination {
+  margin: 2rem 0;
+}
 
-/* ----- Stylus ----- */
+.pagination a {
+  font-size: 1.6rem;
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+.pagination a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: var(--gray80);
+}
+/* ----- end pagination links ----- */
+
+/* ----- END COMPONENTS ----- */
+
+
+/* ----- Striped Table ----- */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 1.4rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 1.2rem;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+/* ----- End Striped Table ----- */
+
+/* ----- STYLUS ----- */
 hr.dash {
   width: 10%;
   border: 1px inset var(--primary-color);
@@ -223,3 +267,5 @@ label {
 .label .fa-comment {
   color: var(--blue);
 }
+
+/* ----- END STYLUS ----- */

@@ -403,9 +403,62 @@ section#dashboard .records-list .card {
 
 /* ----- END DASHBOARD ----- */
 
+/* ----- USER PROFILE */
+.user-profile>* {
+  margin: 0 2rem;
+}
+
+.user--avatar img {
+  width: 20rem;
+  height: 20rem;
+  border: 0.5rem solid var(--gray80);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile--image img {
+  width: 5rem;
+  height: 5rem;
+  border: 1px solid var(--gray80);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user--detail h3 {
+  font-weight: bold;
+  font-size: 4.8em;
+  margin-bottom: 0;
+}
+
+.user--detail .btn-primary {
+  margin-bottom: 2rem;
+}
+
+.user--bio {
+  text-align: center;
+  text-justify: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.user--stat .container {
+  width: 100%;
+  text-align: center;
+  border-left: 0.2rem solid var(--primary-color);
+  padding: 2rem 2.8rem;
+}
+
+.user--stat span {
+  display: block;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+/* ----- END USER PROFILE ----- */
+
 
 /* ----- MEDIA QUERIES ----- */
-@media (max-width: 415px) {
+@media (max-width: 455px) {
   .navbar--searchbox form {
     display: none;
   }
@@ -437,6 +490,12 @@ section#dashboard .records-list .card {
     overflow: hidden;
     border-right: 1px solid #ddd;
     transition: 0.2s;
+  }
+}
+
+@media (max-width: 900px) {
+  .user-profile {
+    flex-direction: column;
   }
 }
 
@@ -484,6 +543,16 @@ section#dashboard .records-list .card {
     position: fixed;
     background-color: white;
     transition: 0.2s;
+  }
+
+  /* User Profile */
+  .user--avatar img {
+    width: 25rem;
+    height: 25rem;
+  }
+
+  .user--detail h3 {
+    font-size: 6.1em;
   }
 }
 

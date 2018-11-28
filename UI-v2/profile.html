@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Profile - iReporter</title>
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <nav class="navbar">
+    <div class="wrapper">
+      <div class="row middle">
+        <div class="navbar--logo">
+          <a href="index.html"><span class="primary-text">i</span>Reporter</a>
+        </div>
+        <div class="navbar--searchbox">
+          <form>
+            <input type="text" placeholder="search...">
+          </form>
+        </div>
+        <div class="navbar--links">
+          <a href="add-record.html" class="btn btn-primary">Make A Report</a>
+          <a href="#!"><i class="fa fa-bell"></i></a>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown--button">
+            <i class="fa fa-th"></i>
+          </button>
+          <div class="dropdown--menu">
+            <a href="dashboard.html">
+              <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+            <a href="profile.html">
+              <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="settings.html">
+              <i class="fa fa-gear"></i> Settings
+            </a>
+            <a href="signin.html">
+              <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrapper" id="dashboard">
+    <div class="row">
+      <!-- MAIN CONTENT -->
+      <section class="main--content">
+        <div class="column">
+          <div class="panel">
+            <div class="panel--heading">
+              <h3>Profile</h3>
+            </div>
+            <div class="panel--body">
+              <div class="user-profile row middle">
+                <div class="user--avatar column center">
+                  <img src="img/avatar.jpg" alt="avatar">
+                </div>
+                <div class="user--detail column center">
+                  <h3>John Doe</h3>
+                  <a href="settings.html" class="btn btn-primary">Edit Profile</a>
+                  <hr class="dash">
+                  <p class="user--bio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro sapiente labore perspiciatis provident illum minus. Minus nihil exercitationem laboriosam totam modi explicabo, obcaecati cupiditate earum. Magnam aliquam libero magni minus!</p>
+                </div>
+                <div class="user--stat column center">
+                  <div class="container">
+                    <span>Joined: Dec 3, 2018</span>
+                    <hr class="dash">
+                    <span>0 Records Published</span>
+                    <span>0 Comments Written</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+    </div>
+  </main>
+
+</body>
+</html>

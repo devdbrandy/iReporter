@@ -6,10 +6,12 @@
   "main": "dist/index.js",
   "scripts": {
     "gh:deploy": "gh-pages -d UI",
-    "build": "babel src -d dist",
     "dev": "babel-node src/index.js",
-    "start": "npm run build & node dist/index.js",
-    "serve": "node dist/index.js"
+    "clean": "rimraf dist",
+    "build": "npm run clean && babel src -d dist",
+    "start": "npm run build & npm run serve",
+    "serve": "node dist/index.js",
+    "lint": "eslint src/"
   },
   "keywords": [
     "reports",
@@ -35,10 +37,13 @@
     "@babel/preset-env": "^7.1.6",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "gh-pages": "^2.0.1",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.7",
     "rimraf": "^2.6.2"
   },

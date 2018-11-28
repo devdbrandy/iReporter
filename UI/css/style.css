@@ -68,32 +68,9 @@ img {
   filter: brightness(120%);
 }
 
-.navbar--searchbox {
-  display: flex;
-  flex: auto;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar--searchbox form {
-  width: 80%;
-}
-
-.navbar--searchbox input {
-  border: 1px solid #555;
-  background: var(--black);
-  color: var(--gray80);
-  outline: none;
-  padding: 0.5rem 1rem;
-  transition: all 0.5s;
-}
-
-.navbar--searchbox input:hover {
-  border-color: var(--primary-color);
-}
-
 .navbar--links {
   display: flex;
+  flex: auto;
   justify-content: flex-end;
   align-items: center;
   margin: 1rem;
@@ -458,12 +435,6 @@ section#dashboard .records-list .card {
 
 
 /* ----- MEDIA QUERIES ----- */
-@media (max-width: 455px) {
-  .navbar--searchbox form {
-    display: none;
-  }
-}
-
 @media (max-width: 575px) {
   .overview .card--body {
     font-size: 0.7rem;
@@ -559,9 +530,5 @@ section#dashboard .records-list .card {
 @media (min-width: 992px) {
   .wrapper {
     width: 75%;
-  }
-
-  .navbar--searchbox form {
-    width: 60%;
   }
 }

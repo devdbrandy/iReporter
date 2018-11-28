@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public",
   "private": true,
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "gh:deploy": "gh-pages -d UI",
-    "start": "node ./server/bin/www"
+    "build": "babel src -d dist",
+    "dev": "babel-node src/index.js",
+    "start": "npm run build & node dist/index.js",
+    "serve": "node dist/index.js"
   },
   "keywords": [
     "reports",
@@ -26,6 +29,28 @@
     "morgan": "~1.9.0"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "gh-pages": "^2.0.1",
+    "nodemon": "^1.18.7",
+    "rimraf": "^2.6.2"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "node": true,
+      "mocha": true
+    }
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }

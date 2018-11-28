@@ -1,0 +1,33 @@
+/* RECORD TABLE */
+.records--table {
+  margin: 2rem 0;
+}
+
+.records--table .label {
+  font-size: 1.2rem;
+}
+
+.records--table a:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+.admin--record--status select {
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+.action--process .fa,
+.action--process .far,
+.action--process .fas {
+  color: var(--green);
+  font-size: 1.6rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem;
+  display: block;
+  border: 0;
+  border-radius: 2px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}

@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans:400|Roboto:300');
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans:400|ABeeZee:400|Roboto:300');
 
 :root {
   --headings-font: 'Roboto', sans-serif;
-  --body-font: 'Alegreya Sans', sans-serif;
+  --body-font: 'ABeeZee', sans-serif;
 }
 
 html,

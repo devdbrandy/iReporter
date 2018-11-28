@@ -66,6 +66,11 @@
   box-shadow: 3px 3px 0 var(--blue);
 }
 
+.card-secondary {
+  border-color: var(--lightblue);
+  box-shadow: 3px 3px 0 var(--lightblue);
+}
+
 .card-noshadow {
   box-shadow: none;
 }

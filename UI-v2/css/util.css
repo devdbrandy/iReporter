@@ -144,7 +144,8 @@ label {
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
+  padding: 1.2rem 1.6rem;;
   display: block;
   border: 1px solid var(--gray80);
   border-radius: 2px;

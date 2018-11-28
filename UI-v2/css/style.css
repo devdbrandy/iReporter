@@ -266,7 +266,7 @@ main.wrapper {
   background: var(--black);
   color: var(--gray80);
   padding: 3rem;
-  margin-top: 3rem;
+  margin-top: 10rem;
 }
 
 .footer--content p {
@@ -287,7 +287,7 @@ section#report span.published-at::before {
   padding-right: 1rem;
 }
 
-section#report .report-content {
+.report-content {
   margin-top: 2rem;
 }
 
@@ -393,6 +393,12 @@ section#dashboard .records-list .card {
 
 .record--links .add-map {
   background: var(--lightblue);
+}
+
+.form-control .avatar img {
+  width: 5rem;
+  height: 5rem;
+  margin-right: 2rem;
 }
 
 /* ----- END DASHBOARD ----- */

@@ -4,7 +4,9 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+  res.status(200).json({
+    status: 'OK',
+  });
 });
 
 export default router;

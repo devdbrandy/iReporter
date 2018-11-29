@@ -57,16 +57,6 @@
     "rimraf": "^2.6.2",
     "supertest": "^3.3.0"
   },
-  "eslintConfig": {
-    "extends": "airbnb-base",
-    "env": {
-      "node": true,
-      "mocha": true
-    },
-    "rules": {
-      "no-unused-vars": 0
-    }
-  },
   "babel": {
     "presets": [
       "env"

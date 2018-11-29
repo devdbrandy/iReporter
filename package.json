@@ -2,9 +2,20 @@
   "name": "ireporter",
   "version": "1.0.0",
   "description": "iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public",
-  "main": "index.js",
+  "private": true,
+  "main": "dist/index.js",
   "scripts": {
-    "gh:deploy": "gh-pages -d UI"
+    "gh:deploy": "gh-pages -d UI",
+    "dev": "babel-node src/index.js -r dotenv/config",
+    "watch": "nodemon --exec npm run dev",
+    "clean": "rimraf dist",
+    "build": "npm run clean && babel src -d dist",
+    "start": "npm run build & npm run serve",
+    "serve": "node -r dotenv/config dist/index.js",
+    "lint": "eslint src/",
+    "mocha": "cross-env NODE_ENV=test nyc mocha --require babel-register",
+    "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "reports",
@@ -15,7 +26,50 @@
   ],
   "author": "Harry Dbrandy",
   "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^6.1.0",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "loglevel": "^1.6.1",
+    "morgan": "~1.9.0"
+  },
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "gh-pages": "^2.0.1",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.7",
+    "nyc": "^13.1.0",
+    "rimraf": "^2.6.2",
+    "supertest": "^3.3.0"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "no-unused-vars": 0
+    }
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }

@@ -4,8 +4,8 @@ import createError from 'http-errors';
 import path from 'path';
 import logger from 'morgan';
 
-const webRouter = require('./routes/web');
-const apiRouter = require('./routes/api');
+import webRouter from './routes/web';
+import apiRouter from './routes/api';
 
 const app = express();
 

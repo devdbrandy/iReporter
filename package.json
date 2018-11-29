@@ -13,7 +13,8 @@
     "start": "npm run build & npm run serve",
     "serve": "node -r dotenv/config dist/index.js",
     "lint": "eslint src/",
-    "test": "cross-env NODE_ENV=test nyc mocha --require babel-register"
+    "test": "cross-env NODE_ENV=test nyc mocha --require babel-register",
+    "coverage": "nyc mocha --require babel-register"
   },
   "keywords": [
     "reports",

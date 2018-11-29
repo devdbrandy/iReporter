@@ -13,8 +13,9 @@
     "start": "npm run build & npm run serve",
     "serve": "node -r dotenv/config dist/index.js",
     "lint": "eslint src/",
-    "test": "cross-env NODE_ENV=test nyc mocha --require babel-register",
-    "coverage": "nyc mocha --require babel-register"
+    "mocha": "cross-env NODE_ENV=test nyc mocha --require babel-register",
+    "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "reports",
@@ -44,6 +45,7 @@
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
+    "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",

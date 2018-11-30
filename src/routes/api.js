@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import dbStorage from '../models/mock';
-import { User } from '../models';
+import { User, Record } from '../models';
 import { env } from '../helpers';
 
 const router = express.Router();
@@ -29,26 +29,13 @@ router.post('/auth', (req, res, next) => {
   });
 });
 
-/* Fetch all red-flag records */
+/* Fetch all users */
 router.get('/users', (req, res, next) => {
   res.status(200)
     .json({
       status: 200,
       data: dbStorage.users,
     });
-});
-
-/* Fetch a specific red-flag record. */
-router.get('/red-flags/:id', (req, res, next) => {
-  const recordId = parseInt(req.params.id, 10);
-  const record = dbStorage.records.filter(item => (
-    item.id === recordId
-  ))[0];
-
-  res.status(200).json({
-    status: 200,
-    data: record,
-  });
 });
 
 /* Create new user */
@@ -67,12 +54,41 @@ router.post('/users', (req, res, next) => {
     });
 });
 
-/* GET list of records. */
+/* Fetch all red-flag records */
 router.get('/red-flags', (req, res, next) => {
   res.status(200)
     .json({
       status: 200,
       data: dbStorage.records,
+    });
+});
+
+/* Fetch a specific red-flag record. */
+router.get('/red-flags/:id', (req, res, next) => {
+  const recordId = parseInt(req.params.id, 10);
+  const record = dbStorage.records.filter(item => (
+    item.id === recordId
+  ))[0];
+
+  res.status(200).json({
+    status: 200,
+    data: record,
+  });
+});
+
+/* Create a red-flag record. */
+router.post('/red-flags', (req, res, next) => {
+  const data = req.body;
+  const newRecord = new Record(data);
+  dbStorage.records.push(newRecord);
+
+  res.status(201)
+    .json({
+      status: 201,
+      data: {
+        id: newRecord.id,
+        message: 'Created red-flag record',
+      },
     });
 });
 

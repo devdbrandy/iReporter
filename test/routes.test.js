@@ -88,4 +88,32 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('POST /api/red-flags', () => {
+    it('Create a red-flag record', (done) => {
+      const recordData = {
+        type: 'red-flag',
+        location: '-42.2078,138.0694',
+        images: [
+          'https://via.placeholder.com/650x450',
+          'https://via.placeholder.com/650x450',
+          'https://via.placeholder.com/650x450',
+        ],
+        video: [
+          'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
+        ],
+        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
+      };
+
+      request(app)
+        .post('/api/red-flags')
+        .send(recordData)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end((err, res) => {
+          res.body.data.should.have.property('id');
+          done(err);
+        });
+    });
+  });
 });

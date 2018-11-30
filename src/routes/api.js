@@ -29,13 +29,26 @@ router.post('/auth', (req, res, next) => {
   });
 });
 
-/* GET list of users */
+/* Fetch all red-flag records */
 router.get('/users', (req, res, next) => {
   res.status(200)
     .json({
       status: 200,
       data: dbStorage.users,
     });
+});
+
+/* Fetch a specific red-flag record. */
+router.get('/red-flags/:id', (req, res, next) => {
+  const recordId = parseInt(req.params.id, 10);
+  const record = dbStorage.records.filter(item => (
+    item.id === recordId
+  ))[0];
+
+  res.status(200).json({
+    status: 200,
+    data: record,
+  });
 });
 
 /* Create new user */

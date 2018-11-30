@@ -9,7 +9,7 @@ const should = chai.should();
 
 describe('API Routes', () => {
   describe('/api/auth', () => {
-    it('authenticates user', (done) => {
+    it('Authenticates a user', (done) => {
       const user = mock.users[0];
 
       request(app)
@@ -28,7 +28,7 @@ describe('API Routes', () => {
   });
 
   describe('GET /api/users', () => {
-    it('retrieve a list of users', (done) => {
+    it('Fetch a list of users', (done) => {
       request(app)
         .get('/api/users')
         .set('Accept', 'application/json')
@@ -42,7 +42,7 @@ describe('API Routes', () => {
   });
 
   describe('POST /api/users', () => {
-    it('creates a new user', (done) => {
+    it('Create a new user', (done) => {
       const userData = {
         firstname: 'John',
         lastname: 'Doe',
@@ -65,13 +65,25 @@ describe('API Routes', () => {
   });
 
   describe('GET /api/red-flags', () => {
-    it('returns a list of red-flags', (done) => {
+    it('Fetch all red-flag records', (done) => {
       request(app)
         .get('/api/red-flags')
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
             .with.lengthOf(2);
+          done(err);
+        });
+    });
+  });
+
+  describe('GET /api/red-flags/:id', () => {
+    it('Fetch a specific red-flag record.', (done) => {
+      request(app)
+        .get('/api/red-flags/1')
+        .expect(200)
+        .end((err, res) => {
+          res.body.should.have.property('data');
           done(err);
         });
     });

@@ -134,4 +134,22 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('PATCH /api/red-flags/:id', () => {
+    it('Edit the comment of a specific red-flag record', (done) => {
+      const data = {
+        comment: 'This is an updated comment',
+      };
+
+      request(app)
+        .patch('/api/red-flags/1')
+        .send(data)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end((err, res) => {
+          res.body.data.should.have.property('id');
+          done(err);
+        });
+    });
+  });
 });

@@ -4,6 +4,15 @@ import { User } from '../models';
 
 const router = express.Router();
 
+/* GET list of users */
+router.get('/users', (req, res, next) => {
+  res.status(200)
+    .json({
+      status: 200,
+      data: dbStorage.users,
+    });
+});
+
 /* Create new user */
 router.post('/users', (req, res, next) => {
   const data = req.body;
@@ -20,7 +29,7 @@ router.post('/users', (req, res, next) => {
     });
 });
 
-/* GET list of incidents. */
+/* GET list of records. */
 router.get('/red-flags', (req, res, next) => {
   res.status(200)
     .json({

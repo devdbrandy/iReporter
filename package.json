@@ -9,7 +9,7 @@
     "dev": "babel-node src/index.js -r dotenv/config",
     "watch": "nodemon --exec npm run dev",
     "clean": "rimraf dist",
-    "build": "babel src -d dist",
+    "build": "npm run clean && babel src -d dist",
     "start": "npm run build & npm run serve",
     "serve": "node -r dotenv/config dist/index.js",
     "lint": "eslint src/",

@@ -65,7 +65,6 @@ export class Record {
   update(data) {
     if (this.status === 'draft') {
       this.comment = data.comment || this.comment;
-      this.location = data.location || this.location;
       this.type = data.type || this.type;
       this.images = data.images || this.images;
       this.videos = data.videos || this.videos;
@@ -74,8 +73,12 @@ export class Record {
     return this;
   }
 
-  publish() {
-    this.status = 'published';
+  updateLocation(data) {
+    if (this.status === 'draft') {
+      this.location = data.location || this.location;
+    }
+
+    return this;
   }
 
   static incrementCount() {

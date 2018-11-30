@@ -116,4 +116,22 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('PATCH /api/red-flags/:id/location', () => {
+    it('Edit the location of a specific red-flag record', (done) => {
+      const data = {
+        location: '-81.2078,138.0233',
+      };
+
+      request(app)
+        .patch('/api/red-flags/1/location')
+        .send(data)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end((err, res) => {
+          res.body.data.should.have.property('id');
+          done(err);
+        });
+    });
+  });
 });

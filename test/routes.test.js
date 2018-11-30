@@ -152,4 +152,16 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('DELETE /api/red-flags/:id', () => {
+    it('Delete a specific red-flag record', (done) => {
+      request(app)
+        .delete('/api/red-flags/1')
+        .expect(200)
+        .end((err, res) => {
+          res.body.data.should.have.property('id');
+          done(err);
+        });
+    });
+  });
 });

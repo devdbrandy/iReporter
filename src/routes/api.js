@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import _ from 'underscore';
 import dbStorage from '../models/mock';
 import { User, Record } from '../models';
 import { env } from '../helpers';
@@ -126,6 +127,23 @@ router.patch('/red-flags/:id', (req, res, next) => {
       data: {
         id: recordId,
         message: "Updated red-flag record's comment",
+      },
+    });
+});
+
+/* Delete a specific red-flag record */
+router.delete('/red-flags/:id', (req, res, next) => {
+  const recordId = parseInt(req.params.id, 10);
+  dbStorage.records = _.reject(dbStorage.records, record => (
+    record.id === recordId
+  ));
+
+  res.status(200)
+    .json({
+      status: 200,
+      data: {
+        id: recordId,
+        message: 'Red-flag record has been deleted',
       },
     });
 });

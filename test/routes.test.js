@@ -7,13 +7,15 @@ import mock from '../src/models/mock';
 dotenv.config();
 const should = chai.should();
 
+const apiVersion = 'v1';
+
 describe('API Routes', () => {
-  describe('/api/auth', () => {
+  describe(`/api/${apiVersion}/auth`, () => {
     it('Authenticates a user', (done) => {
       const user = mock.users[0];
 
       request(app)
-        .post('/api/auth')
+        .post(`/api/${apiVersion}/auth`)
         .send({
           username: user.username,
           password: user.password,
@@ -27,10 +29,10 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET /api/users', () => {
+  describe(`GET /api/${apiVersion}/users`, () => {
     it('Fetch a list of users', (done) => {
       request(app)
-        .get('/api/users')
+        .get(`/api/${apiVersion}/users`)
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
@@ -41,7 +43,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST /api/users', () => {
+  describe(`POST /api/${apiVersion}/users`, () => {
     it('Create a new user', (done) => {
       const userData = {
         firstname: 'John',
@@ -53,7 +55,7 @@ describe('API Routes', () => {
       };
 
       request(app)
-        .post('/api/users')
+        .post(`/api/${apiVersion}/users`)
         .send(userData)
         .set('Accept', 'application/json')
         .expect(201)
@@ -64,10 +66,10 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET /api/red-flags', () => {
+  describe(`GET /api/${apiVersion}/red-flags`, () => {
     it('Fetch all red-flag records', (done) => {
       request(app)
-        .get('/api/red-flags')
+        .get(`/api/${apiVersion}/red-flags`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
@@ -77,10 +79,10 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET /api/red-flags/:id', () => {
+  describe(`GET /api/${apiVersion}/red-flags/:id`, () => {
     it('Fetch a specific red-flag record.', (done) => {
       request(app)
-        .get('/api/red-flags/1')
+        .get(`/api/${apiVersion}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
@@ -89,7 +91,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST /api/red-flags', () => {
+  describe(`POST /api/${apiVersion}/red-flags`, () => {
     it('Create a red-flag record', (done) => {
       const recordData = {
         type: 'red-flag',
@@ -106,7 +108,7 @@ describe('API Routes', () => {
       };
 
       request(app)
-        .post('/api/red-flags')
+        .post(`/api/${apiVersion}/red-flags`)
         .send(recordData)
         .set('Accept', 'application/json')
         .expect(201)
@@ -117,14 +119,14 @@ describe('API Routes', () => {
     });
   });
 
-  describe('PATCH /api/red-flags/:id/location', () => {
+  describe(`PATCH /api/${apiVersion}/red-flags/:id/location`, () => {
     it('Edit the location of a specific red-flag record', (done) => {
       const data = {
         location: '-81.2078,138.0233',
       };
 
       request(app)
-        .patch('/api/red-flags/1/location')
+        .patch(`/api/${apiVersion}/red-flags/1/location`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
@@ -135,14 +137,14 @@ describe('API Routes', () => {
     });
   });
 
-  describe('PATCH /api/red-flags/:id', () => {
+  describe(`PATCH /api/${apiVersion}/red-flags/:id`, () => {
     it('Edit the comment of a specific red-flag record', (done) => {
       const data = {
         comment: 'This is an updated comment',
       };
 
       request(app)
-        .patch('/api/red-flags/1')
+        .patch(`/api/${apiVersion}/red-flags/1`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
@@ -153,10 +155,10 @@ describe('API Routes', () => {
     });
   });
 
-  describe('DELETE /api/red-flags/:id', () => {
+  describe(`DELETE /api/${apiVersion}/red-flags/:id`, () => {
     it('Delete a specific red-flag record', (done) => {
       request(app)
-        .delete('/api/red-flags/1')
+        .delete(`/api/${apiVersion}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
           res.body.data.should.have.property('id');

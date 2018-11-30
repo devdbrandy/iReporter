@@ -1,8 +1,33 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import dbStorage from '../models/mock';
 import { User } from '../models';
+import { env } from '../helpers';
 
 const router = express.Router();
+
+router.post('/auth', (req, res, next) => {
+  const user = dbStorage.users.filter(data => (
+    data.username === req.body.username
+  ))[0];
+
+  if (!user || req.body.password !== user.password) {
+    return res.status(401)
+      .json({
+        status: 401,
+        data: {
+          message: 'Unauthorized',
+        },
+      });
+  }
+  jwt.sign({ user }, env('CLIENT_SECRET_KEY'), (err, token) => {
+    return res.status(200)
+      .json({
+        status: 200,
+        data: { token },
+      });
+  });
+});
 
 /* GET list of users */
 router.get('/users', (req, res, next) => {

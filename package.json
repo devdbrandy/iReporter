@@ -14,6 +14,7 @@
     "serve": "node -r dotenv/config dist/index.js",
     "lint": "eslint src/",
     "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
+    "mocha:watch": "cross-env NODE_ENV=test mocha --watch --require babel-register",
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },

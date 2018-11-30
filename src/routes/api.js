@@ -21,7 +21,7 @@ router.post('/auth', (req, res, next) => {
       });
   }
   jwt.sign({ user }, env('CLIENT_SECRET_KEY'), (err, token) => {
-    return res.status(200)
+    res.status(200)
       .json({
         status: 200,
         data: { token },
@@ -107,6 +107,25 @@ router.patch('/red-flags/:id/location', (req, res, next) => {
       data: {
         id: recordId,
         message: "Updated red-flag record's location",
+      },
+    });
+});
+
+/* Edit the comment of a specific red-flag record */
+router.patch('/red-flags/:id', (req, res, next) => {
+  const recordId = parseInt(req.params.id, 10);
+  const data = req.body;
+  const record = dbStorage.records.filter(item => (
+    item.id === recordId
+  ))[0];
+  record.update(data);
+
+  res.status(201)
+    .json({
+      status: 201,
+      data: {
+        id: recordId,
+        message: "Updated red-flag record's comment",
       },
     });
 });

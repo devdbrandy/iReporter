@@ -20,7 +20,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 _dotenv2.default.config({ silent: true });
 
-var port = (0, _helpers.env)('APP_PORT', 3000);
+var port = process.env.PORT || 3000;
 _server2.default.listen(port, function () {
   return log.warn('Listening on port ' + port);
 });

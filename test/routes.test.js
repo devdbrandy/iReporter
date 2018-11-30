@@ -5,6 +5,28 @@ import app from '../src/server';
 const should = chai.should();
 
 describe('API Routes', () => {
+  describe('POST /api/users', () => {
+    it('creates a new user', (done) => {
+      const userData = {
+        firstname: 'John',
+        lastname: 'Doe',
+        othernames: 'Posnan',
+        email: 'john@email.com',
+        phoneNumber: '622-132-9283',
+      };
+
+      request(app)
+        .post('/api/users')
+        .send(userData)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end((err, res) => {
+          res.body.data.should.have.property('id');
+          done(err);
+        });
+    });
+  });
+
   describe('GET /api/red-flags', () => {
     it('returns a list of red-flags', (done) => {
       request(app)

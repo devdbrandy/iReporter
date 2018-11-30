@@ -1,12 +1,15 @@
 import express from 'express';
+import dbStorage from '../models/mock';
 
 const router = express.Router();
 
-/* GET home page. */
-router.get('/', (req, res, next) => {
-  res.status(200).json({
-    status: 'OK',
-  });
+/* GET list of incidents. */
+router.get('/red-flags', (req, res, next) => {
+  res.status(200)
+    .json({
+      status: 200,
+      data: dbStorage.records,
+    });
 });
 
 export default router;

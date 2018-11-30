@@ -13,7 +13,7 @@
     "start": "npm run build & npm run serve",
     "serve": "node -r dotenv/config dist/index.js",
     "lint": "eslint src/",
-    "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
+    "mocha": "cross-env NODE_ENV=test nyc mocha --require babel-register",
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -34,9 +34,7 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "loglevel": "^1.6.1",
-    "mocker-data-generator": "^2.6.6",
-    "morgan": "~1.9.0",
-    "underscore": "^1.9.1"
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -49,7 +47,6 @@
     "chai-http": "^4.2.0",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
-    "editorconfig": "^0.15.2",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",

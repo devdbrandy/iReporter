@@ -92,4 +92,23 @@ router.post('/red-flags', (req, res, next) => {
     });
 });
 
+/* Edit the location of a specific red-flag record */
+router.patch('/red-flags/:id/location', (req, res, next) => {
+  const recordId = parseInt(req.params.id, 10);
+  const data = req.body;
+  const record = dbStorage.records.filter(item => (
+    item.id === recordId
+  ))[0];
+  record.updateLocation(data);
+
+  res.status(201)
+    .json({
+      status: 201,
+      data: {
+        id: recordId,
+        message: "Updated red-flag record's location",
+      },
+    });
+});
+
 export default router;

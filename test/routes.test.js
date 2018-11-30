@@ -5,6 +5,19 @@ import app from '../src/server';
 const should = chai.should();
 
 describe('API Routes', () => {
+  describe('GET /api/users', () => {
+    it('retrieve a list of users', (done) => {
+      request(app)
+        .get('/api/users')
+        .expect(200)
+        .end((err, res) => {
+          res.body.should.have.property('data')
+            .with.lengthOf(2);
+          done(err);
+        });
+    });
+  });
+
   describe('POST /api/users', () => {
     it('creates a new user', (done) => {
       const userData = {

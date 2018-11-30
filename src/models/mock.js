@@ -12,6 +12,7 @@ const dbStorage = {
       phoneNumber: '441-955-1086',
       username: 'RusseDan4',
       registered: '2017-11-30T12:19:06.208Z',
+      password: 'secret',
     }),
   ],
   records: [
@@ -54,6 +55,7 @@ const adminUser = new User({
   phoneNumber: '615-955-1086',
   username: 'johnnyboi',
   registered: '2017-11-30T12:19:06.208Z',
+  password: 'secret',
 });
 
 User.assignAdmin(adminUser);

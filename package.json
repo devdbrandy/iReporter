@@ -66,5 +66,8 @@
     "presets": [
       "env"
     ]
+  },
+  "engines": {
+    "node": "10.x"
   }
 }

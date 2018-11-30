@@ -1,3 +1,5 @@
+const privateProps = new WeakMap();
+
 export class User {
   constructor(attributes) {
     User.incrementCount();
@@ -9,6 +11,7 @@ export class User {
     this.phoneNumber = attributes.phoneNumber;
     this.registered = Date();
     this.isAdmin = false;
+    privateProps.set(this, { password: attributes.password });
     this.generateUsername();
   }
 
@@ -18,6 +21,10 @@ export class User {
         + this.firstname.substring(0, 3)
         + Math.floor(Math.random() * 10)
     );
+  }
+
+  get password() {
+    return privateProps.get(this).password;
   }
 
   update(data) {

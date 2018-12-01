@@ -1,7 +1,2 @@
-import verifyToken from './authenticate';
-import errorHandler from './error-handler';
-
-export default {
-  verifyToken,
-  errorHandler,
-};
+export { default as verifyToken } from './authenticate';
+export { default as errorHandler } from './error-handler';

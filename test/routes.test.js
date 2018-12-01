@@ -15,8 +15,8 @@ describe('routes: index', () => {
     it('should render the index page', (done) => {
       request(app)
         .get('/')
-        .expect(200);
-      done();
+        .expect(200)
+        .end(done);
     });
   });
 
@@ -24,8 +24,8 @@ describe('routes: index', () => {
     it('should throw an error', (done) => {
       request(app)
         .get('/404')
-        .expect(404);
-      done();
+        .expect(404)
+        .end(done);
     });
   });
 });
@@ -45,7 +45,7 @@ describe('routes: auth', () => {
         .expect(200)
         .end((err, res) => {
           res.body.data[0].should.have.property('token');
-          done(err);
+          done();
         });
     });
   });
@@ -61,7 +61,7 @@ describe('routes: users', () => {
         .end((err, res) => {
           res.body.should.have.property('data')
             .with.lengthOf(2);
-          done(err);
+          done();
         });
     });
   });
@@ -84,7 +84,7 @@ describe('routes: users', () => {
         .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
-          done(err);
+          done();
         });
     });
   });
@@ -111,7 +111,7 @@ describe('routes: red-flags', () => {
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
-          done(err);
+          done();
         });
     });
 
@@ -121,7 +121,7 @@ describe('routes: red-flags', () => {
         .expect(404)
         .end((err, res) => {
           res.body.should.have.property('error');
-          done(err);
+          done();
         });
     });
   });
@@ -149,7 +149,7 @@ describe('routes: red-flags', () => {
         .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
-          done(err);
+          done();
         });
     });
   });
@@ -167,7 +167,7 @@ describe('routes: red-flags', () => {
         .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
-          done(err);
+          done();
         });
     });
   });
@@ -185,7 +185,7 @@ describe('routes: red-flags', () => {
         .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
-          done(err);
+          done();
         });
     });
   });
@@ -197,7 +197,7 @@ describe('routes: red-flags', () => {
         .expect(200)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
-          done(err);
+          done();
         });
     });
   });

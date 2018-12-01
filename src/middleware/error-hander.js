@@ -4,6 +4,7 @@ function errorHandler(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   const statusCode = err.status || 500;
+  res.status(statusCode);
 
   if (req.accepts('application/json')) {
     res.json({
@@ -12,7 +13,6 @@ function errorHandler(err, req, res, next) {
     });
   } else {
     // render the error page
-    res.status(statusCode);
     res.render('error');
   }
 }

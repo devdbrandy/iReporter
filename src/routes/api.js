@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import createError from 'http-errors';
 import _ from 'underscore';
 import dbStorage from '../models/mock';
 import { User, Record } from '../models';
@@ -71,10 +72,14 @@ router.get('/red-flags/:id', (req, res, next) => {
     item.id === recordId
   ))[0];
 
-  res.status(200).json({
-    status: 200,
-    data: record,
-  });
+  if (record) {
+    res.status(200).json({
+      status: 200,
+      data: record,
+    });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Create a red-flag record. */
@@ -100,16 +105,21 @@ router.patch('/red-flags/:id/location', (req, res, next) => {
   const record = dbStorage.records.filter(item => (
     item.id === recordId
   ))[0];
-  record.updateLocation(data);
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: {
-        id: recordId,
-        message: "Updated red-flag record's location",
-      },
-    });
+  if (record) {
+    record.updateLocation(data);
+
+    res.status(201)
+      .json({
+        status: 201,
+        data: {
+          id: recordId,
+          message: "Updated red-flag record's location",
+        },
+      });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Edit the comment of a specific red-flag record */
@@ -119,16 +129,21 @@ router.patch('/red-flags/:id', (req, res, next) => {
   const record = dbStorage.records.filter(item => (
     item.id === recordId
   ))[0];
-  record.update(data);
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: {
-        id: recordId,
-        message: "Updated red-flag record's comment",
-      },
-    });
+  if (record) {
+    record.update(data);
+
+    res.status(201)
+      .json({
+        status: 201,
+        data: {
+          id: recordId,
+          message: "Updated red-flag record's comment",
+        },
+      });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Delete a specific red-flag record */

@@ -10,9 +10,9 @@ const should = chai.should();
 const apiVersion = 'v1';
 const apiBase = `/api/${apiVersion}`;
 
-describe('API Routes', () => {
+describe('routes: auth', () => {
   describe(`${apiBase}/auth`, () => {
-    it('Authenticates a user', (done) => {
+    it('should authenticate a user and respond with a token', (done) => {
       const user = mock.users[0];
 
       request(app)
@@ -29,9 +29,11 @@ describe('API Routes', () => {
         });
     });
   });
+});
 
+describe('routes: users', () => {
   describe(`GET ${apiBase}/users`, () => {
-    it('Fetch a list of users', (done) => {
+    it('should fetch a list of users', (done) => {
       request(app)
         .get(`${apiBase}/users`)
         .set('Accept', 'application/json')
@@ -45,7 +47,7 @@ describe('API Routes', () => {
   });
 
   describe(`POST ${apiBase}/users`, () => {
-    it('Create a new user', (done) => {
+    it('should create a new user', (done) => {
       const userData = {
         firstname: 'John',
         lastname: 'Doe',
@@ -66,9 +68,11 @@ describe('API Routes', () => {
         });
     });
   });
+});
 
+describe('routes: red-flags', () => {
   describe(`GET ${apiBase}/red-flags`, () => {
-    it('Fetch all red-flag records', (done) => {
+    it('should fetch all red-flag records', (done) => {
       request(app)
         .get(`${apiBase}/red-flags`)
         .expect(200)
@@ -81,7 +85,7 @@ describe('API Routes', () => {
   });
 
   describe(`GET ${apiBase}/red-flags/:id`, () => {
-    it('Fetch a specific red-flag record.', (done) => {
+    it('should fetch a specific red-flag record.', (done) => {
       request(app)
         .get(`${apiBase}/red-flags/1`)
         .expect(200)
@@ -93,7 +97,7 @@ describe('API Routes', () => {
   });
 
   describe(`POST ${apiBase}/red-flags`, () => {
-    it('Create a red-flag record', (done) => {
+    it('should create a red-flag record', (done) => {
       const recordData = {
         type: 'red-flag',
         location: '-42.2078,138.0694',
@@ -121,7 +125,7 @@ describe('API Routes', () => {
   });
 
   describe(`PATCH ${apiBase}/red-flags/:id/location`, () => {
-    it('Edit the location of a specific red-flag record', (done) => {
+    it('should edit the location of a specific red-flag record', (done) => {
       const data = {
         location: '-81.2078,138.0233',
       };
@@ -139,7 +143,7 @@ describe('API Routes', () => {
   });
 
   describe(`PATCH ${apiBase}/red-flags/:id`, () => {
-    it('Edit the comment of a specific red-flag record', (done) => {
+    it('should edit the comment of a specific red-flag record', (done) => {
       const data = {
         comment: 'This is an updated comment',
       };
@@ -157,7 +161,7 @@ describe('API Routes', () => {
   });
 
   describe(`DELETE ${apiBase}/red-flags/:id`, () => {
-    it('Delete a specific red-flag record', (done) => {
+    it('should delete a specific red-flag record', (done) => {
       request(app)
         .delete(`${apiBase}/red-flags/1`)
         .expect(200)

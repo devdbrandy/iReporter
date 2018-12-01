@@ -5,18 +5,20 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "gh:deploy": "gh-pages -d UI",
-    "dev": "babel-node src/index.js -r dotenv/config",
-    "watch": "nodemon --exec npm run dev",
-    "clean": "rimraf dist",
     "build": "npm run clean && babel src -d dist",
-    "start": "npm run build & npm run serve",
-    "serve": "node -r dotenv/config dist/index.js",
+    "build:serve": "npm run build & npm run serve",
+    "dev": "babel-node src/index.js -r dotenv/config",
+    "clean": "rimraf dist",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "gh:deploy": "gh-pages -d UI",
+    "heroku-postbuild" : "NPM_CONFIG_PRODUCTION=false npm run build ",
     "lint": "eslint src/",
     "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
-    "mocha:watch": "cross-env NODE_ENV=test mocha --watch --require babel-register",
+    "mocha:watch": "npm run mocha -- -w",
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "serve": "npm run start -- -r dotenv/config",
+    "start": "node dist/index.js",
+    "watch": "nodemon --exec npm run dev"
   },
   "keywords": [
     "reports",

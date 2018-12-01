@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import path from 'path';
 import logger from 'morgan';
-import errorHandler from './middleware/error-hander';
+import errorHandler from './middleware';
 
 import webRouter from './routes/web';
 import apiRouter from './routes/api';

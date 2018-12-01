@@ -1,7 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
-import _ from 'underscore';
 import dbStorage from '../models/mock';
 import { User, Record } from '../models';
 import { env } from '../helpers';
@@ -17,7 +16,7 @@ router.post('/auth', (req, res, next) => {
     next(createError(401, 'Unauthorized'));
   }
 
-  jwt.sign({ user }, env('CLIENT_SECRET_KEY'), (err, token) => {
+  jwt.sign({ user }, env('APP_KEY'), (err, token) => {
     res.status(200)
       .json({
         status: 200,

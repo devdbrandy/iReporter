@@ -3,13 +3,14 @@ function errorHandler(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  const error = err.message.length > 1 ? err.message : err.errors;
   const statusCode = err.status || 500;
   res.status(statusCode);
 
   if (req.accepts('application/json')) {
     res.json({
       status: statusCode,
-      error: err.message,
+      error,
     });
   } else {
     // render the error page

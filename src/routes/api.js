@@ -14,19 +14,14 @@ router.post('/auth', (req, res, next) => {
   ))[0];
 
   if (!user || req.body.password !== user.password) {
-    return res.status(401)
-      .json({
-        status: 401,
-        data: {
-          message: 'Unauthorized',
-        },
-      });
+    next(createError(401, 'Unauthorized'));
   }
+
   jwt.sign({ user }, env('CLIENT_SECRET_KEY'), (err, token) => {
     res.status(200)
       .json({
         status: 200,
-        data: { token },
+        data: [{ token }],
       });
   });
 });
@@ -49,10 +44,12 @@ router.post('/users', (req, res, next) => {
   res.status(201)
     .json({
       status: 201,
-      data: {
-        id: newUser.id,
-        message: 'New user created',
-      },
+      data: [
+        {
+          id: newUser.id,
+          message: 'New user created',
+        },
+      ],
     });
 });
 
@@ -75,7 +72,7 @@ router.get('/red-flags/:id', (req, res, next) => {
   if (record) {
     res.status(200).json({
       status: 200,
-      data: record,
+      data: [{ record }],
     });
   } else {
     next(createError(404, 'Resource not found'));
@@ -91,10 +88,12 @@ router.post('/red-flags', (req, res, next) => {
   res.status(201)
     .json({
       status: 201,
-      data: {
-        id: newRecord.id,
-        message: 'Created red-flag record',
-      },
+      data: [
+        {
+          id: newRecord.id,
+          message: 'Created red-flag record',
+        },
+      ],
     });
 });
 
@@ -112,10 +111,12 @@ router.patch('/red-flags/:id/location', (req, res, next) => {
     res.status(201)
       .json({
         status: 201,
-        data: {
-          id: recordId,
-          message: "Updated red-flag record's location",
-        },
+        data: [
+          {
+            id: recordId,
+            message: "Updated red-flag record's location",
+          },
+        ],
       });
   } else {
     next(createError(404, 'Resource not found'));
@@ -136,10 +137,12 @@ router.patch('/red-flags/:id', (req, res, next) => {
     res.status(201)
       .json({
         status: 201,
-        data: {
-          id: recordId,
-          message: "Updated red-flag record's comment",
-        },
+        data: [
+          {
+            id: recordId,
+            message: "Updated red-flag record's comment",
+          },
+        ],
       });
   } else {
     next(createError(404, 'Resource not found'));
@@ -149,17 +152,19 @@ router.patch('/red-flags/:id', (req, res, next) => {
 /* Delete a specific red-flag record */
 router.delete('/red-flags/:id', (req, res, next) => {
   const recordId = parseInt(req.params.id, 10);
-  dbStorage.records = _.reject(dbStorage.records, record => (
+  dbStorage.records = dbStorage.records.filter(record => (
     record.id === recordId
   ));
 
   res.status(200)
     .json({
       status: 200,
-      data: {
-        id: recordId,
-        message: 'Red-flag record has been deleted',
-      },
+      data: [
+        {
+          id: recordId,
+          message: 'Red-flag record has been deleted',
+        },
+      ],
     });
 });
 

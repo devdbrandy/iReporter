@@ -10,6 +10,26 @@ const should = chai.should();
 const apiVersion = 'v1';
 const apiBase = `/api/${apiVersion}`;
 
+describe('routes: index', () => {
+  describe('GET /', () => {
+    it('should render the index page', (done) => {
+      request(app)
+        .get('/')
+        .expect(200);
+      done();
+    });
+  });
+
+  describe('/404', () => {
+    it('should throw an error', (done) => {
+      request(app)
+        .get('/404')
+        .expect(404);
+      done();
+    });
+  });
+});
+
 describe('routes: auth', () => {
   describe(`${apiBase}/auth`, () => {
     it('should authenticate a user and respond with a token', (done) => {
@@ -91,6 +111,16 @@ describe('routes: red-flags', () => {
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
+          done(err);
+        });
+    });
+
+    it('should throw an error for non-existing resource', (done) => {
+      request(app)
+        .get(`${apiBase}/red-flags/${null}`)
+        .expect(404)
+        .end((err, res) => {
+          res.body.should.have.property('error');
           done(err);
         });
     });

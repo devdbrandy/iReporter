@@ -8,7 +8,7 @@ dotenv.config();
 const should = chai.should();
 
 const apiVersion = 'v1';
-const apiBase = `/api/${apiVersion}`;
+const prefix = `/api/${apiVersion}`;
 
 describe('routes: index', () => {
   describe('GET /', () => {
@@ -31,12 +31,12 @@ describe('routes: index', () => {
 });
 
 describe('routes: auth', () => {
-  describe(`${apiBase}/auth`, () => {
+  describe(`${prefix}/auth`, () => {
     it('should authenticate a user and respond with a token', (done) => {
       const user = mock.users[0];
 
       request(app)
-        .post(`${apiBase}/auth`)
+        .post(`${prefix}/auth`)
         .send({
           username: user.username,
           password: 'secret',
@@ -52,10 +52,10 @@ describe('routes: auth', () => {
 });
 
 describe('routes: users', () => {
-  describe(`GET ${apiBase}/users`, () => {
+  describe(`GET ${prefix}/users`, () => {
     it('should fetch a list of users', (done) => {
       request(app)
-        .get(`${apiBase}/users`)
+        .get(`${prefix}/users`)
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
@@ -66,7 +66,7 @@ describe('routes: users', () => {
     });
   });
 
-  describe(`POST ${apiBase}/users`, () => {
+  describe(`POST ${prefix}/users`, () => {
     it('should create a new user', (done) => {
       const userData = {
         firstname: 'John',
@@ -78,7 +78,7 @@ describe('routes: users', () => {
       };
 
       request(app)
-        .post(`${apiBase}/users`)
+        .post(`${prefix}/users`)
         .send(userData)
         .set('Accept', 'application/json')
         .expect(201)
@@ -91,10 +91,10 @@ describe('routes: users', () => {
 });
 
 describe('routes: red-flags', () => {
-  describe(`GET ${apiBase}/red-flags`, () => {
+  describe(`GET ${prefix}/red-flags`, () => {
     it('should fetch all red-flag records', (done) => {
       request(app)
-        .get(`${apiBase}/red-flags`)
+        .get(`${prefix}/red-flags`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
@@ -104,10 +104,10 @@ describe('routes: red-flags', () => {
     });
   });
 
-  describe(`GET ${apiBase}/red-flags/:id`, () => {
+  describe(`GET ${prefix}/red-flags/:id`, () => {
     it('should fetch a specific red-flag record.', (done) => {
       request(app)
-        .get(`${apiBase}/red-flags/1`)
+        .get(`${prefix}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
@@ -117,7 +117,7 @@ describe('routes: red-flags', () => {
 
     it('should throw an error for non-existing resource', (done) => {
       request(app)
-        .get(`${apiBase}/red-flags/${null}`)
+        .get(`${prefix}/red-flags/${null}`)
         .expect(404)
         .end((err, res) => {
           res.body.should.have.property('error');
@@ -126,7 +126,7 @@ describe('routes: red-flags', () => {
     });
   });
 
-  describe(`POST ${apiBase}/red-flags`, () => {
+  describe(`POST ${prefix}/red-flags`, () => {
     it('should create a red-flag record', (done) => {
       const recordData = {
         type: 'red-flag',
@@ -143,7 +143,7 @@ describe('routes: red-flags', () => {
       };
 
       request(app)
-        .post(`${apiBase}/red-flags`)
+        .post(`${prefix}/red-flags`)
         .send(recordData)
         .set('Accept', 'application/json')
         .expect(201)
@@ -154,14 +154,14 @@ describe('routes: red-flags', () => {
     });
   });
 
-  describe(`PATCH ${apiBase}/red-flags/:id/location`, () => {
+  describe(`PATCH ${prefix}/red-flags/:id/location`, () => {
     it('should edit the location of a specific red-flag record', (done) => {
       const data = {
         location: '-81.2078,138.0233',
       };
 
       request(app)
-        .patch(`${apiBase}/red-flags/1/location`)
+        .patch(`${prefix}/red-flags/1/location`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
@@ -172,14 +172,14 @@ describe('routes: red-flags', () => {
     });
   });
 
-  describe(`PATCH ${apiBase}/red-flags/:id`, () => {
+  describe(`PATCH ${prefix}/red-flags/:id`, () => {
     it('should edit the comment of a specific red-flag record', (done) => {
       const data = {
         comment: 'This is an updated comment',
       };
 
       request(app)
-        .patch(`${apiBase}/red-flags/1`)
+        .patch(`${prefix}/red-flags/1`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
@@ -190,10 +190,10 @@ describe('routes: red-flags', () => {
     });
   });
 
-  describe(`DELETE ${apiBase}/red-flags/:id`, () => {
+  describe(`DELETE ${prefix}/red-flags/:id`, () => {
     it('should delete a specific red-flag record', (done) => {
       request(app)
-        .delete(`${apiBase}/red-flags/1`)
+        .delete(`${prefix}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');

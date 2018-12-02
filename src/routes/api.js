@@ -1,13 +1,20 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
+import { checkSchema, validationResult } from 'express-validator/check';
+import { validator } from '../middleware';
 import dbStorage from '../models/mock';
 import { User, Record } from '../models';
 import { env } from '../helpers';
 
 const router = express.Router();
 
-router.post('/auth', (req, res, next) => {
+router.post('/auth', checkSchema(validator.auth), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
+
   const user = dbStorage.users.filter(data => (
     data.username === req.body.username
   ))[0];
@@ -35,7 +42,12 @@ router.get('/users', (req, res, next) => {
 });
 
 /* Create new user */
-router.post('/users', (req, res, next) => {
+router.post('/users', checkSchema(validator.user), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
+
   const data = req.body;
   const newUser = new User(data);
   dbStorage.users.push(newUser);
@@ -79,7 +91,12 @@ router.get('/red-flags/:id', (req, res, next) => {
 });
 
 /* Create a red-flag record. */
-router.post('/red-flags', (req, res, next) => {
+router.post('/red-flags', checkSchema(validator.record), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
+
   const data = req.body;
   const newRecord = new Record(data);
   dbStorage.records.push(newRecord);

@@ -41,7 +41,7 @@ export default class RedFlagsController {
     if (record) {
       res.status(200).json({
         status: 200,
-        data: [{ record }],
+        data: [record.toString()],
       });
     } else {
       next(createError(404, 'Resource not found'));

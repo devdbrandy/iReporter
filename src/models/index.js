@@ -46,6 +46,20 @@ export class User {
   static incrementCount() {
     User.count += 1;
   }
+
+  toString() {
+    return {
+      id: this.id,
+      firstname: this.firstname,
+      lastname: this.lastname,
+      othernames: this.othernames,
+      username: this.username,
+      email: this.email,
+      phoneNumber: this.phoneNumber,
+      registered: this.registered,
+      isAdmin: this.isAdmin,
+    };
+  }
 }
 
 export class Record {
@@ -83,6 +97,19 @@ export class Record {
 
   static incrementCount() {
     Record.count += 1;
+  }
+
+  toString() {
+    return {
+      id: this.id,
+      createdOn: this.createdOn,
+      type: this.type,
+      location: this.location,
+      comment: this.comment,
+      images: this.images,
+      videos: this.videos,
+      status: this.status,
+    };
   }
 }
 

@@ -24,6 +24,32 @@ export default class UsersController {
   }
 
   /**
+   * Fetch a specific user
+   *
+   * @static
+   * @param {Object} req Request object
+   * @param {Object} res Response object
+   * @param {Function} next Call to next middleware
+   *
+   * @memberOf UsersController
+   */
+  static show(req, res, next) {
+    const userId = parseInt(req.params.id, 10);
+    const user = dbStorage.users.filter(item => (
+      item.id === userId
+    ))[0];
+
+    if (user) {
+      res.status(200).json({
+        status: 200,
+        data: [user.toString()],
+      });
+    } else {
+      next(createError(404, 'Resource not found'));
+    }
+  }
+
+  /**
    * Create new user
    *
    * @static

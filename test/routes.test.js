@@ -39,7 +39,7 @@ describe('routes: auth', () => {
         .post(`${apiBase}/auth`)
         .send({
           username: user.username,
-          password: user.password,
+          password: 'secret',
         })
         .set('Accept', 'application/json')
         .expect(200)

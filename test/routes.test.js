@@ -48,6 +48,23 @@ describe('routes: auth', () => {
           done();
         });
     });
+
+    it('should throw an error on invalid credentials', (done) => {
+      const user = mock.users[0];
+
+      request(app)
+        .post(`${prefix}/auth`)
+        .send({
+          username: user.username,
+          password: 'bacons',
+        })
+        .set('Accept', 'application/json')
+        .expect(401)
+        .end((err, res) => {
+          res.body.error.should.equal('Unauthorized');
+          done();
+        });
+    });
   });
 });
 
@@ -61,6 +78,21 @@ describe('routes: users', () => {
         .end((err, res) => {
           res.body.should.have.property('data')
             .with.lengthOf(2);
+          done();
+        });
+    });
+  });
+  describe(`GET ${prefix}/users/{id}`, () => {
+    it('should fetch a specific user', (done) => {
+      const user = mock.users[0];
+      const { id } = user;
+
+      request(app)
+        .get(`${prefix}/users/${id}`)
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end((err, res) => {
+          res.body.data[0].email.should.equal(user.email);
           done();
         });
     });
@@ -151,6 +183,21 @@ describe('routes: red-flags', () => {
           res.body.data[0].should.have.property('id');
           done();
         });
+    });
+
+    it('should throw an error on invalid entities', (done) => {
+      const recordData = {
+        type: 'red-flag',
+        location: 'invalid data',
+        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
+      };
+
+      request(app)
+        .post(`${prefix}/red-flags`)
+        .send(recordData)
+        .set('Accept', 'application/json')
+        .expect(422)
+        .end(done);
     });
   });
 

@@ -18,6 +18,9 @@ router.post('/auth', checkSchema(validator.auth), AuthController.auth);
 /* Fetch all users */
 router.get('/users', UsersController.index);
 
+/* Fetch a specific user */
+router.get('/users/:id', UsersController.show);
+
 /* Create new user */
 router.post('/users', checkSchema(validator.user), UsersController.create);
 

@@ -11,7 +11,7 @@
     "clean": "rimraf dist",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "gh:deploy": "gh-pages -d UI",
-    "heroku-postbuild" : "NPM_CONFIG_PRODUCTION=false npm run build ",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build ",
     "lint": "eslint src/",
     "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
     "mocha:watch": "npm run mocha -- -w",
@@ -30,6 +30,7 @@
   "author": "Harry Dbrandy",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^6.1.0",
@@ -63,6 +64,7 @@
     "nodemon": "^1.18.7",
     "nyc": "^13.1.0",
     "rimraf": "^2.6.2",
+    "sinon": "^7.1.1",
     "supertest": "^3.3.0"
   },
   "babel": {

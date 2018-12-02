@@ -5,18 +5,20 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "gh:deploy": "gh-pages -d UI",
-    "dev": "babel-node src/index.js -r dotenv/config",
-    "watch": "nodemon --exec npm run dev",
-    "clean": "rimraf dist",
     "build": "npm run clean && babel src -d dist",
-    "start": "npm run build & npm run serve",
-    "serve": "node -r dotenv/config dist/index.js",
+    "build:serve": "npm run build & npm run serve",
+    "dev": "babel-node src/index.js -r dotenv/config",
+    "clean": "rimraf dist",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "gh:deploy": "gh-pages -d UI",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build ",
     "lint": "eslint src/",
     "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
-    "mocha:watch": "cross-env NODE_ENV=test mocha --watch --require babel-register",
+    "mocha:watch": "npm run mocha -- -w",
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "serve": "npm run start -- -r dotenv/config",
+    "start": "node dist/index.js",
+    "watch": "nodemon --exec npm run dev"
   },
   "keywords": [
     "reports",
@@ -28,10 +30,12 @@
   "author": "Harry Dbrandy",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^6.1.0",
     "express": "~4.16.0",
+    "express-validator": "^5.3.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.4.0",
@@ -60,6 +64,7 @@
     "nodemon": "^1.18.7",
     "nyc": "^13.1.0",
     "rimraf": "^2.6.2",
+    "sinon": "^7.1.1",
     "supertest": "^3.3.0"
   },
   "babel": {

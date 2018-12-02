@@ -8,43 +8,66 @@ dotenv.config();
 const should = chai.should();
 
 const apiVersion = 'v1';
+const apiBase = `/api/${apiVersion}`;
 
-describe('API Routes', () => {
-  describe(`/api/${apiVersion}/auth`, () => {
-    it('Authenticates a user', (done) => {
+describe('routes: index', () => {
+  describe('GET /', () => {
+    it('should render the index page', (done) => {
+      request(app)
+        .get('/')
+        .expect(200)
+        .end(done);
+    });
+  });
+
+  describe('/404', () => {
+    it('should throw an error', (done) => {
+      request(app)
+        .get('/404')
+        .expect(404)
+        .end(done);
+    });
+  });
+});
+
+describe('routes: auth', () => {
+  describe(`${apiBase}/auth`, () => {
+    it('should authenticate a user and respond with a token', (done) => {
       const user = mock.users[0];
 
       request(app)
-        .post(`/api/${apiVersion}/auth`)
+        .post(`${apiBase}/auth`)
         .send({
           username: user.username,
-          password: user.password,
+          password: 'secret',
         })
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
-          res.body.data.should.have.property('token');
-          done(err);
+          res.body.data[0].should.have.property('token');
+          done();
         });
     });
   });
+});
 
-  describe(`GET /api/${apiVersion}/users`, () => {
-    it('Fetch a list of users', (done) => {
+describe('routes: users', () => {
+  describe(`GET ${apiBase}/users`, () => {
+    it('should fetch a list of users', (done) => {
       request(app)
-        .get(`/api/${apiVersion}/users`)
+        .get(`${apiBase}/users`)
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
             .with.lengthOf(2);
-          done(err);
+          done();
         });
     });
   });
 
-  describe(`POST /api/${apiVersion}/users`, () => {
-    it('Create a new user', (done) => {
+  describe(`POST ${apiBase}/users`, () => {
+    it('should create a new user', (done) => {
       const userData = {
         firstname: 'John',
         lastname: 'Doe',
@@ -55,21 +78,23 @@ describe('API Routes', () => {
       };
 
       request(app)
-        .post(`/api/${apiVersion}/users`)
+        .post(`${apiBase}/users`)
         .send(userData)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
-          res.body.data.should.have.property('id');
-          done(err);
+          res.body.data[0].should.have.property('id');
+          done();
         });
     });
   });
+});
 
-  describe(`GET /api/${apiVersion}/red-flags`, () => {
-    it('Fetch all red-flag records', (done) => {
+describe('routes: red-flags', () => {
+  describe(`GET ${apiBase}/red-flags`, () => {
+    it('should fetch all red-flag records', (done) => {
       request(app)
-        .get(`/api/${apiVersion}/red-flags`)
+        .get(`${apiBase}/red-flags`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
@@ -79,20 +104,30 @@ describe('API Routes', () => {
     });
   });
 
-  describe(`GET /api/${apiVersion}/red-flags/:id`, () => {
-    it('Fetch a specific red-flag record.', (done) => {
+  describe(`GET ${apiBase}/red-flags/:id`, () => {
+    it('should fetch a specific red-flag record.', (done) => {
       request(app)
-        .get(`/api/${apiVersion}/red-flags/1`)
+        .get(`${apiBase}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
-          done(err);
+          done();
+        });
+    });
+
+    it('should throw an error for non-existing resource', (done) => {
+      request(app)
+        .get(`${apiBase}/red-flags/${null}`)
+        .expect(404)
+        .end((err, res) => {
+          res.body.should.have.property('error');
+          done();
         });
     });
   });
 
-  describe(`POST /api/${apiVersion}/red-flags`, () => {
-    it('Create a red-flag record', (done) => {
+  describe(`POST ${apiBase}/red-flags`, () => {
+    it('should create a red-flag record', (done) => {
       const recordData = {
         type: 'red-flag',
         location: '-42.2078,138.0694',
@@ -108,61 +143,61 @@ describe('API Routes', () => {
       };
 
       request(app)
-        .post(`/api/${apiVersion}/red-flags`)
+        .post(`${apiBase}/red-flags`)
         .send(recordData)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
-          res.body.data.should.have.property('id');
-          done(err);
+          res.body.data[0].should.have.property('id');
+          done();
         });
     });
   });
 
-  describe(`PATCH /api/${apiVersion}/red-flags/:id/location`, () => {
-    it('Edit the location of a specific red-flag record', (done) => {
+  describe(`PATCH ${apiBase}/red-flags/:id/location`, () => {
+    it('should edit the location of a specific red-flag record', (done) => {
       const data = {
         location: '-81.2078,138.0233',
       };
 
       request(app)
-        .patch(`/api/${apiVersion}/red-flags/1/location`)
+        .patch(`${apiBase}/red-flags/1/location`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
-          res.body.data.should.have.property('id');
-          done(err);
+          res.body.data[0].should.have.property('id');
+          done();
         });
     });
   });
 
-  describe(`PATCH /api/${apiVersion}/red-flags/:id`, () => {
-    it('Edit the comment of a specific red-flag record', (done) => {
+  describe(`PATCH ${apiBase}/red-flags/:id`, () => {
+    it('should edit the comment of a specific red-flag record', (done) => {
       const data = {
         comment: 'This is an updated comment',
       };
 
       request(app)
-        .patch(`/api/${apiVersion}/red-flags/1`)
+        .patch(`${apiBase}/red-flags/1`)
         .send(data)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
-          res.body.data.should.have.property('id');
-          done(err);
+          res.body.data[0].should.have.property('id');
+          done();
         });
     });
   });
 
-  describe(`DELETE /api/${apiVersion}/red-flags/:id`, () => {
-    it('Delete a specific red-flag record', (done) => {
+  describe(`DELETE ${apiBase}/red-flags/:id`, () => {
+    it('should delete a specific red-flag record', (done) => {
       request(app)
-        .delete(`/api/${apiVersion}/red-flags/1`)
+        .delete(`${apiBase}/red-flags/1`)
         .expect(200)
         .end((err, res) => {
-          res.body.data.should.have.property('id');
-          done(err);
+          res.body.data[0].should.have.property('id');
+          done();
         });
     });
   });

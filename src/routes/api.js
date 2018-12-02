@@ -1,31 +1,35 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import _ from 'underscore';
+import createError from 'http-errors';
+import bcrypt from 'bcryptjs';
+import { checkSchema, validationResult } from 'express-validator/check';
+import { validator } from '../middleware';
 import dbStorage from '../models/mock';
 import { User, Record } from '../models';
 import { env } from '../helpers';
 
 const router = express.Router();
 
-router.post('/auth', (req, res, next) => {
+router.post('/auth', checkSchema(validator.auth), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
+
   const user = dbStorage.users.filter(data => (
     data.username === req.body.username
   ))[0];
 
-  if (!user || req.body.password !== user.password) {
-    return res.status(401)
-      .json({
-        status: 401,
-        data: {
-          message: 'Unauthorized',
-        },
-      });
+  const { password } = req.body;
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    next(createError(401, 'Unauthorized'));
   }
-  jwt.sign({ user }, env('CLIENT_SECRET_KEY'), (err, token) => {
+
+  jwt.sign({ user }, env('APP_KEY'), (err, token) => {
     res.status(200)
       .json({
         status: 200,
-        data: { token },
+        data: [{ token }],
       });
   });
 });
@@ -40,19 +44,29 @@ router.get('/users', (req, res, next) => {
 });
 
 /* Create new user */
-router.post('/users', (req, res, next) => {
-  const data = req.body;
-  const newUser = new User(data);
-  dbStorage.users.push(newUser);
+router.post('/users', checkSchema(validator.user), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: {
-        id: newUser.id,
-        message: 'New user created',
-      },
-    });
+  const userData = req.body;
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
+    userData.password = hash;
+    const newUser = new User(userData);
+    dbStorage.users.push(newUser);
+
+    res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: newUser.id,
+            message: 'New user created',
+          },
+        ],
+      });
+  });
 });
 
 /* Fetch all red-flag records */
@@ -71,14 +85,23 @@ router.get('/red-flags/:id', (req, res, next) => {
     item.id === recordId
   ))[0];
 
-  res.status(200).json({
-    status: 200,
-    data: record,
-  });
+  if (record) {
+    res.status(200).json({
+      status: 200,
+      data: [{ record }],
+    });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Create a red-flag record. */
-router.post('/red-flags', (req, res, next) => {
+router.post('/red-flags', checkSchema(validator.record), (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(createError(422, '', { errors: errors.array() }));
+  }
+
   const data = req.body;
   const newRecord = new Record(data);
   dbStorage.records.push(newRecord);
@@ -86,10 +109,12 @@ router.post('/red-flags', (req, res, next) => {
   res.status(201)
     .json({
       status: 201,
-      data: {
-        id: newRecord.id,
-        message: 'Created red-flag record',
-      },
+      data: [
+        {
+          id: newRecord.id,
+          message: 'Created red-flag record',
+        },
+      ],
     });
 });
 
@@ -100,16 +125,23 @@ router.patch('/red-flags/:id/location', (req, res, next) => {
   const record = dbStorage.records.filter(item => (
     item.id === recordId
   ))[0];
-  record.updateLocation(data);
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: {
-        id: recordId,
-        message: "Updated red-flag record's location",
-      },
-    });
+  if (record) {
+    record.updateLocation(data);
+
+    res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: recordId,
+            message: "Updated red-flag record's location",
+          },
+        ],
+      });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Edit the comment of a specific red-flag record */
@@ -119,32 +151,41 @@ router.patch('/red-flags/:id', (req, res, next) => {
   const record = dbStorage.records.filter(item => (
     item.id === recordId
   ))[0];
-  record.update(data);
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: {
-        id: recordId,
-        message: "Updated red-flag record's comment",
-      },
-    });
+  if (record) {
+    record.update(data);
+
+    res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: recordId,
+            message: "Updated red-flag record's comment",
+          },
+        ],
+      });
+  } else {
+    next(createError(404, 'Resource not found'));
+  }
 });
 
 /* Delete a specific red-flag record */
 router.delete('/red-flags/:id', (req, res, next) => {
   const recordId = parseInt(req.params.id, 10);
-  dbStorage.records = _.reject(dbStorage.records, record => (
+  dbStorage.records = dbStorage.records.filter(record => (
     record.id === recordId
   ));
 
   res.status(200)
     .json({
       status: 200,
-      data: {
-        id: recordId,
-        message: 'Red-flag record has been deleted',
-      },
+      data: [
+        {
+          id: recordId,
+          message: 'Red-flag record has been deleted',
+        },
+      ],
     });
 });
 

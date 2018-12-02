@@ -2,6 +2,7 @@ import express from 'express';
 import { User, Record } from './index';
 
 const app = express();
+const password = '$2a$10$6bWcliaMM5VrKrkuWXvbq.BGQkb.ZUZ77JxrYkvyaP72Z5gipIyju'; // secret
 const dbStorage = {
   users: [
     new User({
@@ -12,7 +13,7 @@ const dbStorage = {
       phoneNumber: '441-955-1086',
       username: 'RusseDan4',
       registered: '2017-11-30T12:19:06.208Z',
-      password: 'secret',
+      password,
     }),
   ],
   records: [
@@ -55,7 +56,7 @@ const adminUser = new User({
   phoneNumber: '615-955-1086',
   username: 'johnnyboi',
   registered: '2017-11-30T12:19:06.208Z',
-  password: 'secret',
+  password,
 });
 
 User.assignAdmin(adminUser);

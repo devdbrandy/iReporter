@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
+import bcrypt from 'bcryptjs';
 import { checkSchema, validationResult } from 'express-validator/check';
 import { validator } from '../middleware';
 import dbStorage from '../models/mock';
@@ -19,7 +20,8 @@ router.post('/auth', checkSchema(validator.auth), (req, res, next) => {
     data.username === req.body.username
   ))[0];
 
-  if (!user || req.body.password !== user.password) {
+  const { password } = req.body;
+  if (!user || !bcrypt.compareSync(password, user.password)) {
     next(createError(401, 'Unauthorized'));
   }
 
@@ -48,20 +50,23 @@ router.post('/users', checkSchema(validator.user), (req, res, next) => {
     next(createError(422, '', { errors: errors.array() }));
   }
 
-  const data = req.body;
-  const newUser = new User(data);
-  dbStorage.users.push(newUser);
+  const userData = req.body;
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
+    userData.password = hash;
+    const newUser = new User(userData);
+    dbStorage.users.push(newUser);
 
-  res.status(201)
-    .json({
-      status: 201,
-      data: [
-        {
-          id: newUser.id,
-          message: 'New user created',
-        },
-      ],
-    });
+    res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: newUser.id,
+            message: 'New user created',
+          },
+        ],
+      });
+  });
 });
 
 /* Fetch all red-flag records */

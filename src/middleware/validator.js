@@ -8,7 +8,7 @@ const validator = {
     password: {
       isLength: {
         errorMessage: 'Password should be at least 7 chars long',
-        options: { min: 10 },
+        options: { min: 6 },
       },
     },
   },
@@ -34,7 +34,7 @@ const validator = {
     password: {
       isLength: {
         errorMessage: 'Password should be at least 7 chars long',
-        options: { min: 7 },
+        options: { min: 6 },
       },
     },
   },

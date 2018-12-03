@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import dbStorage from '../../models/mock';
+import db from '../../models/mock';
 import { Record } from '../../models';
 import { env, validateRequest } from '../../utils';
 
@@ -19,7 +19,7 @@ export default class RedFlagsController {
     res.status(200)
       .json({
         status: 200,
-        data: dbStorage.records,
+        data: db.records,
       });
   }
 
@@ -35,7 +35,7 @@ export default class RedFlagsController {
    */
   static show(req, res, next) {
     const recordId = parseInt(req.params.id, 10);
-    const record = dbStorage.records.filter(item => (
+    const record = db.records.filter(item => (
       item.id === recordId
     ))[0];
 
@@ -66,7 +66,7 @@ export default class RedFlagsController {
       const data = req.body;
       const newRecord = new Record(data);
       newRecord.belongsTo(user);
-      dbStorage.records.push(newRecord);
+      db.records.push(newRecord);
 
       res.status(201)
         .json({
@@ -97,7 +97,7 @@ export default class RedFlagsController {
         const { user } = decoded;
         const recordId = parseInt(req.params.id, 10);
         const data = req.body;
-        const record = dbStorage.records.filter(item => (
+        const record = db.records.filter(item => (
           item.id === recordId
         ))[0];
 
@@ -138,7 +138,7 @@ export default class RedFlagsController {
   static updateLocation(req, res, next) {
     const recordId = parseInt(req.params.id, 10);
     const data = req.body;
-    const record = dbStorage.records.filter(item => (
+    const record = db.records.filter(item => (
       item.id === recordId
     ))[0];
 
@@ -175,13 +175,13 @@ export default class RedFlagsController {
       if (decoded) {
         const { user } = decoded;
         const recordId = parseInt(req.params.id, 10);
-        const record = dbStorage.records.filter(item => (
+        const record = db.records.filter(item => (
           item.id === recordId
         ))[0];
 
         if (record) {
           if (user.id === record.createdBy || user.isAdmin) {
-            dbStorage.records = dbStorage.records.filter(record => (
+            db.records = db.records.filter(record => (
               record.id !== recordId
             ));
 

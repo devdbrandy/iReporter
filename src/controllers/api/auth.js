@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
 import dbStorage from '../../models/mock';
-import { env } from '../../helpers';
+import { env } from '../../utils';
 
 export default class AuthController {
   static auth(req, res, next) {

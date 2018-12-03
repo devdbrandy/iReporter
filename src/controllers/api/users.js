@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
 import dbStorage from '../../models/mock';
 import { User } from '../../models';
+import { validateRequest } from '../../utils';
 
 export default class UsersController {
   /**
@@ -60,10 +61,7 @@ export default class UsersController {
    * @memberOf UsersController
    */
   static create(req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      next(createError(422, '', { errors: errors.array() }));
-    }
+    validateRequest(req, next);
 
     const userData = req.body;
     bcrypt.hash(req.body.password, 10, (err, hash) => {

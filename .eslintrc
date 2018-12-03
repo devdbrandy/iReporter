@@ -6,6 +6,7 @@
   },
   "rules": {
     "no-unused-vars": 0,
-    "no-shadow": 0
+    "no-shadow": 0,
+    "import/no-cycle": 0
   }
 }

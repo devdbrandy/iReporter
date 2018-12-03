@@ -2,7 +2,7 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
-import dbStorage from '../../models/mock';
+import db from '../../models/mock';
 import { env } from '../../utils';
 
 export default class AuthController {
@@ -12,7 +12,7 @@ export default class AuthController {
       next(createError(422, '', { errors: errors.array() }));
     }
 
-    const user = dbStorage.users.filter(data => (
+    const user = db.users.filter(data => (
       data.username === req.body.username
     ))[0];
 

@@ -1,7 +1,6 @@
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator/check';
-import dbStorage from '../../models/mock';
+import db from '../../models/mock';
 import { User } from '../../models';
 import { validateRequest } from '../../utils';
 
@@ -20,7 +19,7 @@ export default class UsersController {
     res.status(200)
       .json({
         status: 200,
-        data: dbStorage.users,
+        data: db.users,
       });
   }
 
@@ -36,7 +35,7 @@ export default class UsersController {
    */
   static show(req, res, next) {
     const userId = parseInt(req.params.id, 10);
-    const user = dbStorage.users.filter(item => (
+    const user = db.users.filter(item => (
       item.id === userId
     ))[0];
 
@@ -67,7 +66,7 @@ export default class UsersController {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
       userData.password = hash;
       const newUser = new User(userData);
-      dbStorage.users.push(newUser);
+      db.users.push(newUser);
 
       res.status(201)
         .json({

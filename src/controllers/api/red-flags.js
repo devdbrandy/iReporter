@@ -34,6 +34,8 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static show(req, res, next) {
+    validateRequest(req, next);
+
     const recordId = parseInt(req.params.id, 10);
     const record = db.records.filter(item => (
       item.id === recordId
@@ -63,6 +65,7 @@ export default class RedFlagsController {
     validateRequest(req, next);
 
     jwt.verify(req.token, env('APP_KEY'), (err, { user }) => {
+
       const data = req.body;
       const newRecord = new Record(data);
       newRecord.belongsTo(user);
@@ -92,17 +95,21 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static update(req, res, next) {
+    validateRequest(req, next);
+
     jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
       if (decoded) {
         const { user } = decoded;
         const recordId = parseInt(req.params.id, 10);
         const data = req.body;
-        const record = db.records.filter(item => (
+        // const records = db.records.map(item => item.toString());
+
+        const record = db.records.find(item => (
           item.id === recordId
-        ))[0];
+        ));
 
         if (record) {
-          if (user.id === record.createdBy || user.isAdmin) {
+          if (record.createdBy === user.id || user.isAdmin) {
             record.update(data);
 
             res.status(201)
@@ -136,6 +143,8 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static updateLocation(req, res, next) {
+    validateRequest(req, next);
+
     const recordId = parseInt(req.params.id, 10);
     const data = req.body;
     const record = db.records.filter(item => (
@@ -171,6 +180,8 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static destroy(req, res, next) {
+    validateRequest(req, next);
+
     jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
       if (decoded) {
         const { user } = decoded;

@@ -35,16 +35,8 @@ export class User {
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
   }
 
-  adminPrivilege(value) {
-    this.isAdmin = value;
-  }
-
-  static assignAdmin(user) {
-    user.adminPrivilege(true);
-  }
-
-  static incrementCount() {
-    User.count += 1;
+  owns(resource) {
+    return resource.createdBy === this.id;
   }
 
   toString() {
@@ -60,6 +52,18 @@ export class User {
       isAdmin: this.isAdmin,
     };
   }
+
+  adminPrivilege(value) {
+    this.isAdmin = value;
+  }
+
+  static assignAdmin(user) {
+    user.adminPrivilege(true);
+  }
+
+  static incrementCount() {
+    User.count += 1;
+  }
 }
 
 export class Record {
@@ -67,7 +71,7 @@ export class Record {
     Record.incrementCount();
     this.id = Record.count;
     this.creadedOn = Date();
-    this.createdBy = attributes.author;
+    this.createdBy = attributes.createdBy;
     this.type = attributes.type;
     this.location = attributes.location;
     this.comment = attributes.comment;
@@ -95,8 +99,8 @@ export class Record {
     return this;
   }
 
-  static incrementCount() {
-    Record.count += 1;
+  belongsTo({ id }) {
+    this.createdBy = id;
   }
 
   toString() {
@@ -110,6 +114,10 @@ export class Record {
       videos: this.videos,
       status: this.status,
     };
+  }
+
+  static incrementCount() {
+    Record.count += 1;
   }
 }
 

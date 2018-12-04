@@ -35,24 +35,6 @@ export class User {
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
   }
 
-  owns(resource) {
-    return resource.createdBy === this.id;
-  }
-
-  toString() {
-    return {
-      id: this.id,
-      firstname: this.firstname,
-      lastname: this.lastname,
-      othernames: this.othernames,
-      username: this.username,
-      email: this.email,
-      phoneNumber: this.phoneNumber,
-      registered: this.registered,
-      isAdmin: this.isAdmin,
-    };
-  }
-
   adminPrivilege(value) {
     this.isAdmin = value;
   }
@@ -71,7 +53,7 @@ export class Record {
     Record.incrementCount();
     this.id = Record.count;
     this.creadedOn = Date();
-    this.createdBy = attributes.createdBy;
+    this.createdBy = attributes.author;
     this.type = attributes.type;
     this.location = attributes.location;
     this.comment = attributes.comment;
@@ -82,34 +64,21 @@ export class Record {
 
   update(data) {
     if (this.status === 'draft') {
-      if (data.location) {
-        this.location = data.location || this.location;
-      } else {
-        this.comment = data.comment || this.comment;
-        this.type = data.type || this.type;
-        this.images = data.images || this.images;
-        this.videos = data.videos || this.videos;
-      }
+      this.comment = data.comment || this.comment;
+      this.type = data.type || this.type;
+      this.images = data.images || this.images;
+      this.videos = data.videos || this.videos;
     }
 
     return this;
   }
 
-  belongsTo({ id }) {
-    this.createdBy = id;
-  }
+  updateLocation(data) {
+    if (this.status === 'draft') {
+      this.location = data.location || this.location;
+    }
 
-  toString() {
-    return {
-      id: this.id,
-      createdOn: this.createdOn,
-      type: this.type,
-      location: this.location,
-      comment: this.comment,
-      images: this.images,
-      videos: this.videos,
-      status: this.status,
-    };
+    return this;
   }
 
   static incrementCount() {

@@ -10,8 +10,6 @@ const should = chai.should();
 const apiVersion = 'v1';
 const prefix = `/api/${apiVersion}`;
 
-let db = JSON.parse(JSON.stringify(mock));
-
 describe('routes: index', () => {
   describe('GET /', () => {
     it('should render the index page', (done) => {
@@ -35,7 +33,7 @@ describe('routes: index', () => {
 describe('routes: auth', () => {
   describe(`${prefix}/auth`, () => {
     it('should authenticate a user and respond with a token', (done) => {
-      const user = db.users[0];
+      const user = mock.users[0];
 
       request(app)
         .post(`${prefix}/auth`)
@@ -47,23 +45,6 @@ describe('routes: auth', () => {
         .expect(200)
         .end((err, res) => {
           res.body.data[0].should.have.property('token');
-          done();
-        });
-    });
-
-    it('should throw an error on invalid credentials', (done) => {
-      const user = db.users[0];
-
-      request(app)
-        .post(`${prefix}/auth`)
-        .send({
-          username: user.username,
-          password: 'bacons',
-        })
-        .set('Accept', 'application/json')
-        .expect(401)
-        .end((err, res) => {
-          res.body.error.should.equal('Unauthorized');
           done();
         });
     });
@@ -84,42 +65,6 @@ describe('routes: users', () => {
         });
     });
   });
-  describe(`GET ${prefix}/users/{id}`, () => {
-    it('should fetch a specific user', (done) => {
-      const user = db.users[0];
-      const { id } = user;
-
-      request(app)
-        .get(`${prefix}/users/${id}`)
-        .set('Accept', 'application/json')
-        .expect(200)
-        .end((err, res) => {
-          res.body.data[0].email.should.equal(user.email);
-          done();
-        });
-    });
-
-    it('should throw an error for non-existing resource', (done) => {
-      const id = 1000;
-
-      request(app)
-        .get(`${prefix}/users/${id}`)
-        .set('Accept', 'application/json')
-        .expect(404, {
-          status: 404,
-          error: 'Resource not found',
-        }, done);
-    });
-
-    it('should throw an error on validation failure', (done) => {
-      const id = null;
-
-      request(app)
-        .get(`${prefix}/users/${id}`)
-        .set('Accept', 'application/json')
-        .expect(422, done);
-    });
-  });
 
   describe(`POST ${prefix}/users`, () => {
     it('should create a new user', (done) => {
@@ -136,7 +81,7 @@ describe('routes: users', () => {
         .post(`${prefix}/users`)
         .send(userData)
         .set('Accept', 'application/json')
-        .expect(200)
+        .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
           done();
@@ -146,25 +91,6 @@ describe('routes: users', () => {
 });
 
 describe('routes: red-flags', () => {
-  let token;
-  beforeEach((done) => {
-    db = JSON.parse(JSON.stringify(mock));
-    const user = db.users[0];
-
-    request(app)
-      .post(`${prefix}/auth`)
-      .send({
-        username: user.username,
-        password: 'secret',
-      })
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        const response = res.body.data[0].token;
-        token = response;
-        done();
-      });
-  });
-
   describe(`GET ${prefix}/red-flags`, () => {
     it('should fetch all red-flag records', (done) => {
       request(app)
@@ -180,10 +106,9 @@ describe('routes: red-flags', () => {
 
   describe(`GET ${prefix}/red-flags/:id`, () => {
     it('should fetch a specific red-flag record.', (done) => {
-      const redFlag = db.records[0];
-
       request(app)
-        .get(`${prefix}/red-flags/${redFlag.id}`)
+        .get(`${prefix}/red-flags/1`)
+        .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data');
           done();
@@ -192,20 +117,12 @@ describe('routes: red-flags', () => {
 
     it('should throw an error for non-existing resource', (done) => {
       request(app)
-        .get(`${prefix}/red-flags/1000`)
-        .expect(404, {
-          status: 404,
-          error: 'Resource not found',
-        }, done);
-    });
-
-    it('should throw an error on validation failure', (done) => {
-      const id = null;
-
-      request(app)
-        .get(`${prefix}/red-flags/${id}`)
-        .set('Accept', 'application/json')
-        .expect(422, done);
+        .get(`${prefix}/red-flags/${null}`)
+        .expect(404)
+        .end((err, res) => {
+          res.body.should.have.property('error');
+          done();
+        });
     });
   });
 
@@ -228,29 +145,12 @@ describe('routes: red-flags', () => {
       request(app)
         .post(`${prefix}/red-flags`)
         .send(recordData)
-        .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');
           done();
         });
-    });
-
-    it('should throw an error on validation failure', (done) => {
-      const recordData = {
-        type: 'red-flag',
-        location: 'invalid data',
-        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
-      };
-
-      request(app)
-        .post(`${prefix}/red-flags`)
-        .send(recordData)
-        .set('Authorization', `Bearer ${token}`)
-        .set('Accept', 'application/json')
-        .expect(422)
-        .end(done);
     });
   });
 
@@ -263,7 +163,6 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
@@ -282,7 +181,6 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
@@ -296,8 +194,6 @@ describe('routes: red-flags', () => {
     it('should delete a specific red-flag record', (done) => {
       request(app)
         .delete(`${prefix}/red-flags/1`)
-        .set('Authorization', `Bearer ${token}`)
-        .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
           res.body.data[0].should.have.property('id');

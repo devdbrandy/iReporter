@@ -1,7 +1,9 @@
+import express from 'express';
 import { User, Record } from './index';
 
+const app = express();
 const password = '$2a$10$6bWcliaMM5VrKrkuWXvbq.BGQkb.ZUZ77JxrYkvyaP72Z5gipIyju'; // secret
-const db = {
+const dbStorage = {
   users: [
     new User({
       firstname: 'Dana',
@@ -28,7 +30,6 @@ const db = {
       ],
       comment: 'Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.',
       createdOn: Date(),
-      createdBy: 1,
     }),
     new Record({
       type: 'red-flag',
@@ -43,7 +44,6 @@ const db = {
       ],
       comment: 'Delectus aliquam deleniti iure beatae quis. Ratione velit perspiciatis blanditiis',
       createdOn: Date(),
-      createdBy: 1,
     }),
   ],
 };
@@ -60,6 +60,6 @@ const adminUser = new User({
 });
 
 User.assignAdmin(adminUser);
-db.users.push(adminUser);
+dbStorage.users.push(adminUser);
 
-export default db;
+export default dbStorage;

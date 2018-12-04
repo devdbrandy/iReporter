@@ -1,7 +1,7 @@
 import * as log from 'loglevel';
 import dotenv from 'dotenv';
 import server from './server';
-import { env } from './utils';
+import { env } from './helpers';
 
 dotenv.config({ silent: true });
 

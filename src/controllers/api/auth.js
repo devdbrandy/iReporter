@@ -2,14 +2,19 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
-import db from '../../models/mock';
-import { env, validateRequest } from '../../utils';
+import dbStorage from '../../models/mock';
+import { env } from '../../helpers';
 
 export default class AuthController {
   static auth(req, res, next) {
-    validateRequest(req, next);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      next(createError(422, '', { errors: errors.array() }));
+    }
 
-    const user = db.users.find(data => data.username === req.body.username);
+    const user = dbStorage.users.filter(data => (
+      data.username === req.body.username
+    ))[0];
 
     const { password } = req.body;
     if (!user || !bcrypt.compareSync(password, user.password)) {

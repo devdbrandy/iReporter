@@ -111,6 +111,7 @@ export default class RedFlagsController {
         if (record) {
           if (record.createdBy === user.id || user.isAdmin) {
             record.update(data);
+            const attribute = data.location ? 'comment' : 'location';
 
             res.status(201)
               .json({
@@ -118,7 +119,7 @@ export default class RedFlagsController {
                 data: [
                   {
                     id: recordId,
-                    message: "Updated red-flag record's comment",
+                    message: `Updated red-flag record's ${attribute}`,
                   },
                 ],
               });
@@ -130,43 +131,6 @@ export default class RedFlagsController {
         }
       }
     });
-  }
-
-  /**
-   * Edit the location of a specific red-flag record
-   *
-   * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
-   * @param {Function} next Call to next middleware
-   *
-   * @memberOf RedFlagsController
-   */
-  static updateLocation(req, res, next) {
-    validateRequest(req, next);
-
-    const recordId = parseInt(req.params.id, 10);
-    const data = req.body;
-    const record = db.records.filter(item => (
-      item.id === recordId
-    ))[0];
-
-    if (record) {
-      record.updateLocation(data);
-
-      res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: recordId,
-              message: "Updated red-flag record's location",
-            },
-          ],
-        });
-    } else {
-      next(createError(404, 'Resource not found'));
-    }
   }
 
   /**
@@ -186,9 +150,9 @@ export default class RedFlagsController {
       if (decoded) {
         const { user } = decoded;
         const recordId = parseInt(req.params.id, 10);
-        const record = db.records.filter(item => (
+        const record = db.records.find(item => (
           item.id === recordId
-        ))[0];
+        ));
 
         if (record) {
           if (user.id === record.createdBy || user.isAdmin) {

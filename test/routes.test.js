@@ -263,6 +263,7 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
+        .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {

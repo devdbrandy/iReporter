@@ -1,7 +1,8 @@
 import createError from 'http-errors';
-import { validationResult } from 'express-validator/check';
-import dbStorage from '../../models/mock';
+import jwt from 'jsonwebtoken';
+import db from '../../models/mock';
 import { Record } from '../../models';
+import { env, validateRequest } from '../../utils';
 
 export default class RedFlagsController {
   /**
@@ -18,7 +19,7 @@ export default class RedFlagsController {
     res.status(200)
       .json({
         status: 200,
-        data: dbStorage.records,
+        data: db.records,
       });
   }
 
@@ -33,15 +34,17 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static show(req, res, next) {
+    validateRequest(req, next);
+
     const recordId = parseInt(req.params.id, 10);
-    const record = dbStorage.records.filter(item => (
+    const record = db.records.filter(item => (
       item.id === recordId
     ))[0];
 
     if (record) {
       res.status(200).json({
         status: 200,
-        data: [{ record }],
+        data: [record.toString()],
       });
     } else {
       next(createError(404, 'Resource not found'));
@@ -59,25 +62,26 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static create(req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      next(createError(422, '', { errors: errors.array() }));
-    }
+    validateRequest(req, next);
 
-    const data = req.body;
-    const newRecord = new Record(data);
-    dbStorage.records.push(newRecord);
+    jwt.verify(req.token, env('APP_KEY'), (err, { user }) => {
 
-    res.status(201)
-      .json({
-        status: 201,
-        data: [
-          {
-            id: newRecord.id,
-            message: 'Created red-flag record',
-          },
-        ],
-      });
+      const data = req.body;
+      const newRecord = new Record(data);
+      newRecord.belongsTo(user);
+      db.records.push(newRecord);
+
+      res.status(201)
+        .json({
+          status: 201,
+          data: [
+            {
+              id: newRecord.id,
+              message: 'Created red-flag record',
+            },
+          ],
+        });
+    });
   }
 
   /**
@@ -91,63 +95,42 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static update(req, res, next) {
-    const recordId = parseInt(req.params.id, 10);
-    const data = req.body;
-    const record = dbStorage.records.filter(item => (
-      item.id === recordId
-    ))[0];
+    validateRequest(req, next);
 
-    if (record) {
-      record.update(data);
+    jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
+      if (decoded) {
+        const { user } = decoded;
+        const recordId = parseInt(req.params.id, 10);
+        const data = req.body;
+        // const records = db.records.map(item => item.toString());
 
-      res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: recordId,
-              message: "Updated red-flag record's comment",
-            },
-          ],
-        });
-    } else {
-      next(createError(404, 'Resource not found'));
-    }
-  }
+        const record = db.records.find(item => (
+          item.id === recordId
+        ));
 
-  /**
-   * Edit the location of a specific red-flag record
-   *
-   * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
-   * @param {Function} next Call to next middleware
-   *
-   * @memberOf RedFlagsController
-   */
-  static updateLocation(req, res, next) {
-    const recordId = parseInt(req.params.id, 10);
-    const data = req.body;
-    const record = dbStorage.records.filter(item => (
-      item.id === recordId
-    ))[0];
+        if (record) {
+          if (record.createdBy === user.id || user.isAdmin) {
+            record.update(data);
+            const attribute = data.location ? 'comment' : 'location';
 
-    if (record) {
-      record.updateLocation(data);
-
-      res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: recordId,
-              message: "Updated red-flag record's location",
-            },
-          ],
-        });
-    } else {
-      next(createError(404, 'Resource not found'));
-    }
+            res.status(201)
+              .json({
+                status: 201,
+                data: [
+                  {
+                    id: recordId,
+                    message: `Updated red-flag record's ${attribute}`,
+                  },
+                ],
+              });
+          } else {
+            next(createError(403, 'Unauthorized'));
+          }
+        } else {
+          next(createError(404, 'Resource not found'));
+        }
+      }
+    });
   }
 
   /**
@@ -161,20 +144,41 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static destroy(req, res, next) {
-    const recordId = parseInt(req.params.id, 10);
-    dbStorage.records = dbStorage.records.filter(record => (
-      record.id === recordId
-    ));
+    validateRequest(req, next);
 
-    res.status(200)
-      .json({
-        status: 200,
-        data: [
-          {
-            id: recordId,
-            message: 'Red-flag record has been deleted',
-          },
-        ],
-      });
+    jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
+      if (decoded) {
+        const { user } = decoded;
+        const recordId = parseInt(req.params.id, 10);
+        const record = db.records.find(item => (
+          item.id === recordId
+        ));
+
+        if (record) {
+          if (user.id === record.createdBy || user.isAdmin) {
+            db.records = db.records.filter(record => (
+              record.id !== recordId
+            ));
+
+            res.status(200)
+              .json({
+                status: 200,
+                data: [
+                  {
+                    id: recordId,
+                    message: 'Red-flag record has been deleted',
+                  },
+                ],
+              });
+          } else {
+            next(createError(403, 'Unauthorized'));
+          }
+        } else {
+          next(createError(404, 'Resource not found'));
+        }
+      } else {
+        next(createError(403, 'Invalid token provided'));
+      }
+    });
   }
 }

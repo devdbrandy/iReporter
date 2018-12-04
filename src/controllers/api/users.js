@@ -1,8 +1,8 @@
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator/check';
-import dbStorage from '../../models/mock';
+import db from '../../models/mock';
 import { User } from '../../models';
+import { validateRequest } from '../../utils';
 
 export default class UsersController {
   /**
@@ -19,8 +19,34 @@ export default class UsersController {
     res.status(200)
       .json({
         status: 200,
-        data: dbStorage.users,
+        data: db.users,
       });
+  }
+
+  /**
+   * Fetch a specific user
+   *
+   * @static
+   * @param {Object} req Request object
+   * @param {Object} res Response object
+   * @param {Function} next Call to next middleware
+   *
+   * @memberOf UsersController
+   */
+  static show(req, res, next) {
+    validateRequest(req, next);
+
+    const userId = parseInt(req.params.id, 10);
+    const user = db.users.find(row => row.id === userId);
+
+    if (user) {
+      res.status(200).json({
+        status: 200,
+        data: [user],
+      });
+    } else {
+      next(createError(404, 'Resource not found'));
+    }
   }
 
   /**
@@ -34,16 +60,13 @@ export default class UsersController {
    * @memberOf UsersController
    */
   static create(req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      next(createError(422, '', { errors: errors.array() }));
-    }
+    validateRequest(req, next);
 
     const userData = req.body;
     bcrypt.hash(req.body.password, 10, (err, hash) => {
       userData.password = hash;
       const newUser = new User(userData);
-      dbStorage.users.push(newUser);
+      db.users.push(newUser);
 
       res.status(201)
         .json({

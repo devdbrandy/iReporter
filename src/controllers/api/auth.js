@@ -1,7 +1,6 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator/check';
 import db from '../../models/mock';
 import { env, validateRequest } from '../../utils';
 

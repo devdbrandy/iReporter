@@ -34,15 +34,15 @@ export default class UsersController {
    * @memberOf UsersController
    */
   static show(req, res, next) {
+    validateRequest(req, next);
+
     const userId = parseInt(req.params.id, 10);
-    const user = db.users.filter(item => (
-      item.id === userId
-    ))[0];
+    const user = db.users.find(row => row.id === userId);
 
     if (user) {
       res.status(200).json({
         status: 200,
-        data: [user.toString()],
+        data: [user],
       });
     } else {
       next(createError(404, 'Resource not found'));

@@ -37,14 +37,14 @@ export default class RedFlagsController {
     validateRequest(req, next);
 
     const recordId = parseInt(req.params.id, 10);
-    const record = db.records.filter(item => (
+    const record = db.records.find(item => (
       item.id === recordId
-    ))[0];
+    ));
 
     if (record) {
       res.status(200).json({
         status: 200,
-        data: [record.toString()],
+        data: [record],
       });
     } else {
       next(createError(404, 'Resource not found'));

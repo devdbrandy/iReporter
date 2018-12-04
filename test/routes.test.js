@@ -33,10 +33,10 @@ describe('routes: index', () => {
 });
 
 describe('routes: auth', () => {
+  const user = db.users[0];
+
   describe(`${prefix}/auth`, () => {
     it('should authenticate a user and respond with a token', (done) => {
-      const user = db.users[0];
-
       request(app)
         .post(`${prefix}/auth`)
         .send({
@@ -52,8 +52,6 @@ describe('routes: auth', () => {
     });
 
     it('should throw an error on invalid credentials', (done) => {
-      const user = db.users[0];
-
       request(app)
         .post(`${prefix}/auth`)
         .send({
@@ -61,11 +59,10 @@ describe('routes: auth', () => {
           password: 'bacons',
         })
         .set('Accept', 'application/json')
-        .expect(401)
-        .end((err, res) => {
-          res.body.error.should.equal('Unauthorized');
-          done();
-        });
+        .expect(401, {
+          status: 401,
+          error: 'Unauthorized',
+        }, done);
     });
   });
 });
@@ -92,11 +89,20 @@ describe('routes: users', () => {
       request(app)
         .get(`${prefix}/users/${id}`)
         .set('Accept', 'application/json')
-        .expect(200)
-        .end((err, res) => {
-          res.body.data[0].email.should.equal(user.email);
-          done();
-        });
+        .expect(200, {
+          status: 200,
+          data: [{
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            othernames: user.othernames,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            registered: user.registered,
+            isAdmin: user.isAdmin,
+            username: user.username,
+          }],
+        }, done);
     });
 
     it('should throw an error for non-existing resource', (done) => {

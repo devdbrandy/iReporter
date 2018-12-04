@@ -82,18 +82,14 @@ export class Record {
 
   update(data) {
     if (this.status === 'draft') {
-      this.comment = data.comment || this.comment;
-      this.type = data.type || this.type;
-      this.images = data.images || this.images;
-      this.videos = data.videos || this.videos;
-    }
-
-    return this;
-  }
-
-  updateLocation(data) {
-    if (this.status === 'draft') {
-      this.location = data.location || this.location;
+      if (data.location) {
+        this.location = data.location || this.location;
+      } else {
+        this.comment = data.comment || this.comment;
+        this.type = data.type || this.type;
+        this.images = data.images || this.images;
+        this.videos = data.videos || this.videos;
+      }
     }
 
     return this;

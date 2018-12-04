@@ -36,7 +36,7 @@ router.post('/red-flags', [verifyToken, checkSchema(validator.record)], RedFlags
 // checkSchema(validator.record)
 
 /* Edit the location of a specific red-flag record */
-router.patch('/red-flags/:id/location', check('id').isInt(), RedFlagsController.updateLocation);
+router.patch('/red-flags/:id/location', [check('id').isInt(), verifyToken], RedFlagsController.update);
 
 /* Edit the comment of a specific red-flag record */
 router.patch('/red-flags/:id', [check('id').isInt(), verifyToken], RedFlagsController.update);

@@ -466,6 +466,15 @@ hr.dash {
   color: var(--black);
 }
 
+.record--title h3 {
+  display: inline;
+}
+
+.record--title span.status {
+  display: inline-block;
+  padding: 6px 8px;
+}
+
 .record--links button,
 .record--links a,
 .record--links span {
@@ -516,6 +525,10 @@ hr.dash {
 
 .tag-intervention {
   background: var(--blue);
+}
+
+.tag-status {
+  background: var(--info);
 }
 /* ----- DASHBOARD ----- */
 
@@ -618,6 +631,38 @@ hr.dash {
 }
 /* ----- PAGINATION LINKS ----- */
 
+/* ----- Custom Upload Button----- */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper button {
+  border: 1px solid var(--flat-blue);
+  background: white;
+  color: var(--blue);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 2rem;
+}
+
+.upload-btn-wrapper input[type=file] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-btn-wrapper small {
+  font-size: 1.4rem;
+}
+
+/* ----- Edn Custom Upload Button ----- */
+
 
 /* ----- MEDIA QUERIES ----- */
 
@@ -633,7 +678,7 @@ hr.dash {
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {} 
+@media only screen and (min-width: 600px) {}
 
 /* Medium devices (phones, 768px and down) */
 @media only screen and (max-width: 768px) {

@@ -1,66 +1,52 @@
 /* Reset css to ensure accuracy of styles across browsers */
 @import 'reset.css';
-/* Modules */
+/* Utilities */
 @import 'typography.css';
+@import 'util.css';
 
-/* Variables */
+/* ----- VARIABLES ----- */
 :root {
   /* Colors */
-  /* --primary-color: #f15b2a; */
   --primary-color: #e74c3c;
-
   --bg-color: #181818;
   --lightgray: #1d1d1d;
   --darkgray: #1a1a1a;
   --gray80: #ccc;
   --white: #fff;
+  --green: #4CAF50;
   --black: #24292e;
   --red: #F44336;
   --blue: #2196F3;
-  --green: #4CAF50;
-
   --flat-blue: #607D8B;
+  --info: #00BCD4;
 }
+/* ----- END VARIABLE ----- */
 
-a {
+/* ----- UTILITIES ----- */
+a, button {
   text-decoration: none;
   font-family: inherit;
+  cursor: pointer;
 }
 
-.container {
-  width: 70%;
-  margin: auto;
+.primary {
+  background: var(--primary-color);
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
+.secondary {
+  background: var(--blue);
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
+.success {
+  background: var(--green);
 }
 
-.center {
-  align-items: center;
-  justify-content: center;
+.danger {
+  background: var(--red);
 }
 
-.middle {
-  align-items: center;
-}
-
-.end {
-  justify-content: flex-end;
-}
-
-/* MARGIN HELPERS */
-.ml-20 {
-  margin-left: 2rem;
+.info {
+  background: var(--info);
 }
 
 .btn-primary {
@@ -76,7 +62,6 @@ a {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  cursor: pointer;
   transition: all 0.5s;
 }
 
@@ -97,7 +82,6 @@ a {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  cursor: pointer;
   transition: all 0.5s;
 }
 
@@ -122,14 +106,16 @@ button:focus {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  cursor: pointer;
 }
 
 .primary-text {
   color: var(--primary-color);
 }
 
-input[type=text], select {
+input[type=text],
+input[type=email],
+input[type=password],
+select {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -164,8 +150,9 @@ main.signin {
   background: var(--lightgray);
   color: var(--white);
 }
+/* -----END UTILITIES ----- */
 
-/* SIGNIN */
+/* ----- SIGNIN ----- */
 .signin {
   flex: 1;
   height: 100vh;
@@ -288,6 +275,7 @@ main.signin {
 .signin--footer a {
   color: var(--primary-color);
 }
+/* ----- END SIGNIN ----- */
 
 /* SIGNIN SHOWCASE */
 .showcase {
@@ -312,8 +300,9 @@ main.signin {
 .showcase strong {
   font-weight: bold;
 }
+/* ----- END SIGNIN SHOWCASE ----- */
 
-/* SIGNUP POPUP */
+/* ----- SIGNUP POPUP ----- */
 #signup-popup {
   display: none;
   z-index: 9;
@@ -329,8 +318,9 @@ hr.dash {
   margin-bottom: 1.6rem;
   text-align: center;
 }
+/* END SIGNUP POPUP ----- */
 
-/* MAIN NAVBAR STYLE */
+/* ----- MAIN NAVBAR ----- */
 .main--navbar {
   background: var(--black);
   width: 100vw;
@@ -406,7 +396,12 @@ hr.dash {
   color: var(--white);
 }
 
-/* PANEL */
+.navbar--right a:nth-child(2n) {
+  display: none;
+}
+/* ----- END MAIN NAVBAR ----- */
+
+/* ----- PANEL ----- */
 .panel {
   width: 100%;
   margin-top: 2rem;
@@ -430,7 +425,9 @@ hr.dash {
   border-top: 0;
   padding: 1rem 1.6rem;
 }
+/* ----- END PANEL ----- */
 
+/* ----- CARD ----- */
 .card {
   padding: 2px 16px;
   border-radius: 2px;
@@ -445,6 +442,9 @@ hr.dash {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
+/* ----- END CARD ----- */
+
+/* ----- DAHSBOARD ----- */
 .overview span.count {
   font-size: 6rem;
   font-weight: bold;
@@ -462,13 +462,47 @@ hr.dash {
   padding: 2rem;
 }
 
+.record .card h3 {
+  color: var(--black);
+}
+
+.record--title h3 {
+  display: inline;
+}
+
+.record--title span.status {
+  display: inline-block;
+  padding: 6px 8px;
+}
+
 .record--links button,
-.record--links a {
+.record--links a,
+.record--links span {
   display: inline-block;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   font-weight: 400;
+}
+
+.record--links span {
+  cursor: default;
+}
+
+.record--links .draft {
+  background: var(--info);
+}
+
+.record--links .edit {
+  background: var(--green);
+}
+
+.record--links .delete {
+  background: var(--red);
+}
+
+.record--links .add-map {
+  background: var(--flat-blue);
 }
 
 .tag {
@@ -483,7 +517,6 @@ hr.dash {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  cursor: default;
 }
 
 .tag-redflag {
@@ -494,10 +527,16 @@ hr.dash {
   background: var(--blue);
 }
 
-/* RECORD STYLES */
+.tag-status {
+  background: var(--info);
+}
+/* ----- DASHBOARD ----- */
+
+/* ----- RECORD STYLES ----- */
 .record--heading h3 {
   font-size: 5rem;
   font-weight: bold;
+  color: var(--black);
   margin-bottom: 0;
 }
 
@@ -519,8 +558,9 @@ hr.dash {
   color: var(var(--white));
   font-size: 1.2rem;
 }
+/* ----- END RECORD ----- */
 
-/* USER PROFILE */
+/* ----- USER PROFILE ----- */
 .user--avatar img {
   width: 25rem;
   height: 25rem;
@@ -565,13 +605,9 @@ hr.dash {
   font-size: 1.4rem;
   font-weight: 600;
 }
+/* ----- END USER PROFILE */
 
-/* SIDEBAR */
-section.sidebar {
-  width: 100px;
-}
-
-/* PAGINATION LINKS */
+/* ----- PAGINATION LINKS ----- */
 .pagination {
   margin: 2rem 0;
 }
@@ -593,10 +629,42 @@ section.sidebar {
 .pagination a:hover:not(.active) {
   background-color: var(--gray80);
 }
+/* ----- PAGINATION LINKS ----- */
+
+/* ----- Custom Upload Button----- */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper button {
+  border: 1px solid var(--flat-blue);
+  background: white;
+  color: var(--blue);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 2rem;
+}
+
+.upload-btn-wrapper input[type=file] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-btn-wrapper small {
+  font-size: 1.4rem;
+}
+
+/* ----- Edn Custom Upload Button ----- */
 
 
-
-/* MEDIA QUERIES - Device Breakpoints */
+/* ----- MEDIA QUERIES ----- */
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -610,7 +678,7 @@ section.sidebar {
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {} 
+@media only screen and (min-width: 600px) {}
 
 /* Medium devices (phones, 768px and down) */
 @media only screen and (max-width: 768px) {
@@ -663,11 +731,7 @@ section.sidebar {
   .nav-right .circle-add {
     display: none;
   }
-
-  /* .navbar--right .btn-primary {
-    display: inline-block;
-  } */
-} 
+}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {

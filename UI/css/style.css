@@ -659,6 +659,23 @@ hr.dash {
 
 .upload-btn-wrapper small {
   font-size: 1.4rem;
+  color: var(--blue);
+}
+
+.media-list li {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--darkgray);
+}
+
+.media-list li span {
+  border: none;
+  background: none;
+  border-radius: 2px;
+  color: var(--green);
+  font-weight: bold;
+  margin-left: 5px;
+  font-size: 1.6rem;
 }
 
 /* ----- Edn Custom Upload Button ----- */

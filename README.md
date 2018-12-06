@@ -1,11 +1,13 @@
 <h1 align="center">iReporter<h1> 
 
 <p align="center">
-  <a href="https://travis-ci.org/devdbrandy/iReporter.svg?branch=develop"><img src="https://travis-ci.org/devdbrandy/iReporter.svg?branch=develop" /></a>
-  <a href='https://coveralls.io/github/devdbrandy/iReporter?branch=develop'><img src='https://coveralls.io/repos/github/devdbrandy/iReporter/badge.svg?branch=develop' alt='Coverage Status' /></a>
+  <a href="https://travis-ci.org/devdbrandy/iReporter.svg?branch=develop">
+    <img src="https://travis-ci.org/devdbrandy/iReporter.svg?branch=develop" />
+  </a>
   <a class="badge-align" href="https://www.codacy.com/app/devdbrandy/iReporter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=devdbrandy/iReporter&amp;utm_campaign=Badge_Grade">
     <img src="https://api.codacy.com/project/badge/Grade/af41b75a4052458888f44cd39007295a"/>
   </a>
+  <a href='https://coveralls.io/github/devdbrandy/iReporter?branch=develop'><img src='https://coveralls.io/repos/github/devdbrandy/iReporter/badge.svg?branch=develop' alt='Coverage Status' /></a>
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
   </a>

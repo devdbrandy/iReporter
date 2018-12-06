@@ -72,14 +72,21 @@
                 <textarea name="record_body" placeholder="Record body"></textarea>
               </div>
               <div class="form-control">
-                <label for="">
-                  Upload image: <input type="file" name="image">
-                </label>
-              </div>
-              <div class="form-control">
-                <label for="">
-                  Upload video: <input type="file" name="image">
-                </label>
+                <div class="upload-btn-wrapper">
+                  <label>
+                    <button>
+                      <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" name="media" multiple>
+                    <small>Upload media files</small>
+                  </label>
+                </div>
+                <div class="file-list">
+                  <ul>
+                    <li class="li">image1.jpg</li>
+                    <li class="li">image2.jpg</li>
+                  </ul>
+                </div>
               </div>
               <div class="form-control">
                 <select id="status" name="status">

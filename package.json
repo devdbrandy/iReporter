@@ -11,7 +11,7 @@
     "clean": "rimraf dist",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "gh:deploy": "gh-pages -d UI",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build ",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build",
     "lint": "eslint src/",
     "mocha": "cross-env NODE_ENV=test mocha --require babel-register",
     "mocha:watch": "npm run mocha -- -w",

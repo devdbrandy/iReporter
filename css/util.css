@@ -37,7 +37,7 @@
 /* ----- End Alignment ----- */
 
 
-/* ----- Margin/Padding ----- */
+/* ----- Margin ----- */
 
 .ml-20 {
   margin-left: 2rem;
@@ -47,8 +47,4 @@
   margin-right: 2rem;
 }
 
-.pl-10 {
-  padding-left: 1rem;
-}
-
-/* ----- End Margin/Padding -----*/
+/* ----- End Margin -----*/

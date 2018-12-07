@@ -47,7 +47,7 @@
               <h3>Edit Record</h3>
               <div class="column">
                 <div class="row end">
-                  <button class="btn btn-back"><i class="fas fa-reply"></i></button>
+                  <button class="btn-back"><i class="fas fa-reply"></i> Back</button>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@
           <div class="panel--body">
             <form action="dashboard.html">
               <div class="form-control">
-                <input type="text" name="title" placeholder="Record comment">
+                <input type="text" name="title" placeholder="Record title">
               </div>
               <div class="form-control">
                 <input type="text" name="description" placeholder="Record description">
@@ -77,11 +77,16 @@
                     <button>
                       <i class="fas fa-paperclip"></i>
                     </button>
-                    <input type="file" id="mediaFiles" name="media" multiple>
+                    <input type="file" name="media" multiple>
                     <small>Upload media files</small>
                   </label>
                 </div>
-                <div class="media-list"></div>
+                <div class="file-list">
+                  <ul>
+                    <li class="li">image1.jpg</li>
+                    <li class="li">image2.jpg</li>
+                  </ul>
+                </div>
               </div>
               <div class="form-control">
                 <select id="status" name="status">

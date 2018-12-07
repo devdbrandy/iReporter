@@ -14,9 +14,7 @@
       <section class="signin column center">
         <div class="signin--content column center">
           <header class="signin--header">
-            <a href="index.html">
-              <h2><span class="primary-text">i</span>Reporter</h2>
-            </a>
+            <h2><span class="primary-text">i</span>Reporter</h2>
           </header>
           <div id="signin-view" class="row">
             <div class="column center">
@@ -47,7 +45,7 @@
           <div id="signup-popup" class="row">
             <div class="column center">
               <form class="signup--form" action="dashboard.html">
-                <p class="hint">Fill the form below to create an account</p>
+                <p>Fill the form below to create an account</p>
                 <hr class="dash">
                 <div>
                   <label for="firstname">First Name</label>
@@ -89,7 +87,7 @@
       <!-- SHOWCASE -->
       <section class="showcase column center">
         <div class="showcase--content">
-          <h1>Let&rsquo;s build the Nation <strong>together</strong></h1>
+          <h1>Let&rsquo;s build the future <strong>together</strong></h1>
           <a href="records.html" class="btn-secondary">Browse latest reports</a>
         </div>
       </section>
@@ -101,18 +99,15 @@
     const signinView = document.getElementById('signin-view');
     const openButton = document.querySelector('.open');
     const closeButton = document.querySelector('.close');
-    const headerLogo = document.querySelector('.signin--header h2');
 
     const openForm = () => {
       signupPopup.style.display = 'block';
       signinView.style.display = 'none';
-      headerLogo.style.fontSize = '2.4em';
     };
 
     const closeForm = () => {
       signupPopup.style.display = 'none';
       signinView.style.display = 'block';
-      headerLogo.style.fontSize = '4.8em';
     };
 
     openButton.addEventListener('click', openForm);

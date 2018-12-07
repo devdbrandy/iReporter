@@ -1,11 +1,18 @@
 language: node_js
 node_js:
-  - "node"
-
+- node
 cache: npm
 
+before_script:
+- npm install -g --silent
 env:
   global:
-    - NODE_ENV=test
-
-after_success: npm run coverage
+  - NODE_ENV=test
+  - GITHUB_REPO="devdbrandy/iReporter"
+after_success:
+  - npm run coverage
+deploy:
+  provider: heroku
+  api_key:
+    secure: Tj/RWO+NhDpk2T+h/9ecTaXwOvMQ8MjeewB9IqYTINUbwPwNJp96e9R3roiWVfLHibH8ZZ8tnF4vV38H4ZKTAt6dkqOnylnNjppQi+RuSJ2pbMD7+i14VcTgcIkKqob+/UhLAIYKdpIfLTnrL0K33wp0YyEik4oPC79l4cASPeJsZxd1sUYOk2S0hcAcexMZlVxCH80Q7qc4R6GfykE8TVABj6PGgqtZOj67HzQYITe6w/Npt7jKE4TmeyaJLhLKJddX4Y329br0k0JnUtt0bcFZPO+6ByJAl6RAkpxFvZg012bkowEKZNgmKS9YD70idMNsgBopbOxfLPJtgolIFL7jLdT9U5pSkHX6sWIavcq6yyH7NL7MsApvcdSfGDXrpGMu8+wYsYP1nlmbXNjrxFZhOth6RubGmdqGSOTZ2dTnAAEFeYPjU0bYj6BU8mwldw60QNH5cBuPjXuiz8j1WaWw5NZ2am7lZC8duCkd5rL1/7XduL9/XpTVqLrhBsam13EWLSZ7xqKx2JkBmSrZqkPSRvgWKFVGSEts4sjBAdLJEUpulOFa4NVUgpqU5Ho/DlHgj42ORJBvKAqMudTCF5aTdeiW0xYvaNLIrI31lhtdJft4QvNMBGaXEbE58T++nklqF4BI35h9cLUYYga43GSa4VMABjTkZyOln8IzxDQ=
+  app: irepot

@@ -81,7 +81,7 @@ Content-Type: application/json
 The second part of the URI specifies the API version you wish to access in the format `v{version_number}`.
 For example, version 1 of the API (most current) is accessible via:
 ```http
-  https://irepot.herokuapp.com
+  https://irepot.herokuapp.com/api/v1
 ```
 
 ## 6. HTTP Requests

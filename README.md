@@ -20,23 +20,38 @@ iReporter app enables users (citizen) to bring any form of corruption to the not
 
 - [1. Overview](#1-overview)
 - [2. Table of Contents](#2-table-of-contents)
-- [2. Authentication](#2-authentication)
 - [3. Installation](#3-installation)
   - [3.1. Run locally](#31-run-locally)
   - [3.2. Test Locally](#32-test-locally)
-- [4. Usage](#4-usage)
-  - [4.1 Fetch all red-flag records](#41-fetch-all-red-flag-records)
-  - [4.2. Fetch a specific red-flag record](#42-fetch-a-specific-red-flag-record)
-  - [4.3. Create a red-flag record](#43-create-a-red-flag-record)
-  - [4.4. Edit the location of a specific red-flag record](#44-edit-the-location-of-a-specific-red-flag-record)
-  - [4.5. Edit the comment of a specific red-flag record](#45-edit-the-comment-of-a-specific-red-flag-record)
-  - [4.6. Delete a specific red-flag record](#46-delete-a-specific-red-flag-record)
-- [5. :pencil: License](#5-pencil-license)
+- [4. Authentication](#4-authentication)
+- [5. API Versioning](#5-api-versioning)
+- [6. HTTP Requests](#6-http-requests)
+- [7. HTTP Response Codes](#7-http-response-codes)
+- [8. Usage](#8-usage)
+  - [8.1 Fetch all red-flag records](#81-fetch-all-red-flag-records)
+  - [8.2. Fetch a specific red-flag record](#82-fetch-a-specific-red-flag-record)
+  - [8.3. Create a red-flag record](#83-create-a-red-flag-record)
+  - [8.4. Edit the location of a specific red-flag record](#84-edit-the-location-of-a-specific-red-flag-record)
+  - [8.5. Edit the comment of a specific red-flag record](#85-edit-the-comment-of-a-specific-red-flag-record)
+  - [8.6. Delete a specific red-flag record](#86-delete-a-specific-red-flag-record)
+- [9. :pencil: License](#9-pencil-license)
 
-## 2. Authentication
+## 3. Installation
 
-Access to the API is granted by providing your username and password using HTTP basic authentication. The username and password used 
+### 3.1. Run locally
+To run app locally, make sure you have `nodejs` installed.
 
+```bash
+git clone https://github.com/devdbrandy/iReporter.git # or clone your own fork
+cd iReporter
+npm install
+npm run watch
+```
+
+### 3.2. Test Locally
+To test or consume api locally, you can make use of [Postman](https://www.getpostman.com) or [Insomnia](https://insomnia.rest/download/)
+
+## 4. Authentication
 
 Access to restricted API endpoints requires an access token, iReporter uses access tokens to associate API requests with your account. To obtain your access token, make a request along with `username` and `password` field to `https://irepot.herokuapp.com/api/v1/auth`
 
@@ -63,24 +78,40 @@ Content-Type: application/json
 ]
 ```
 
-## 3. Installation
+## 5. API Versioning
 
-### 3.1. Run locally
-To run app locally, make sure you have `nodejs` installed.
-
-```bash
-git clone https://github.com/devdbrandy/iReporter.git # or clone your own fork
-cd iReporter
-npm install
-npm run watch
+The second part of the URI specifies the API version you wish to access in the format `v{version_number}`.
+For example, version 1 of the API (most current) is accessible via:
+```http
+  https://irepot.herokuapp.com
 ```
 
-### 3.2. Test Locally
-To test or consume api locally, you can make use of [Postman](https://www.getpostman.com) or [Insomnia](https://insomnia.rest/download/)
+## 6. HTTP Requests
 
-## 4. Usage
+All API requests are made by sending  asecure HTTPS request using one of the following methods, depending on the being taken:
 
-### 4.1 Fetch all red-flag records
+- `POST` Create a resource
+- `PATCH` Update a resource
+- `GET` Get a resource or list of resources
+- `DELETE` Delete a resource
+
+For `POST` and `PATCH` requests, the body of your request may include a JSON payload.
+
+## 7. HTTP Response Codes
+
+Each response will be returned with one of the following HTTP status codes:
+
+- `200` `OK` The request was successful
+- `400` `Bad Request` There was a problem with the request (security, malformed)
+- `401` `Unauthorized` The supplied API credentials are invalid
+- `403` `Forbidden` The credentials provided do not have permissions to access the requested resource
+- `404` `Not found` An attempt was made to access a resource that does not exist in the API
+- `500` `Server Error` An error on the server occurred
+
+
+## 8. Usage
+
+### 8.1 Fetch all red-flag records
 
 API endpoint that represents a list of red-flags records
 - **URL Endpoint:** `/api/v1/red-flags`
@@ -143,7 +174,7 @@ API endpoint that represents a list of red-flags records
     },
     ```
 
-### 4.2. Fetch a specific red-flag record
+### 8.2. Fetch a specific red-flag record
 API endpoint that represents a single red-flags records
 - **URL Endpoint:** `/api/v1/red-flags/{id}`
 - **Method:** `GET`
@@ -219,7 +250,7 @@ API endpoint that represents a single red-flags records
     ]
     ```
 
-### 4.3. Create a red-flag record
+### 8.3. Create a red-flag record
 
 API endpoint that represents the creation of red-flag record
 - **URL Endpoint:** `/api/v1/red-flags`
@@ -252,7 +283,7 @@ API endpoint that represents the creation of red-flag record
     }
   ```
 
-### 4.4. Edit the location of a specific red-flag record
+### 8.4. Edit the location of a specific red-flag record
 
 API endpoint that represents editing the location of red-flag record
 - **URL Endpoint:** `/api/v1/red-flags/{id}/location`
@@ -285,7 +316,7 @@ API endpoint that represents editing the location of red-flag record
     }
   ```
 
-### 4.5. Edit the comment of a specific red-flag record
+### 8.5. Edit the comment of a specific red-flag record
 
 API endpoint that represents editing a specific red-flag record
 - **URL Endpoint:** `/api/v1/red-flags/{id}/comment`
@@ -317,7 +348,7 @@ API endpoint that represents editing a specific red-flag record
     }
   ```
 
-### 4.6. Delete a specific red-flag record
+### 8.6. Delete a specific red-flag record
 
 API endpoint that represents deleting a specific red-flag record
 - **URL Endpoint:** `/api/v1/red-flags/{id}`
@@ -344,6 +375,6 @@ API endpoint that represents deleting a specific red-flag record
     }
   ```
 
-## 5. :pencil: License
+## 9. :pencil: License
 
 The iReporter REST API is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

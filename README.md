@@ -65,17 +65,15 @@ Accept: application/json
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-  {
-    "status": 200,
-    "data": [
-      {
-        "token": "ahd64jfhHG7832KFM5",
-        "user": {}
-      }
-    ]
-  }
-]
+{
+  "status": 200,
+  "data": [
+    {
+      "token": "ahd64jfhHG7832KFM5",
+      "user": {}
+    }
+  ]
+}
 ```
 
 ## 5. API Versioning

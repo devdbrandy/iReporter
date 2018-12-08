@@ -12,11 +12,9 @@ import createError from 'http-errors';
 export default function verifyToken(req, res, next) {
   // Get auth header value
   const bearer = req.headers.authorization;
-  if (!bearer) {
-    next(createError(403, 'Unauthorized'));
-  } else {
-    const token = bearer.split(' ')[1];
-    req.token = token;
-    next();
-  }
+  if (!bearer) return next(createError(403, 'Unauthorized'));
+
+  const token = bearer.split(' ')[1];
+  req.token = token;
+  return next();
 }

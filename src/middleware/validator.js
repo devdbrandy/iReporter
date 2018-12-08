@@ -45,8 +45,8 @@ const validator = {
     },
     comment: {
       isLength: {
-        errorMessage: 'Comment is required',
-        options: { min: 5 },
+        errorMessage: 'Comment should be atleast 10 chars long',
+        options: { min: 10 },
       },
     },
   },

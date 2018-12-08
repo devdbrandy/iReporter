@@ -3,12 +3,14 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import path from 'path';
 import logger from 'morgan';
-import { errorHandler } from './middleware';
+import { exceptionHandler } from './middleware';
+import { config } from './utils/helpers';
 
 import webRouter from './routes/web';
 import apiRouter from './routes/api';
 
 const app = express();
+const version = config('app:version');
 
 // view engine setup
 app.set('views', path.join(__dirname, '../resources/views'));
@@ -23,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', webRouter);
-app.use('/api/v1/', apiRouter);
+app.use(`/api/${version}/`, apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -31,6 +33,6 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use(errorHandler);
+app.use(exceptionHandler);
 
 export default app;

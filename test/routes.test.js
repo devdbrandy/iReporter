@@ -17,8 +17,7 @@ describe('routes: index', () => {
     it('should render the index page', (done) => {
       request(app)
         .get('/')
-        .expect(200)
-        .end(done);
+        .expect(200, done);
     });
   });
 
@@ -26,8 +25,10 @@ describe('routes: index', () => {
     it('should throw an error', (done) => {
       request(app)
         .get('/404')
-        .expect(404)
-        .end(done);
+        .expect(404, {
+          status: 404,
+          error: 'Provided route is invalid',
+        }, done);
     });
   });
 });
@@ -141,6 +142,7 @@ describe('routes: users', () => {
       request(app)
         .post(`${prefix}/users`)
         .send(userData)
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
@@ -163,6 +165,7 @@ describe('routes: red-flags', () => {
         username: user.username,
         password: 'secret',
       })
+      .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .end((err, res) => {
         const response = res.body.data[0].token;
@@ -175,6 +178,7 @@ describe('routes: red-flags', () => {
     it('should fetch all red-flag records', (done) => {
       request(app)
         .get(`${prefix}/red-flags`)
+        .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
@@ -190,6 +194,7 @@ describe('routes: red-flags', () => {
 
       request(app)
         .get(`${prefix}/red-flags/${redFlag.id}`)
+        .set('Accept', 'application/json')
         .end((err, res) => {
           res.body.should.have.property('data');
           done();
@@ -199,6 +204,7 @@ describe('routes: red-flags', () => {
     it('should throw an error for non-existing resource', (done) => {
       request(app)
         .get(`${prefix}/red-flags/1000`)
+        .set('Accept', 'application/json')
         .expect(404, {
           status: 404,
           error: 'Resource not found',
@@ -235,6 +241,7 @@ describe('routes: red-flags', () => {
         .post(`${prefix}/red-flags`)
         .send(recordData)
         .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
@@ -254,6 +261,7 @@ describe('routes: red-flags', () => {
         .post(`${prefix}/red-flags`)
         .send(recordData)
         .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(422)
         .end(done);
@@ -270,6 +278,7 @@ describe('routes: red-flags', () => {
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
         .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
@@ -289,6 +298,7 @@ describe('routes: red-flags', () => {
         .patch(`${prefix}/red-flags/1`)
         .send(data)
         .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {

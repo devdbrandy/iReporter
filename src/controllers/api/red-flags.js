@@ -62,26 +62,25 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static create(req, res, next) {
-    validateRequest(req, next);
+    if (validateRequest(req, next)) {
+      jwt.verify(req.token, env('APP_KEY'), (err, { user }) => {
+        const data = req.body;
+        const newRecord = new Record(data);
+        newRecord.belongsTo(user);
+        db.records.push(newRecord);
 
-    jwt.verify(req.token, env('APP_KEY'), (err, { user }) => {
-
-      const data = req.body;
-      const newRecord = new Record(data);
-      newRecord.belongsTo(user);
-      db.records.push(newRecord);
-
-      res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: newRecord.id,
-              message: 'Created red-flag record',
-            },
-          ],
-        });
-    });
+        return res.status(201)
+          .json({
+            status: 201,
+            data: [
+              {
+                id: newRecord.id,
+                message: 'Created red-flag record',
+              },
+            ],
+          });
+      });
+    }
   }
 
   /**

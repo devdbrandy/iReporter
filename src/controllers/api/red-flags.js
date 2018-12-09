@@ -102,7 +102,7 @@ export default class RedFlagsController {
         });
     }
 
-    return next(createError(403, 'Unauthorized'));
+    return next(createError(403, 'Forbidden'));
   }
 
   /**
@@ -137,7 +137,7 @@ export default class RedFlagsController {
           ],
         });
     }
-
-    return next(createError(403, 'Unauthorized'));
+    console.log('passed all');
+    return next(createError(403, 'Forbidden'));
   }
 }

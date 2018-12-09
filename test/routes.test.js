@@ -70,7 +70,7 @@ describe('routes: auth', () => {
         .set('Accept', 'application/json')
         .expect(401, {
           status: 401,
-          error: 'Unauthorized',
+          error: 'Unauthenticated',
         }, done);
     });
   });
@@ -169,6 +169,7 @@ describe('routes: users', () => {
 
 describe('routes: red-flags', () => {
   let token;
+  let token2;
   beforeEach((done) => {
     // Refresh tables and seed data
     User.resetTable();
@@ -177,7 +178,6 @@ describe('routes: red-flags', () => {
     mock.records.forEach(data => Record.create(data));
 
     const user = User.table[0];
-
     request(app)
       .post(`${prefix}/auth`)
       .send({
@@ -189,6 +189,20 @@ describe('routes: red-flags', () => {
       .end((err, res) => {
         const response = res.body.data[0].token;
         token = response;
+      });
+
+    const user2 = User.table[1];
+    request(app)
+      .post(`${prefix}/auth`)
+      .send({
+        username: user2.username,
+        password: 'secret',
+      })
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        const response = res.body.data[0].token;
+        token2 = response;
         done();
       });
   });
@@ -369,7 +383,7 @@ describe('routes: red-flags', () => {
         .set('Accept', 'application/json')
         .expect(403, {
           status: 403,
-          error: 'Unauthorized',
+          error: 'Forbidden',
         }, done);
     });
 
@@ -438,15 +452,13 @@ describe('routes: red-flags', () => {
     });
 
     it('should throw an error for unauthorized user', (done) => {
-      token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJNaWtlIiwibGFzdG5hbWUiOiJTcGluZSIsIm90aGVybmFtZXMiOiJUb20iLCJlbWFpbCI6Im1pa2VAZW1haWwuY29tIiwicGhvbmVOdW1iZXIiOiI2MjItMTMyLTkyODMiLCJyZWdpc3RlcmVkIjoiU3VuIERlYyAwOSAyMDE4IDE5OjUxOjQ3IEdNVCswMTAwIChXZXN0IEFmcmljYSBTdGFuZGFyZCBUaW1lKSIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6IlNwaW5lTWlrMSJ9LCJpYXQiOjE1NDQzODE1MzB9.w34D916p7N12lUjsTTICx0g4GDOLNRMnSCq-u07Jarw';
-
       request(app)
         .delete(`${prefix}/red-flags/1`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token2}`)
         .set('Accept', 'application/json')
         .expect(403, {
           status: 403,
-          error: 'Unauthorized',
+          error: 'Forbidden',
         }, done);
     });
   });

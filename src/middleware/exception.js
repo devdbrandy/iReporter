@@ -15,12 +15,10 @@ const exceptionHandler = (err, req, res, next) => {
   const statusCode = err.status || 500;
   res.status(statusCode);
 
-  if (req.accepts('application/json')) {
-    return res.json({
-      status: statusCode,
-      error,
-    });
-  }
+  return res.json({
+    status: statusCode,
+    error,
+  });
 };
 
 export default exceptionHandler;

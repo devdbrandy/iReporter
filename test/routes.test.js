@@ -373,12 +373,10 @@ describe('routes: red-flags', () => {
     });
 
     it('should throw an error for unauthorized user', (done) => {
-      token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJNaWtlIiwibGFzdG5hbWUiOiJTcGluZSIsIm90aGVybmFtZXMiOiJUb20iLCJlbWFpbCI6Im1pa2VAZW1haWwuY29tIiwicGhvbmVOdW1iZXIiOiI2MjItMTMyLTkyODMiLCJyZWdpc3RlcmVkIjoiU3VuIERlYyAwOSAyMDE4IDE5OjUxOjQ3IEdNVCswMTAwIChXZXN0IEFmcmljYSBTdGFuZGFyZCBUaW1lKSIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6IlNwaW5lTWlrMSJ9LCJpYXQiOjE1NDQzODE1MzB9.w34D916p7N12lUjsTTICx0g4GDOLNRMnSCq-u07Jarw';
-
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token2}`)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(403, {

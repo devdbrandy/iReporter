@@ -18,8 +18,6 @@ export function verifyToken(req, res, next) {
 
   const token = bearer.split(' ')[1];
   if (!token) return next(createError(400, 'Invalid HEADER token'));
-  console.log('passed token');
-
   req.token = token;
   return next();
 }
@@ -27,7 +25,6 @@ export function verifyToken(req, res, next) {
 export function authenticate(req, res, next) {
   jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
     if (!decoded) return next(createError(401, 'Unauthenticated'));
-    console.log('passed authentication');
     req.user = decoded.user;
     return next();
   });

@@ -14,7 +14,7 @@ import { env } from '../utils';
 export function verifyToken(req, res, next) {
   // Get auth header value
   const bearer = req.headers.authorization;
-  if (!bearer) return next(createError(403, 'Unauthorized'));
+  if (!bearer) return next(createError(401, 'Unauthenticated'));
 
   const token = bearer.split(' ')[1];
   if (!token) return next(createError(400, 'Invalid HEADER token'));

@@ -50,20 +50,6 @@ export default class User {
     return privateProps.get(this).password;
   }
 
-  toString() {
-    return {
-      id: this.id,
-      firstname: this.firstname,
-      lastname: this.lastname,
-      othernames: this.othernames,
-      username: this.username,
-      email: this.email,
-      phoneNumber: this.phoneNumber,
-      registered: this.registered,
-      isAdmin: privateProps.get(this).isAdmin,
-    };
-  }
-
   /**
    * Generate username from firstname and lastname
    *
@@ -133,19 +119,6 @@ export default class User {
     const user = new User(attributes);
     User.table.push(user);
     return user;
-  }
-
-  /**
-   * Assign admin privilege to user resource
-   *
-   * @static
-   * @param {User} user user object
-   *
-   * @memberOf User
-   */
-  static assignAdmin(user) {
-    const userObject = User.find(user.id);
-    userObject.isAdmin = true;
   }
 
   static incrementCount() {

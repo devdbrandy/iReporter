@@ -1,7 +1,5 @@
 import createError from 'http-errors';
-import jwt from 'jsonwebtoken';
 import { Record } from '../../models';
-import { env, validateRequest } from '../../utils';
 
 export default class RedFlagsController {
   /**
@@ -33,19 +31,14 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static show(req, res, next) {
-    if (validateRequest(req, next)) {
-      const recordId = parseInt(req.params.id, 10);
-      const record = Record.find(recordId);
+    const recordId = parseInt(req.params.id, 10);
+    const record = Record.find(recordId);
 
-      if (record) {
-        res.status(200).json({
-          status: 200,
-          data: [record],
-        });
-      } else {
-        next(createError(404, 'Resource not found'));
-      }
-    }
+    if (!record) return next(createError(404, 'Resource not found'));
+    return res.status(200).json({
+      status: 200,
+      data: [record],
+    });
   }
 
   /**
@@ -59,27 +52,21 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static create(req, res, next) {
-    if (validateRequest(req, next)) {
-      jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
-        if (!decoded) return next(createError(401, 'Unauthenticated'));
+    const { user } = req;
+    const data = req.body;
+    data.createdBy = user.id;
+    const newRecord = Record.create(data);
 
-        const { user } = decoded;
-        const data = req.body;
-        data.createdBy = user.id;
-        const newRecord = Record.create(data);
-
-        return res.status(201)
-          .json({
-            status: 201,
-            data: [
-              {
-                id: newRecord.id,
-                message: 'Created red-flag record',
-              },
-            ],
-          });
+    return res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: newRecord.id,
+            message: 'Created red-flag record',
+          },
+        ],
       });
-    }
   }
 
   /**
@@ -93,36 +80,29 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static update(req, res, next) {
-    if (validateRequest(req, next)) {
-      jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
-        if (!decoded) return next(createError(401, 'Unauthenticated'));
+    const { user } = req;
+    const recordId = parseInt(req.params.id, 10);
+    const record = Record.find(recordId);
 
-        const { user } = decoded;
-        const recordId = parseInt(req.params.id, 10);
-        const record = Record.find(recordId);
+    if (!record) return next(createError(404, 'Resource not found'));
+    if (record.createdBy === user.id || user.isAdmin) {
+      const data = req.body;
+      const attribute = data.location ? 'location' : 'comment';
+      record.update(data);
 
-        if (!record) return next(createError(404, 'Resource not found'));
-
-        if (record.createdBy === user.id || user.isAdmin) {
-          const data = req.body;
-          const attribute = data.location ? 'location' : 'comment';
-          record.update(data);
-
-          return res.status(201)
-            .json({
-              status: 201,
-              data: [
-                {
-                  id: recordId,
-                  message: `Updated red-flag record's ${attribute}`,
-                },
-              ],
-            });
-        }
-
-        return next(createError(403, 'Unauthorized'));
-      });
+      return res.status(201)
+        .json({
+          status: 201,
+          data: [
+            {
+              id: recordId,
+              message: `Updated red-flag record's ${attribute}`,
+            },
+          ],
+        });
     }
+
+    return next(createError(403, 'Unauthorized'));
   }
 
   /**
@@ -136,34 +116,28 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static destroy(req, res, next) {
-    validateRequest(req, next);
+    const { user } = req;
+    const recordId = parseInt(req.params.id, 10);
+    const record = Record.find(recordId);
 
-    jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
-      if (!decoded) return next(createError(401, 'Unauthenticated'));
+    if (!record) return next(createError(404, 'Resource not found'));
+    if (record.createdBy === user.id || user.isAdmin) {
+      Record.table = Record.table.filter(record => (
+        record.id !== recordId
+      ));
 
-      const { user } = decoded;
-      const recordId = parseInt(req.params.id, 10);
-      const record = Record.find(recordId);
+      return res.status(200)
+        .json({
+          status: 200,
+          data: [
+            {
+              id: recordId,
+              message: 'Red-flag record has been deleted',
+            },
+          ],
+        });
+    }
 
-      if (!record) return next(createError(404, 'Resource not found'));
-      if (record.createdBy === user.id || user.isAdmin) {
-        Record.table = Record.table.filter(record => (
-          record.id !== recordId
-        ));
-
-        return res.status(200)
-          .json({
-            status: 200,
-            data: [
-              {
-                id: recordId,
-                message: 'Red-flag record has been deleted',
-              },
-            ],
-          });
-      }
-
-      return next(createError(403, 'Unauthorized'));
-    });
+    return next(createError(403, 'Unauthorized'));
   }
 }

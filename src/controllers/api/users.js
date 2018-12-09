@@ -1,6 +1,5 @@
 import createError from 'http-errors';
 import { User } from '../../models';
-import { validateRequest } from '../../utils';
 
 export default class UsersController {
   /**
@@ -32,18 +31,16 @@ export default class UsersController {
    * @memberOf UsersController
    */
   static show(req, res, next) {
-    if (validateRequest(req, next)) {
-      const userId = parseInt(req.params.id, 10);
-      const user = User.find(userId);
+    const userId = parseInt(req.params.id, 10);
+    const user = User.find(userId);
 
-      if (user) {
-        res.status(200).json({
-          status: 200,
-          data: [user],
-        });
-      } else {
-        next(createError(404, 'Resource not found'));
-      }
+    if (user) {
+      res.status(200).json({
+        status: 200,
+        data: [user],
+      });
+    } else {
+      next(createError(404, 'Resource not found'));
     }
   }
 
@@ -58,18 +55,16 @@ export default class UsersController {
    * @memberOf UsersController
    */
   static create(req, res, next) {
-    if (validateRequest(req, next)) {
-      const newUser = User.create(req.body);
-      res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: newUser.id,
-              message: 'New user created',
-            },
-          ],
-        });
-    }
+    const newUser = User.create(req.body);
+    res.status(201)
+      .json({
+        status: 201,
+        data: [
+          {
+            id: newUser.id,
+            message: 'New user created',
+          },
+        ],
+      });
   }
 }

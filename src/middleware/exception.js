@@ -16,13 +16,10 @@ const exceptionHandler = (err, req, res, next) => {
   res.status(statusCode);
 
   if (req.accepts('application/json')) {
-    res.json({
+    return res.json({
       status: statusCode,
       error,
     });
-  } else {
-    // render the error page
-    res.render('error');
   }
 };
 

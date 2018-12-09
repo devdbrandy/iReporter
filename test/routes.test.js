@@ -4,11 +4,12 @@ import dotenv from 'dotenv';
 import app from '../src/server';
 import { User, Record } from '../src/models';
 import mock from './setup/mock';
+import { config } from '../src/utils/helpers';
 
 dotenv.config();
 const should = chai.should();
 
-const apiVersion = 'v1';
+const apiVersion = config('app:version');
 const prefix = `/api/${apiVersion}`;
 
 describe('routes: index', () => {
@@ -357,7 +358,7 @@ describe('routes: red-flags', () => {
         }, done);
     });
 
-    it('should throw an error for unauthenticated user', (done) => {
+    it('should throw an error for unauthorized user', (done) => {
       token = 'wefwefwwfewfewf';
 
       request(app)
@@ -369,6 +370,21 @@ describe('routes: red-flags', () => {
         .expect(401, {
           status: 401,
           error: 'Unauthenticated',
+        }, done);
+    });
+
+    it('should throw an error for unauthenticated user', (done) => {
+      token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJNaWtlIiwibGFzdG5hbWUiOiJTcGluZSIsIm90aGVybmFtZXMiOiJUb20iLCJlbWFpbCI6Im1pa2VAZW1haWwuY29tIiwicGhvbmVOdW1iZXIiOiI2MjItMTMyLTkyODMiLCJyZWdpc3RlcmVkIjoiU3VuIERlYyAwOSAyMDE4IDE5OjUxOjQ3IEdNVCswMTAwIChXZXN0IEFmcmljYSBTdGFuZGFyZCBUaW1lKSIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6IlNwaW5lTWlrMSJ9LCJpYXQiOjE1NDQzODE1MzB9.w34D916p7N12lUjsTTICx0g4GDOLNRMnSCq-u07Jarw';
+
+      request(app)
+        .patch(`${prefix}/red-flags/1/location`)
+        .send(data)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(403, {
+          status: 403,
+          error: 'Unauthorized',
         }, done);
     });
   });
@@ -408,6 +424,30 @@ describe('routes: red-flags', () => {
           res.body.data[0].should.have.property('id');
           done();
         });
+    });
+
+    it('should throw an error for non-existing resource', (done) => {
+      request(app)
+        .delete(`${prefix}/red-flags/10`)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .expect(404, {
+          status: 404,
+          error: 'Resource not found',
+        }, done);
+    });
+
+    it('should throw an error for unauthenticated user', (done) => {
+      token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJNaWtlIiwibGFzdG5hbWUiOiJTcGluZSIsIm90aGVybmFtZXMiOiJUb20iLCJlbWFpbCI6Im1pa2VAZW1haWwuY29tIiwicGhvbmVOdW1iZXIiOiI2MjItMTMyLTkyODMiLCJyZWdpc3RlcmVkIjoiU3VuIERlYyAwOSAyMDE4IDE5OjUxOjQ3IEdNVCswMTAwIChXZXN0IEFmcmljYSBTdGFuZGFyZCBUaW1lKSIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6IlNwaW5lTWlrMSJ9LCJpYXQiOjE1NDQzODE1MzB9.w34D916p7N12lUjsTTICx0g4GDOLNRMnSCq-u07Jarw';
+
+      request(app)
+        .delete(`${prefix}/red-flags/1`)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .expect(403, {
+          status: 403,
+          error: 'Unauthorized',
+        }, done);
     });
   });
 });

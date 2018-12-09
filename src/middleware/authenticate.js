@@ -1,4 +1,6 @@
 import createError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils';
 
 /**
  * Verify user token
@@ -9,7 +11,7 @@ import createError from 'http-errors';
  * @param {object} res Response object
  * @param {Function} next call to next middleware
  */
-export default function verifyToken(req, res, next) {
+export function verifyToken(req, res, next) {
   // Get auth header value
   const bearer = req.headers.authorization;
   if (!bearer) return next(createError(403, 'Unauthorized'));
@@ -19,4 +21,12 @@ export default function verifyToken(req, res, next) {
 
   req.token = token;
   return next();
+}
+
+export function authenticate(req, res, next) {
+  jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
+    if (!decoded) return next(createError(401, 'Unauthenticated'));
+    req.user = decoded.user;
+    return next();
+  });
 }

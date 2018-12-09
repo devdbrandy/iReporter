@@ -90,19 +90,6 @@ export default class Record {
     return this;
   }
 
-  toString() {
-    return {
-      id: this.id,
-      createdOn: this.createdOn,
-      type: this.type,
-      location: this.location,
-      comment: this.comment,
-      images: this.images,
-      videos: this.videos,
-      status: this.status,
-    };
-  }
-
   static incrementCount() {
     Record.count += 1;
   }

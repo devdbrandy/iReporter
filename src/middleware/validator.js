@@ -1,4 +1,7 @@
-const validator = {
+import createError from 'http-errors';
+import { validationResult } from 'express-validator/check';
+
+export const validator = {
   auth: {
     username: {
       in: ['body'],
@@ -52,4 +55,19 @@ const validator = {
   },
 };
 
-export default validator;
+/**
+* Validates request
+*
+* @param {object} req Request object
+* @param {Function} next call to next middleware
+* @returns {Boolean} returns true successful validation
+*
+*/
+export function validateRequest(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(createError(422, '', { errors: errors.array() }));
+  }
+
+  return next();
+}

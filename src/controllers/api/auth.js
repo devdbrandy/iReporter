@@ -2,7 +2,7 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { User } from '../../models';
-import { env, validateRequest } from '../../utils';
+import { env } from '../../utils';
 
 /**
  * Determines if the user is valid
@@ -20,21 +20,19 @@ const isValidUser = (user, password) => {
 
 export default class AuthController {
   static auth(req, res, next) {
-    if (validateRequest(req, next)) {
-      const { username, password } = req.body;
-      const user = User.findByUsername(username);
+    const { username, password } = req.body;
+    const user = User.findByUsername(username);
 
-      if (!isValidUser(user, password)) {
-        next(createError(401, 'Unauthorized'));
-      }
-
-      jwt.sign({ user }, env('APP_KEY'), (err, token) => {
-        res.status(200)
-          .json({
-            status: 200,
-            data: [{ token }],
-          });
-      });
+    if (!isValidUser(user, password)) {
+      next(createError(401, 'Unauthorized'));
     }
+
+    jwt.sign({ user }, env('APP_KEY'), (err, token) => {
+      res.status(200)
+        .json({
+          status: 200,
+          data: [{ token }],
+        });
+    });
   }
 }

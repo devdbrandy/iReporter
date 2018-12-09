@@ -1,21 +1,33 @@
-import { User, Record } from './index';
+// import { User, Record } from './index';
 
-const password = '$2a$10$6bWcliaMM5VrKrkuWXvbq.BGQkb.ZUZ77JxrYkvyaP72Z5gipIyju'; // secret
-const db = {
+// const password = '$2a$10$6bWcliaMM5VrKrkuWXvbq.BGQkb.ZUZ77JxrYkvyaP72Z5gipIyju'; // secret
+const mock = {
   users: [
-    new User({
+    {
+      // id: 1,
+      firstname: 'Johnny',
+      lastname: 'Bravo',
+      othernames: 'Afro',
+      email: 'johnnyboi@yahoo.com',
+      phoneNumber: '615-955-1086',
+      username: 'johnnyboi',
+      registered: '2017-11-30T12:19:06.208Z',
+      password: 'secret',
+    },
+    {
+      // id: 2,
       firstname: 'Dana',
       lastname: 'Russel',
       othernames: 'Louvenia',
-      email: 'Ruth57@yahoo.com',
+      email: 'ruth57@yahoo.com',
       phoneNumber: '441-955-1086',
       username: 'RusseDan4',
       registered: '2017-11-30T12:19:06.208Z',
-      password,
-    }),
+      password: 'secret',
+    },
   ],
   records: [
-    new Record({
+    {
       type: 'intervention',
       location: '-42.7871,138.0694',
       images: [
@@ -29,8 +41,8 @@ const db = {
       comment: 'Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.',
       createdOn: Date(),
       createdBy: 1,
-    }),
-    new Record({
+    },
+    {
       type: 'red-flag',
       location: '-88.6823,-125.3144',
       images: [
@@ -44,22 +56,8 @@ const db = {
       comment: 'Delectus aliquam deleniti iure beatae quis. Ratione velit perspiciatis blanditiis',
       createdOn: Date(),
       createdBy: 1,
-    }),
+    },
   ],
 };
 
-const adminUser = new User({
-  firstname: 'Johnny',
-  lastname: 'Bravo',
-  othernames: 'Afro',
-  email: 'johnnyboi@yahoo.com',
-  phoneNumber: '615-955-1086',
-  username: 'johnnyboi',
-  registered: '2017-11-30T12:19:06.208Z',
-  password,
-});
-
-User.assignAdmin(adminUser);
-db.users.push(adminUser);
-
-export default db;
+export default mock;

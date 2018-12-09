@@ -1,3 +1,3 @@
-export { default as verifyToken } from './authenticate';
-export { default as errorHandler } from './error-handler';
-export { default as validator } from './validator';
+export { authenticate, verifyToken } from './authenticate';
+export { default as exceptionHandler } from './exception';
+export { validator, validateRequest } from './validator';

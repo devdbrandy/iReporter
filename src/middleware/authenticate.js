@@ -15,7 +15,6 @@ export function verifyToken(req, res, next) {
   // Get auth header value
   const bearer = req.headers.authorization;
   if (!bearer) return next(createError(401, 'Unauthenticated'));
-  console.log('passed bearer');
 
   const token = bearer.split(' ')[1];
   if (!token) return next(createError(400, 'Invalid HEADER token'));

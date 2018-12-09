@@ -24,7 +24,7 @@ export default class AuthController {
     const user = User.findByUsername(username);
 
     if (!isValidUser(user, password)) {
-      next(createError(401, 'Unauthorized'));
+      next(createError(401, 'Unauthenticated'));
     }
 
     jwt.sign({ user }, env('APP_KEY'), (err, token) => {

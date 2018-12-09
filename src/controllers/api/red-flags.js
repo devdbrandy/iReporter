@@ -137,7 +137,6 @@ export default class RedFlagsController {
           ],
         });
     }
-    console.log('passed all');
     return next(createError(403, 'Forbidden'));
   }
 }

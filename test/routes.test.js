@@ -2,15 +2,14 @@ import request from 'supertest';
 import chai from 'chai';
 import dotenv from 'dotenv';
 import app from '../src/server';
-import mock from '../src/models/mock';
+import { User, Record } from '../src/models';
+import mock from './setup/mock';
 
 dotenv.config();
 const should = chai.should();
 
 const apiVersion = 'v1';
 const prefix = `/api/${apiVersion}`;
-
-let db = JSON.parse(JSON.stringify(mock));
 
 describe('routes: index', () => {
   describe('GET /', () => {
@@ -34,10 +33,16 @@ describe('routes: index', () => {
 });
 
 describe('routes: auth', () => {
-  const user = db.users[0];
+  beforeEach((done) => {
+    User.resetTable();
+    mock.users.forEach(data => User.create(data));
+    done();
+  });
 
   describe(`${prefix}/auth`, () => {
     it('should authenticate a user and respond with a token', (done) => {
+      const user = User.table[0];
+
       request(app)
         .post(`${prefix}/auth`)
         .send({
@@ -53,6 +58,8 @@ describe('routes: auth', () => {
     });
 
     it('should throw an error on invalid credentials', (done) => {
+      const user = User.table[0];
+
       request(app)
         .post(`${prefix}/auth`)
         .send({
@@ -69,6 +76,12 @@ describe('routes: auth', () => {
 });
 
 describe('routes: users', () => {
+  beforeEach((done) => {
+    User.resetTable();
+    mock.users.forEach(data => User.create(data));
+    done();
+  });
+
   describe(`GET ${prefix}/users`, () => {
     it('should fetch a list of users', (done) => {
       request(app)
@@ -84,7 +97,7 @@ describe('routes: users', () => {
   });
   describe(`GET ${prefix}/users/{id}`, () => {
     it('should fetch a specific user', (done) => {
-      const user = db.users[0];
+      const user = User.table[1];
       const { id } = user;
 
       request(app)
@@ -122,7 +135,7 @@ describe('routes: users', () => {
       const id = null;
 
       request(app)
-        .get(`${prefix}/users/${id}`)
+        .get(`${prefix}/users/null`)
         .set('Accept', 'application/json')
         .expect(422, done);
     });
@@ -136,7 +149,7 @@ describe('routes: users', () => {
         othernames: 'Posnan',
         phoneNumber: '622-132-9283',
         email: 'john@email.com',
-        password: 'abc123',
+        password: 'secret',
       };
 
       request(app)
@@ -156,8 +169,13 @@ describe('routes: users', () => {
 describe('routes: red-flags', () => {
   let token;
   beforeEach((done) => {
-    db = JSON.parse(JSON.stringify(mock));
-    const user = db.users[0];
+    // Refresh tables and seed data
+    User.resetTable();
+    Record.resetTable();
+    mock.users.forEach(data => User.create(data));
+    mock.records.forEach(data => Record.create(data));
+
+    const user = User.table[0];
 
     request(app)
       .post(`${prefix}/auth`)
@@ -183,14 +201,14 @@ describe('routes: red-flags', () => {
         .end((err, res) => {
           res.body.should.have.property('data')
             .with.lengthOf(2);
-          done(err);
+          done();
         });
     });
   });
 
   describe(`GET ${prefix}/red-flags/:id`, () => {
     it('should fetch a specific red-flag record.', (done) => {
-      const redFlag = db.records[0];
+      const redFlag = Record.table[0];
 
       request(app)
         .get(`${prefix}/red-flags/${redFlag.id}`)
@@ -222,7 +240,7 @@ describe('routes: red-flags', () => {
   });
 
   describe(`POST ${prefix}/red-flags`, () => {
-    it('should create a red-flag record', (done) => {
+    it('should create a new red-flag record', (done) => {
       const recordData = {
         type: 'red-flag',
         location: '-42.2078,138.0694',
@@ -266,14 +284,43 @@ describe('routes: red-flags', () => {
         .expect(422)
         .end(done);
     });
+
+    it('should throw an error for unauthenticated user', (done) => {
+      const recordData = {
+        type: 'red-flag',
+        location: '-42.2078,138.0694',
+        images: [
+          'https://via.placeholder.com/650x450',
+          'https://via.placeholder.com/650x450',
+          'https://via.placeholder.com/650x450',
+        ],
+        video: [
+          'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
+        ],
+        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
+      };
+
+      token = 'jefowjfojwjfjewoji0j';
+
+      request(app)
+        .post(`${prefix}/red-flags`)
+        .send(recordData)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(401, {
+          status: 401,
+          error: 'Unauthenticated',
+        }, done);
+    });
   });
 
   describe(`PATCH ${prefix}/red-flags/:id/location`, () => {
-    it('should edit the location of a specific red-flag record', (done) => {
-      const data = {
-        location: '-81.2078,138.0233',
-      };
+    const data = {
+      location: '-81.2078,138.0233',
+    };
 
+    it('should edit the location of a specific red-flag record', (done) => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
@@ -286,25 +333,67 @@ describe('routes: red-flags', () => {
           done();
         });
     });
+
+    it('should throw an error on validation failure', (done) => {
+      request(app)
+        .patch(`${prefix}/red-flags/1/location`)
+        .send({})
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(422, done);
+    });
+
+    it('should throw an error for non-existing resource', (done) => {
+      request(app)
+        .patch(`${prefix}/red-flags/10/location`)
+        .send(data)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(404, {
+          status: 404,
+          error: 'Resource not found',
+        }, done);
+    });
+
+    it('should throw an error for unauthenticated user', (done) => {
+      token = 'wefwefwwfewfewf';
+
+      request(app)
+        .patch(`${prefix}/red-flags/1/location`)
+        .send(data)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(401, {
+          status: 401,
+          error: 'Unauthenticated',
+        }, done);
+    });
   });
 
-  describe(`PATCH ${prefix}/red-flags/:id`, () => {
+  describe(`PATCH ${prefix}/red-flags/:id/comment`, () => {
     it('should edit the comment of a specific red-flag record', (done) => {
       const data = {
         comment: 'This is an updated comment',
       };
 
       request(app)
-        .patch(`${prefix}/red-flags/1`)
+        .patch(`${prefix}/red-flags/1/comment`)
         .send(data)
         .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .expect(201)
-        .end((err, res) => {
-          res.body.data[0].should.have.property('id');
-          done();
-        });
+        .expect(201, {
+          status: 201,
+          data: [
+            {
+              id: 1,
+              message: "Updated red-flag record's comment",
+            },
+          ],
+        }, done);
     });
   });
 

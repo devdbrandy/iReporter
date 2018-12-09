@@ -1,6 +1,5 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import db from '../../models/mock';
 import { Record } from '../../models';
 import { env, validateRequest } from '../../utils';
 
@@ -19,7 +18,7 @@ export default class RedFlagsController {
     res.status(200)
       .json({
         status: 200,
-        data: db.records,
+        data: Record.all(),
       });
   }
 
@@ -34,25 +33,23 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static show(req, res, next) {
-    validateRequest(req, next);
+    if (validateRequest(req, next)) {
+      const recordId = parseInt(req.params.id, 10);
+      const record = Record.find(recordId);
 
-    const recordId = parseInt(req.params.id, 10);
-    const record = db.records.find(item => (
-      item.id === recordId
-    ));
-
-    if (record) {
-      res.status(200).json({
-        status: 200,
-        data: [record],
-      });
-    } else {
-      next(createError(404, 'Resource not found'));
+      if (record) {
+        res.status(200).json({
+          status: 200,
+          data: [record],
+        });
+      } else {
+        next(createError(404, 'Resource not found'));
+      }
     }
   }
 
   /**
-   * Create a red-flag record
+   * Create a new red-flag record
    *
    * @static
    * @param {Object} req Request object
@@ -63,11 +60,13 @@ export default class RedFlagsController {
    */
   static create(req, res, next) {
     if (validateRequest(req, next)) {
-      jwt.verify(req.token, env('APP_KEY'), (err, { user }) => {
+      jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
+        if (!decoded) return next(createError(401, 'Unauthenticated'));
+
+        const { user } = decoded;
         const data = req.body;
-        const newRecord = new Record(data);
-        newRecord.belongsTo(user);
-        db.records.push(newRecord);
+        data.createdBy = user.id;
+        const newRecord = Record.create(data);
 
         return res.status(201)
           .json({
@@ -87,49 +86,43 @@ export default class RedFlagsController {
    * Edit the comment of a specific red-flag record
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
-   * @param {Function} next Call to next middleware
+   * @param {object} req Request object
+   * @param {object} res Response object
+   * @param {function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
   static update(req, res, next) {
-    validateRequest(req, next);
+    if (validateRequest(req, next)) {
+      jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
+        if (!decoded) return next(createError(401, 'Unauthenticated'));
 
-    jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
-      if (decoded) {
         const { user } = decoded;
         const recordId = parseInt(req.params.id, 10);
-        const data = req.body;
-        // const records = db.records.map(item => item.toString());
+        const record = Record.find(recordId);
 
-        const record = db.records.find(item => (
-          item.id === recordId
-        ));
+        if (!record) return next(createError(404, 'Resource not found'));
 
-        if (record) {
-          if (record.createdBy === user.id || user.isAdmin) {
-            record.update(data);
-            const attribute = data.location ? 'comment' : 'location';
+        if (record.createdBy === user.id || user.isAdmin) {
+          const data = req.body;
+          const attribute = data.location ? 'location' : 'comment';
+          record.update(data);
 
-            res.status(201)
-              .json({
-                status: 201,
-                data: [
-                  {
-                    id: recordId,
-                    message: `Updated red-flag record's ${attribute}`,
-                  },
-                ],
-              });
-          } else {
-            next(createError(403, 'Unauthorized'));
-          }
-        } else {
-          next(createError(404, 'Resource not found'));
+          return res.status(201)
+            .json({
+              status: 201,
+              data: [
+                {
+                  id: recordId,
+                  message: `Updated red-flag record's ${attribute}`,
+                },
+              ],
+            });
         }
-      }
-    });
+
+        return next(createError(403, 'Unauthorized'));
+      });
+    }
   }
 
   /**
@@ -146,38 +139,31 @@ export default class RedFlagsController {
     validateRequest(req, next);
 
     jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
-      if (decoded) {
-        const { user } = decoded;
-        const recordId = parseInt(req.params.id, 10);
-        const record = db.records.find(item => (
-          item.id === recordId
+      if (!decoded) return next(createError(401, 'Unauthenticated'));
+
+      const { user } = decoded;
+      const recordId = parseInt(req.params.id, 10);
+      const record = Record.find(recordId);
+
+      if (!record) return next(createError(404, 'Resource not found'));
+      if (record.createdBy === user.id || user.isAdmin) {
+        Record.table = Record.table.filter(record => (
+          record.id !== recordId
         ));
 
-        if (record) {
-          if (user.id === record.createdBy || user.isAdmin) {
-            db.records = db.records.filter(record => (
-              record.id !== recordId
-            ));
-
-            res.status(200)
-              .json({
-                status: 200,
-                data: [
-                  {
-                    id: recordId,
-                    message: 'Red-flag record has been deleted',
-                  },
-                ],
-              });
-          } else {
-            next(createError(403, 'Unauthorized'));
-          }
-        } else {
-          next(createError(404, 'Resource not found'));
-        }
-      } else {
-        next(createError(403, 'Invalid token provided'));
+        return res.status(200)
+          .json({
+            status: 200,
+            data: [
+              {
+                id: recordId,
+                message: 'Red-flag record has been deleted',
+              },
+            ],
+          });
       }
+
+      return next(createError(403, 'Unauthorized'));
     });
   }
 }

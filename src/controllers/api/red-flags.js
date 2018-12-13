@@ -12,13 +12,10 @@ export default class RedFlagsController {
    *
    * @memberOf RedFlagsController
    */
-  static async index(request, response, next) {
-    try {
-      const records = await Record.all();
-      return responseHandler(response, records);
-    } catch (error) {
-      return next(error);
-    }
+  static index(request, response, next) {
+    Record.all()
+      .then(records => responseHandler(response, records))
+      .catch(next);
   }
 
   /**
@@ -52,20 +49,18 @@ export default class RedFlagsController {
    *
    * @memberOf RedFlagsController
    */
-  static async create(request, response, next) {
+  static create(request, response, next) {
     const { user } = request;
-    const userData = request.body;
-    userData.createdBy = user.id;
+    const recordData = request.body;
+    recordData.createdBy = user.id;
 
-    try {
-      const newRecord = new Record(userData);
-      const { id } = await newRecord.save();
-
-      const data = [{ id, message: 'Created red-flag record' }];
-      return responseHandler(response, data, 201);
-    } catch (error) {
-      return next(error);
-    }
+    const newRecord = new Record(recordData);
+    newRecord.save()
+      .then(({ id }) => {
+        const data = [{ id, message: 'Created red-flag record' }];
+        return responseHandler(response, data, 201);
+      })
+      .catch(next);
   }
 
   /**
@@ -78,28 +73,26 @@ export default class RedFlagsController {
    *
    * @memberOf RedFlagsController
    */
-  static async update(request, response, next) {
+  static update(request, response, next) {
     const { user } = request;
     const recordId = parseInt(request.params.id, 10);
+    Record.find(recordId)
+      .then((record) => {
+        // validate user authorization
+        isAuthorized(user, record);
 
-    try {
-      const record = await Record.find(recordId);
-
-      // validate user authorization
-      isAuthorized(user, record);
-
-      const recordData = request.body;
-      const attribute = (recordData.location) ? 'location' : 'comment';
-      const { id } = await record.update(recordData);
-
-      const data = [{
-        id: recordId,
-        message: `Updated red-flag record's ${attribute}`,
-      }];
-      return responseHandler(response, data, 202);
-    } catch (error) {
-      return next(error);
-    }
+        const recordData = request.body;
+        const attribute = (recordData.location) ? 'location' : 'comment';
+        record.update(recordData)
+          .then(({ id }) => {
+            const data = [{
+              id,
+              message: `Updated red-flag record's ${attribute}`,
+            }];
+            return responseHandler(response, data, 202);
+          });
+      })
+      .catch(next);
   }
 
   /**

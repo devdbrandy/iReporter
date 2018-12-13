@@ -1,16 +1,27 @@
 import request from 'supertest';
 import chai from 'chai';
 import dotenv from 'dotenv';
+import childProcesses from 'child_process';
 import app from '../src/server';
-import { User, Record } from '../src/models';
-import mock from './setup/mock';
+import { User } from '../src/models';
 import { config } from '../src/utils/helpers';
 
 dotenv.config();
 const should = chai.should();
+const { exec } = childProcesses;
 
 const apiVersion = config('app:version');
 const prefix = `/api/${apiVersion}`;
+const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiTWlrZSIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IkV5aW4iLCJwaG9uZU51bWJlciI6IjYyMi0xMzItOTI4MyIsImVtYWlsIjoibHVpekBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImRicmFuZHkiLCJyZWdpc3RlcmVkIjoiMjAxOC0xMi0xM1QxOToyMToyNi4wMzNaIiwiaXNBZG1pbiI6ZmFsc2V9.XxUv7TWw03xeR-H7LNdR5ODh_bedwq5iSUD5DT_RZ-U';
+
+const token2 = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IlBvc25hbiIsInBob25lTnVtYmVyIjoiNjIyLTEzMi05MjIzIiwiZW1haWwiOiJ0aWdlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6InVwdG9uZSIsInJlZ2lzdGVyZWQiOiIyMDE4LTEyLTEzVDIxOjUxOjMyLjU3OVoiLCJpc0FkbWluIjpmYWxzZX0.xxUD-wrdJNN-e5BN5SCJYeXkZ6urmJrXHH0bkuO8ubc';
+
+before(() => {
+  // reset database tables
+  exec('npm run migrate');
+  // insert dummy data
+  exec('npm run seed');
+});
 
 describe('routes: index', () => {
   describe('GET /', () => {
@@ -34,60 +45,57 @@ describe('routes: index', () => {
 });
 
 describe('routes: auth', () => {
-  beforeEach((done) => {
-    User.resetTable();
-    mock.users.forEach(data => User.create(data));
-    done();
-  });
-
-  describe(`${prefix}/auth`, () => {
+  describe('/auth/login', () => {
     it('should authenticate a user and respond with a token', (done) => {
-      const user = User.table[0];
+      User.find(1)
+        .then((user) => {
+          const { username } = user;
 
-      request(app)
-        .post(`${prefix}/auth`)
-        .send({
-          username: user.username,
-          password: 'secret',
+          request(app)
+            .post('/auth/login')
+            .set('Accept', 'application/json')
+            .send({
+              username: 'uptone',
+              password: 'secret',
+            })
+            .end((err, res) => {
+              const { data } = res.body;
+              res.statusCode.should.equal(200);
+              data[0].should.have.property('token');
+              done();
+            });
         })
-        .set('Accept', 'application/json')
-        .expect(200)
-        .end((err, res) => {
-          res.body.data[0].should.have.property('token');
-          done();
-        });
+        .catch(done);
     });
 
     it('should throw an error on invalid credentials', (done) => {
-      const user = User.table[0];
+      User.find(1)
+        .then((user) => {
+          const { username } = user;
 
-      request(app)
-        .post(`${prefix}/auth`)
-        .send({
-          username: user.username,
-          password: 'bacons',
-        })
-        .set('Accept', 'application/json')
-        .expect(401, {
-          status: 401,
-          error: 'Unauthenticated',
-        }, done);
+          request(app)
+            .post('/auth/login')
+            .send({
+              username,
+              password: 'bacons',
+            })
+            .set('Accept', 'application/json')
+            .expect(401, {
+              status: 401,
+              error: 'Wrong username or password',
+            }, done);
+        });
     });
   });
 });
 
 describe('routes: users', () => {
-  beforeEach((done) => {
-    User.resetTable();
-    mock.users.forEach(data => User.create(data));
-    done();
-  });
-
   describe(`GET ${prefix}/users`, () => {
-    it('should fetch a list of users', (done) => {
+    it('should fetch list of users', (done) => {
       request(app)
         .get(`${prefix}/users`)
         .set('Accept', 'application/json')
+        .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
@@ -98,26 +106,11 @@ describe('routes: users', () => {
   });
   describe(`GET ${prefix}/users/{id}`, () => {
     it('should fetch a specific user', (done) => {
-      const user = User.table[1];
-      const { id } = user;
-
       request(app)
-        .get(`${prefix}/users/${id}`)
+        .get(`${prefix}/users/1`)
+        .set('Authorization', token)
         .set('Accept', 'application/json')
-        .expect(200, {
-          status: 200,
-          data: [{
-            id: user.id,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            othernames: user.othernames,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            registered: user.registered,
-            isAdmin: user.isAdmin,
-            username: user.username,
-          }],
-        }, done);
+        .expect(200, done);
     });
 
     it('should throw an error for non-existing resource', (done) => {
@@ -125,6 +118,7 @@ describe('routes: users', () => {
 
       request(app)
         .get(`${prefix}/users/${id}`)
+        .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect(404, {
           status: 404,
@@ -142,25 +136,27 @@ describe('routes: users', () => {
     });
   });
 
-  describe(`POST ${prefix}/users`, () => {
+  describe('POST /auth/signup', () => {
     it('should create a new user', (done) => {
       const userData = {
         firstname: 'John',
         lastname: 'Doe',
         othernames: 'Posnan',
-        phoneNumber: '622-132-9283',
+        phoneNumber: '6221329283',
+        username: 'johnny',
         email: 'john@email.com',
         password: 'secret',
       };
 
       request(app)
-        .post(`${prefix}/users`)
+        .post('/auth/signup')
         .send(userData)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
-          res.body.data[0].should.have.property('id');
+          res.body.data[0].should.have.property('token');
+          res.body.data[0].should.have.property('user');
           done();
         });
     });
@@ -168,54 +164,16 @@ describe('routes: users', () => {
 });
 
 describe('routes: red-flags', () => {
-  let token;
-  let token2;
-  beforeEach((done) => {
-    // Refresh tables and seed data
-    User.resetTable();
-    Record.resetTable();
-    mock.users.forEach(data => User.create(data));
-    mock.records.forEach(data => Record.create(data));
-
-    const user = User.table[0];
-    request(app)
-      .post(`${prefix}/auth`)
-      .send({
-        username: user.username,
-        password: 'secret',
-      })
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        const response = res.body.data[0].token;
-        token = response;
-      });
-
-    const user2 = User.table[1];
-    request(app)
-      .post(`${prefix}/auth`)
-      .send({
-        username: user2.username,
-        password: 'secret',
-      })
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        const response = res.body.data[0].token;
-        token2 = response;
-        done();
-      });
-  });
-
   describe(`GET ${prefix}/red-flags`, () => {
     it('should fetch all red-flag records', (done) => {
       request(app)
         .get(`${prefix}/red-flags`)
         .set('Accept', 'application/json')
+        .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
           res.body.should.have.property('data')
-            .with.lengthOf(2);
+            .with.lengthOf(1);
           done();
         });
     });
@@ -223,13 +181,13 @@ describe('routes: red-flags', () => {
 
   describe(`GET ${prefix}/red-flags/:id`, () => {
     it('should fetch a specific red-flag record.', (done) => {
-      const redFlag = Record.table[0];
-
       request(app)
-        .get(`${prefix}/red-flags/${redFlag.id}`)
+        .get(`${prefix}/red-flags/1`)
         .set('Accept', 'application/json')
+        .set('Authorization', token)
         .end((err, res) => {
-          res.body.should.have.property('data');
+          const [data] = res.body.data;
+          data.should.have.property('id');
           done();
         });
     });
@@ -238,6 +196,7 @@ describe('routes: red-flags', () => {
       request(app)
         .get(`${prefix}/red-flags/1000`)
         .set('Accept', 'application/json')
+        .set('Authorization', token)
         .expect(404, {
           status: 404,
           error: 'Resource not found',
@@ -250,6 +209,7 @@ describe('routes: red-flags', () => {
       request(app)
         .get(`${prefix}/red-flags/${id}`)
         .set('Accept', 'application/json')
+        .set('Authorization', token)
         .expect(422, done);
     });
   });
@@ -273,12 +233,13 @@ describe('routes: red-flags', () => {
       request(app)
         .post(`${prefix}/red-flags`)
         .send(recordData)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(201)
         .end((err, res) => {
-          res.body.data[0].should.have.property('id');
+          const [data] = res.body.data;
+          data.should.have.property('id');
           done();
         });
     });
@@ -293,7 +254,7 @@ describe('routes: red-flags', () => {
       request(app)
         .post(`${prefix}/red-flags`)
         .send(recordData)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(422)
@@ -315,18 +276,13 @@ describe('routes: red-flags', () => {
         comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
       };
 
-      token = 'jefowjfojwjfjewoji0j';
-
       request(app)
         .post(`${prefix}/red-flags`)
         .send(recordData)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', 'Bearer pefkewmffwefewfef')
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .expect(401, {
-          status: 401,
-          error: 'Unauthenticated',
-        }, done);
+        .expect(403, done);
     });
   });
 
@@ -339,7 +295,7 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(201)
@@ -353,7 +309,7 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send({})
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(422, done);
@@ -361,9 +317,9 @@ describe('routes: red-flags', () => {
 
     it('should throw an error for non-existing resource', (done) => {
       request(app)
-        .patch(`${prefix}/red-flags/10/location`)
+        .patch(`${prefix}/red-flags/1000/location`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .expect(404, {
@@ -376,28 +332,10 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/location`)
         .send(data)
-        .set('Authorization', `Bearer ${token2}`)
+        .set('Authorization', 'Bearer ')
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .expect(403, {
-          status: 403,
-          error: 'Forbidden',
-        }, done);
-    });
-
-    it('should throw an error for unauthenticated user', (done) => {
-      token = 'wefwefwwfewfewf';
-
-      request(app)
-        .patch(`${prefix}/red-flags/1/location`)
-        .send(data)
-        .set('Authorization', `Bearer ${token}`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .expect(401, {
-          status: 401,
-          error: 'Unauthenticated',
-        }, done);
+        .expect(400, done);
     });
   });
 
@@ -410,11 +348,11 @@ describe('routes: red-flags', () => {
       request(app)
         .patch(`${prefix}/red-flags/1/comment`)
         .send(data)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .expect(201, {
-          status: 201,
+        .expect(202, {
+          status: 202,
           data: [
             {
               id: 1,
@@ -429,7 +367,7 @@ describe('routes: red-flags', () => {
     it('should delete a specific red-flag record', (done) => {
       request(app)
         .delete(`${prefix}/red-flags/1`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
@@ -441,7 +379,7 @@ describe('routes: red-flags', () => {
     it('should throw an error for non-existing resource', (done) => {
       request(app)
         .delete(`${prefix}/red-flags/10`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect(404, {
           status: 404,
@@ -456,7 +394,7 @@ describe('routes: red-flags', () => {
         .set('Accept', 'application/json')
         .expect(403, {
           status: 403,
-          error: 'Forbidden',
+          error: 'Failed authentication',
         }, done);
     });
   });

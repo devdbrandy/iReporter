@@ -55,7 +55,9 @@ export const validator = {
       rtrim: { options: [[' ', '']] },
     },
     phoneNumber: {
-      isNumeric: true,
+      isMobilePhone: {
+        errorMessage: 'Phone number is invalid',
+      },
       isLength: {
         errorMessage: 'Phone number is invalid',
         options: { min: 9 },

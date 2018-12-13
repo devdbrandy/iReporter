@@ -30,12 +30,10 @@ export default class Record {
     this.images = images;
     this.videos = videos;
     this.status = status;
-    this.creadedOn = createdOn;
+    this.createdOn = createdOn;
   }
 
   belongsTo(user) {
-    // console.log(this.createdBy)
-    // console.log(user.id);
     return (this.createdBy === user.id);
   }
 
@@ -69,11 +67,16 @@ export default class Record {
    */
   static async find(id) {
     const queryString = `${Record.selectQuery()} WHERE id=$1`;
-    const data = await User.select(queryString, id);
 
-    if (!data[0]) throw createError(404, 'Resource not found');
-
-    return new Record(data[0]);
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, [id])
+        .then(({ rows }) => {
+          const [data] = rows;
+          if (!data) throw createError(404, 'Resource not found');
+          resolve(new Record(data));
+        })
+        .catch(reject);
+    });
   }
 
   /**
@@ -104,13 +107,14 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static async all() {
-    try {
-      const { rows } = await db.queryAsync(Record.selectQuery());
-      return rows;
-    } catch (error) {
-      throw createError(400, error.message);
-    }
+  static all() {
+    const queryString = Record.selectQuery();
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString)
+        .then(({ rows }) => {
+          resolve(rows);
+        });
+    });
   }
 
   /**
@@ -122,7 +126,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  async save(attributes) {
+  save(attributes) {
     const queryString = `
       INSERT INTO records(
         user_id, type, location, images, videos, comment
@@ -139,13 +143,19 @@ export default class Record {
       this.comment,
     ];
 
-    try {
-      const { rows } = await db.queryAsync(queryString, values);
-      this.id = rows[0].id;
-      return this;
-    } catch (error) {
-      throw handlerError(error);
-    }
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, values)
+        .then(({ rows }) => {
+          const [record] = rows;
+          this.id = record.id;
+          this.status = record.status;
+          this.createdOn = record.created_at;
+          resolve(this);
+        })
+        .catch((error) => {
+          throw createError(400, error.message);
+        });
+    });
   }
 
   /**
@@ -156,7 +166,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  async update(data) {
+  update(data) {
     const field = data.location ? 'location' : 'comment';
     const queryString = `
       UPDATE records SET ${field}=$1
@@ -165,12 +175,14 @@ export default class Record {
     `;
     const values = [data[field], this.id];
 
-    try {
-      const { rows } = await db.queryAsync(queryString, values);
-      return new Record(rows[0]);
-    } catch (error) {
-      throw handlerError(error);
-    }
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, values)
+        .then(({ rows }) => {
+          const [data] = rows;
+          resolve(data);
+        })
+        .catch(handlerError);
+    });
   }
 
   async delete() {

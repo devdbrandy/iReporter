@@ -66,7 +66,7 @@ export default class User {
    *
    * @memberOf User
    */
-  async save() {
+  save() {
     const queryString = `
       INSERT INTO users(
         firstname, lastname, othernames, phone_number, email, username, password
@@ -88,21 +88,24 @@ export default class User {
       bcrypt.hashSync(this.password, 8),
     ];
 
-    try {
-      const { rows } = await db.queryAsync(queryString, values);
-      this.id = rows[0].id;
-      this.isAdmin = rows[0].is_admin;
-      this.registered = rows[0].created_at;
-      return this;
-    } catch (error) {
-      if (error.code === '23505' && error.constraint === 'users_email_key') {
-        error.message = 'Email address already exists';
-      }
-      if (error.code === '23505' && error.constraint === 'users_username_key') {
-        error.message = 'Username already taken';
-      }
-      throw createError(400, error.message);
-    }
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, values)
+        .then(({ rows }) => {
+          this.id = rows[0].id;
+          this.isAdmin = rows[0].is_admin;
+          this.registered = rows[0].created_at;
+          resolve(this);
+        })
+        .catch((error) => {
+          if (error.code === '23505' && error.constraint === 'users_email_key') {
+            error.message = 'Email address already exists';
+          }
+          if (error.code === '23505' && error.constraint === 'users_username_key') {
+            error.message = 'Username already taken';
+          }
+          throw createError(400, error.message);
+        });
+    });
   }
 
   /**
@@ -113,14 +116,14 @@ export default class User {
    *
    * @memberOf User
    */
-  static async all() {
+  static all() {
     const queryString = User.query();
-    try {
-      const { rows } = await db.queryAsync(queryString);
-      return rows;
-    } catch (error) {
-      throw handlerError(error);
-    }
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString)
+        .then(({ rows }) => {
+          resolve(rows);
+        });
+    });
   }
 
   /**
@@ -132,14 +135,19 @@ export default class User {
    *
    * @memberOf User
    */
-  static async find(id) {
+  static find(id) {
     const field = Number.isInteger(id) ? 'id' : 'username';
     const queryString = `${User.query('password')} WHERE ${field}=$1`;
-    const data = await User.select(queryString, id);
 
-    if (!data[0]) throw createError(404, 'Resource not found');
-
-    return new User(data[0]);
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, [id])
+        .then(({ rows }) => {
+          const [data] = rows;
+          if (!data) throw createError(404, 'Resource not found');
+          resolve(new User(data));
+        })
+        .catch(reject);
+    });
   }
 
   /**

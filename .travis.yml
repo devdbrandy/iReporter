@@ -16,6 +16,8 @@ services:
 
 before_script:
   - psql -c 'create database ireporter;' -U postgres
+  - npm run migrate
+  - npm run seed
 
 deploy:
   - provider: heroku

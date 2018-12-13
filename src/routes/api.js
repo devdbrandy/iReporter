@@ -1,4 +1,5 @@
-import express from 'express';
+// import express from 'express';
+import Router from 'express-promise-router';
 import { check, checkSchema } from 'express-validator/check';
 
 /* Controllers */
@@ -16,7 +17,7 @@ import {
   authenticate,
 } from '../middleware';
 
-const router = express.Router();
+const router = Router();
 
 /* Authenticate a user */
 router.post('/auth', [

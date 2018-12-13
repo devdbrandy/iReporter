@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { env } from '../utils';
+import { User } from '../models';
 
 /**
  * Verify user token
@@ -25,7 +26,7 @@ export function verifyToken(req, res, next) {
 export function authenticate(req, res, next) {
   jwt.verify(req.token, env('APP_KEY'), (err, decoded) => {
     if (!decoded) return next(createError(401, 'Unauthenticated'));
-    req.user = decoded.user;
+    req.user = new User(decoded.user);
     return next();
   });
 }

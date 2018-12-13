@@ -1,142 +1,135 @@
-import createError from 'http-errors';
 import { Record } from '../../models';
+import { isAuthorized, responseHandler } from '../../utils/helpers';
 
 export default class RedFlagsController {
   /**
    * Fetch all red-flag records
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
-  static index(req, res, next) {
-    res.status(200)
-      .json({
-        status: 200,
-        data: Record.all(),
-      });
+  static async index(request, response, next) {
+    try {
+      const records = await Record.all();
+      return responseHandler(response, records);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
    * Fetch a specific red-flag record
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
-  static show(req, res, next) {
-    const recordId = parseInt(req.params.id, 10);
-    const record = Record.find(recordId);
+  static async show(request, response, next) {
+    const recordId = parseInt(request.params.id, 10);
 
-    if (!record) return next(createError(404, 'Resource not found'));
-    return res.status(200).json({
-      status: 200,
-      data: [record],
-    });
+    try {
+      const record = await Record.find(recordId);
+      return responseHandler(response, [record]);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
    * Create a new red-flag record
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
-  static create(req, res, next) {
-    const { user } = req;
-    const data = req.body;
-    data.createdBy = user.id;
-    const newRecord = Record.create(data);
+  static async create(request, response, next) {
+    const { user } = request;
+    const userData = request.body;
+    userData.createdBy = user.id;
 
-    return res.status(201)
-      .json({
-        status: 201,
-        data: [
-          {
-            id: newRecord.id,
-            message: 'Created red-flag record',
-          },
-        ],
-      });
+    try {
+      const newRecord = new Record(userData);
+      const { id } = await newRecord.save();
+
+      const data = [{ id, message: 'Created red-flag record' }];
+      return responseHandler(response, data, 201);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
    * Edit the comment of a specific red-flag record
    *
    * @static
-   * @param {object} req Request object
-   * @param {object} res Response object
+   * @param {object} request Request object
+   * @param {object} response Response object
    * @param {function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
-  static update(req, res, next) {
-    const { user } = req;
-    const recordId = parseInt(req.params.id, 10);
-    const record = Record.find(recordId);
+  static async update(request, response, next) {
+    const { user } = request;
+    const recordId = parseInt(request.params.id, 10);
 
-    if (!record) return next(createError(404, 'Resource not found'));
-    if (record.createdBy === user.id || user.isAdmin) {
-      const data = req.body;
-      const attribute = data.location ? 'location' : 'comment';
-      record.update(data);
+    try {
+      const record = await Record.find(recordId);
 
-      return res.status(201)
-        .json({
-          status: 201,
-          data: [
-            {
-              id: recordId,
-              message: `Updated red-flag record's ${attribute}`,
-            },
-          ],
-        });
+      // validate user authorization
+      isAuthorized(user, record);
+
+      const recordData = request.body;
+      const attribute = (recordData.location) ? 'location' : 'comment';
+      const { id } = await record.update(recordData);
+
+      const data = [{
+        id: recordId,
+        message: `Updated red-flag record's ${attribute}`,
+      }];
+      return responseHandler(response, data, 202);
+    } catch (error) {
+      return next(error);
     }
-
-    return next(createError(403, 'Forbidden'));
   }
 
   /**
    * Delete a specific red-flag record
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf RedFlagsController
    */
-  static destroy(req, res, next) {
-    const { user } = req;
-    const recordId = parseInt(req.params.id, 10);
-    const record = Record.find(recordId);
+  static async destroy(request, response, next) {
+    const { user } = request;
+    const recordId = parseInt(request.params.id, 10);
 
-    if (!record) return next(createError(404, 'Resource not found'));
-    if (record.createdBy === user.id || user.isAdmin) {
-      Record.table = Record.table.filter(record => (
-        record.id !== recordId
-      ));
+    try {
+      const record = await Record.find(recordId);
 
-      return res.status(200)
-        .json({
-          status: 200,
-          data: [
-            {
-              id: recordId,
-              message: 'Red-flag record has been deleted',
-            },
-          ],
-        });
+      // validate user authorization
+      isAuthorized(user, record);
+
+      await record.delete();
+      const data = [{
+        id: recordId,
+        message: 'Red-flag record has been deleted',
+      }];
+      return responseHandler(response, data);
+    } catch (error) {
+      return next(error);
     }
-    return next(createError(403, 'Forbidden'));
   }
 }

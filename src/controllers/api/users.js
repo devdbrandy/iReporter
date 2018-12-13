@@ -1,46 +1,44 @@
-import createError from 'http-errors';
 import { User } from '../../models';
+import { responseHandler } from '../../utils/helpers';
 
 export default class UsersController {
   /**
    * Fetch all users
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf UsersController
    */
-  static index(req, res, next) {
-    res.status(200)
-      .json({
-        status: 200,
-        data: User.all(),
-      });
+  static async index(request, response, next) {
+    try {
+      const users = await User.all();
+      return responseHandler(response, users);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
    * Fetch a specific user
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf UsersController
    */
-  static show(req, res, next) {
-    const userId = parseInt(req.params.id, 10);
-    const user = User.find(userId);
+  static async show(request, response, next) {
+    const userId = parseInt(request.params.id, 10);
 
-    if (user) {
-      res.status(200).json({
-        status: 200,
-        data: [user],
-      });
-    } else {
-      next(createError(404, 'Resource not found'));
+    try {
+      const user = await User.find(userId);
+      return responseHandler(response, [user]);
+    } catch (error) {
+      return next(error);
     }
   }
 
@@ -48,23 +46,20 @@ export default class UsersController {
    * Create new user
    *
    * @static
-   * @param {Object} req Request object
-   * @param {Object} res Response object
+   * @param {Object} request Request object
+   * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
    * @memberOf UsersController
    */
-  static create(req, res, next) {
-    const newUser = User.create(req.body);
-    res.status(201)
-      .json({
-        status: 201,
-        data: [
-          {
-            id: newUser.id,
-            message: 'New user created',
-          },
-        ],
-      });
+  static async create(request, response, next) {
+    try {
+      const newUser = new User(request.body);
+      const { id } = await newUser.save();
+      const data = [{ id, message: 'Created red-flag record' }];
+      return responseHandler(response, data, 201);
+    } catch (err) {
+      return next(err);
+    }
   }
 }

@@ -11,6 +11,12 @@ env:
 after_success:
   - npm run coverage
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database ireporter;' -U postgres
+
 deploy:
   - provider: heroku
     api_key:

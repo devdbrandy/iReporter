@@ -1,5 +1,4 @@
-// import express from 'express';
-import Router from 'express-promise-router';
+import express from 'express';
 import { check, checkSchema } from 'express-validator/check';
 
 /* Controllers */
@@ -15,7 +14,7 @@ import {
   authenticate,
 } from '../middleware';
 
-const router = Router();
+const router = express.Router();
 
 /* Fetch all users */
 router.get('/users', authenticate, UsersController.index);

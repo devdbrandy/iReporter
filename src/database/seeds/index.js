@@ -21,8 +21,11 @@ const pool = new Pool({
       RETURNING id
     `;
     const password = '$2a$08$dEaZzY9fp1BkawSQnQ9xnukRx/Z03Us/RB2vZbP/H9xqm4fsIarXy';
-    const userValues = ['Mike', 'Philip', 'Eyin', '622-132-9283', 'luiz@email.com', 'dbrandy', password];
-    const { rows } = await client.query(insertUser, userValues);
+    const userValues1 = ['Mike', 'Philip', 'Eyin', '622-132-9283', 'luiz@email.com', 'dbrandy', password];
+    const { rows } = await client.query(insertUser, userValues1);
+    const userValues2 = ['John', 'Philip', 'Posnan', '622-132-9223', 'tiger@email.com', 'uptone', password];
+    await client.query(insertUser, userValues2);
+
 
     const insertRecord = `
       INSERT INTO records(

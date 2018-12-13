@@ -14,13 +14,10 @@ export default class UsersController {
    *
    * @memberOf UsersController
    */
-  static async index(request, response, next) {
-    try {
-      const users = await User.all();
-      return responseHandler(response, users);
-    } catch (error) {
-      return next(error);
-    }
+  static index(request, response, next) {
+    User.all()
+      .then(users => responseHandler(response, users))
+      .catch(next);
   }
 
   /**
@@ -33,15 +30,11 @@ export default class UsersController {
    *
    * @memberOf UsersController
    */
-  static async show(request, response, next) {
+  static show(request, response, next) {
     const userId = parseInt(request.params.id, 10);
-
-    try {
-      const user = await User.find(userId);
-      return responseHandler(response, [user]);
-    } catch (error) {
-      return next(error);
-    }
+    User.find(userId)
+      .then(user => responseHandler(response, [user]))
+      .catch(next);
   }
 
   /**
@@ -54,19 +47,26 @@ export default class UsersController {
    *
    * @memberOf UsersController
    */
-  static async create(request, response, next) {
-    try {
-      const user = new User(request.body);
-      const { id } = await user.save();
-
-      return jwt.sign({ user }, env('APP_KEY'), (err, token) => {
+  static create(request, response, next) {
+    const user = new User(request.body);
+    user.save()
+      .then((user) => {
+        const token = jwt.sign({ user }, env('APP_KEY'));
         responseHandler(response, [{
           token,
           user,
         }], 201);
-      });
-    } catch (err) {
-      return next(err);
-    }
+      })
+      .catch(next);
+
+    // try {
+    //   const { id } = await ;
+
+    //   return jwt.sign({ user }, env('APP_KEY'), (err, token) => {
+
+    //   });
+    // } catch (err) {
+    //   return next(err);
+    // }
   }
 }

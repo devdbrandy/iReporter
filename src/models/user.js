@@ -1,7 +1,11 @@
 import bcrypt from 'bcryptjs';
+import createError from 'http-errors';
 import db from '../database';
+import { generateUsername } from '../utils/helpers';
 
 const privateProps = new WeakMap();
+
+const handlerError = ({ message }) => createError(404, message);
 
 export default class User {
   /**
@@ -11,24 +15,27 @@ export default class User {
    * @memberOf User
    */
   constructor({
+    id,
     firstname,
     lastname,
     othernames,
-    email,
     phoneNumber,
+    username,
+    email,
+    registered,
+    isAdmin,
     password,
   }) {
-    User.incrementCount();
-    this.id = User.count;
+    this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.othernames = othernames;
-    this.email = email;
     this.phoneNumber = phoneNumber;
-    this.registered = Date();
-    this.isAdmin = false;
-    privateProps.set(this, { password: bcrypt.hashSync(password, 8) });
-    this.generateUsername();
+    this.email = email;
+    this.username = username;
+    this.registered = registered;
+    this.isAdmin = isAdmin;
+    privateProps.set(this, { password });
   }
 
   /**
@@ -37,7 +44,7 @@ export default class User {
    * @memberOf User
    */
   generateUsername() {
-    this.username = User.genUsername(this.firstname, this.lastname);
+    this.username = generateUsername(this);
   }
 
   /**
@@ -51,21 +58,45 @@ export default class User {
   }
 
   /**
-   * Generate username from firstname and lastname
+   * Persist a new resource
    *
    * @static
-   * @param {string} firstname user firstname attribute
-   * @param {string} lastname user lastname
-   * @returns {string} generated username
+   * @param {Object} attributes the resource attributes
+   * @returns {User} a User resource
    *
    * @memberOf User
    */
-  static genUsername(firstname, lastname) {
-    return (
-      lastname.substring(0, 5)
-        + firstname.substring(0, 3)
-        + Math.floor(Math.random() * 10)
-    );
+  async save() {
+    const queryString = `
+      INSERT INTO users(
+        firstname, lastname, othernames, phone_number, email, username, password
+      )
+      VALUES($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *
+    `;
+
+    // generate username
+    this.generateUsername();
+
+    const values = [
+      this.firstname,
+      this.lastname,
+      this.othernames,
+      this.phoneNumber,
+      this.email,
+      this.username,
+      bcrypt.hashSync(this.password, 8),
+    ];
+
+    try {
+      const { rows } = await db.queryAsync(queryString, values);
+      this.id = rows[0].id;
+      this.isAdmin = rows[0].is_admin;
+      this.registered = rows[0].created_at;
+      return this;
+    } catch (error) {
+      throw createError(400, error.message);
+    }
   }
 
   /**
@@ -76,66 +107,82 @@ export default class User {
    *
    * @memberOf User
    */
-  static all() {
-    return User.table;
+  static async all() {
+    const queryString = User.query();
+    try {
+      const { rows } = await db.queryAsync(queryString);
+      return rows;
+    } catch (error) {
+      throw handlerError(error);
+    }
   }
 
   /**
    * Find resource by given id
    *
    * @static
-   * @param {string} id resource identity number
+   * @param {string} id resource id
    * @returns {User} a User resource
    *
    * @memberOf User
    */
-  static find(id) {
-    return User.table.find(user => user.id === id);
+  static async find(id) {
+    const field = Number.isInteger(id) ? 'id' : 'username';
+    const queryString = `${User.query('password')} WHERE ${field}=$1`;
+    const data = await User.select(queryString, id);
+
+    if (!data[0]) throw createError(404, 'Resource not found');
+
+    return new User(data[0]);
   }
 
   /**
-   * Find resource by given username
+   * Run a select WHERE query on provided param
    *
    * @static
-   * @param {string} username resource username
-   * @returns {User} a User resource
+   * @param {string} query select query
+   * @param {string} param values applied
+   * @returns {[User]} a list of user resources
    *
    * @memberOf User
    */
-  static findByUsername(username) {
-    return User.table.find(user => user.username === username);
+  static async where(param, value) {
+    const queryString = `${User.query()} WHERE ${param}=$1`;
+    try {
+      const data = await User.select(queryString, value);
+      return data;
+    } catch (error) {
+      throw createError(error.code, error.message);
+    }
   }
 
   /**
-   * Create a new resource
+   * Run a select query on provided param
    *
    * @static
-   * @param {Object} attributes the resource attributes
-   * @returns {User} a User resource
+   * @param {string} query select query
+   * @param {string} param values applied
+   * @returns {[User]} a list of user resources
    *
    * @memberOf User
    */
-  static create(attributes) {
-    const user = new User(attributes);
-    User.table.push(user);
-    return user;
+  static async select(query, param) {
+    try {
+      const { rows } = await db.queryAsync(query, [param]);
+      return rows;
+    } catch (error) {
+      throw createError(400, error.message);
+    }
   }
 
-  static incrementCount() {
-    User.count += 1;
-  }
-
-  /**
-  * Reset users table
-  *
-  * @static
-  * @memberOf Record
-  */
-  static resetTable() {
-    User.table = [];
-    User.count = 0;
+  static query(extend) {
+    const extended = extend ? `,${extend}` : '';
+    return `
+      SELECT id, firstname, lastname, othernames,
+        phone_number as "phoneNumber", email, username,
+        created_at as "registered", is_admin as "isAdmin"
+        ${extended}
+      FROM users
+    `;
   }
 }
-
-User.table = db.users;
-User.count = User.table.length;

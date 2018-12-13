@@ -75,8 +75,8 @@ export default class User {
       RETURNING *
     `;
 
-    // generate username
-    this.generateUsername();
+    // generate username if username is not provided
+    if (!this.username) this.generateUsername();
 
     const values = [
       this.firstname,
@@ -95,6 +95,12 @@ export default class User {
       this.registered = rows[0].created_at;
       return this;
     } catch (error) {
+      if (error.code === '23505' && error.constraint === 'users_email_key') {
+        error.message = 'Email address already exists';
+      }
+      if (error.code === '23505' && error.constraint === 'users_username_key') {
+        error.message = 'Username already taken';
+      }
       throw createError(400, error.message);
     }
   }

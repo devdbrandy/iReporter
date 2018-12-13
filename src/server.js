@@ -8,6 +8,7 @@ import { config } from './utils/helpers';
 
 import webRouter from './routes/web';
 import apiRouter from './routes/api';
+import authRouter from './routes/auth';
 
 const app = express();
 const version = config('app:version');
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', webRouter);
 app.use(`/api/${version}/`, apiRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

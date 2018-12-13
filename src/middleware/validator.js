@@ -5,28 +5,60 @@ export const validator = {
   auth: {
     username: {
       in: ['body'],
-      errorMessage: 'Username is required',
-      rtrim: { options: [[' ', '-']] },
+      isAlphanumeric: {
+        errorMessage: 'Username is invalid',
+      },
+      isLength: {
+        errorMessage: 'Username should be at least 3 chars long',
+        options: { min: 3 },
+      },
     },
     password: {
       isLength: {
-        errorMessage: 'Password should be at least 7 chars long',
+        errorMessage: 'Password should be at least 6 chars long',
         options: { min: 6 },
       },
     },
   },
   user: {
     firstname: {
+      isAlpha: true,
       isLength: {
-        errorMessage: 'Firstname is invalid',
-        options: { min: 2 },
+        errorMessage: 'First name should be at least 3 chars long',
+        options: { min: 3 },
       },
-      rtrim: { options: [[' ', '-']] },
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
     },
     lastname: {
+      isAlpha: true,
       isLength: {
-        errorMessage: 'Lastname is invalid',
-        options: { min: 2 },
+        errorMessage: 'Last name should be at least 3 chars long',
+        options: { min: 3 },
+      },
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
+    },
+    username: {
+      isAlphanumeric: {
+        errorMessage: 'Username is invalid',
+      },
+      isLength: {
+        errorMessage: 'Username should be at least 3 chars long',
+        options: { min: 3 },
+      },
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
+    },
+    othernames: {
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
+    },
+    phoneNumber: {
+      isNumeric: true,
+      isLength: {
+        errorMessage: 'Phone number is invalid',
+        options: { min: 9 },
       },
       rtrim: { options: [[' ', '-']] },
     },
@@ -51,6 +83,8 @@ export const validator = {
         errorMessage: 'Comment should be atleast 10 chars long',
         options: { min: 10 },
       },
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
     },
   },
 };

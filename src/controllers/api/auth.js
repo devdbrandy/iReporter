@@ -6,7 +6,7 @@ import { isValidUser, responseHandler } from '../../utils/helpers';
 
 export default class AuthController {
   static async auth(request, response, next) {
-    const { username, password } = resquest.body;
+    const { username, password } = request.body;
 
     try {
       const user = await User.find(username);
@@ -14,7 +14,10 @@ export default class AuthController {
       if (!isValidUser(user, password)) next(createError(401, 'Unauthenticated'));
 
       jwt.sign({ user }, env('APP_KEY'), (err, token) => {
-        return responseHandler(response, [{ token }]);
+        responseHandler(response, [{
+          token,
+          user,
+        }]);
       });
     } catch (error) {
       next(error);

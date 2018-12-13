@@ -1,5 +1,7 @@
+import jwt from 'jsonwebtoken';
 import { User } from '../../models';
 import { responseHandler } from '../../utils/helpers';
+import { env } from '../../utils';
 
 export default class UsersController {
   /**
@@ -54,10 +56,15 @@ export default class UsersController {
    */
   static async create(request, response, next) {
     try {
-      const newUser = new User(request.body);
-      const { id } = await newUser.save();
-      const data = [{ id, message: 'Created red-flag record' }];
-      return responseHandler(response, data, 201);
+      const user = new User(request.body);
+      const { id } = await user.save();
+
+      return jwt.sign({ user }, env('APP_KEY'), (err, token) => {
+        responseHandler(response, [{
+          token,
+          user,
+        }], 201);
+      });
     } catch (err) {
       return next(err);
     }

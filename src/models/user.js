@@ -103,7 +103,7 @@ export default class User {
           if (error.code === '23505' && error.constraint === 'users_username_key') {
             error.message = 'Username already taken';
           }
-          throw createError(400, error.message);
+          reject(error);
         });
     });
   }

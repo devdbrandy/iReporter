@@ -105,24 +105,21 @@ export default class RedFlagsController {
    *
    * @memberOf RedFlagsController
    */
-  static async destroy(request, response, next) {
+  static destroy(request, response, next) {
     const { user } = request;
     const recordId = parseInt(request.params.id, 10);
 
-    try {
-      const record = await Record.find(recordId);
-
-      // validate user authorization
-      isAuthorized(user, record);
-
-      await record.delete();
-      const data = [{
-        id: recordId,
-        message: 'Red-flag record has been deleted',
-      }];
-      return responseHandler(response, data);
-    } catch (error) {
-      return next(error);
-    }
+    Record.find(recordId)
+      .then((record) => {
+        record.delete()
+          .then((result) => {
+            const data = [{
+              id: recordId,
+              message: 'Red-flag record has been deleted',
+            }];
+            return responseHandler(response, data);
+          });
+      })
+      .catch(next);
   }
 }

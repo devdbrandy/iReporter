@@ -38,7 +38,6 @@ router.get('/red-flags/:id', [
 
 /* Create a new red-flag record */
 router.post('/red-flags', [
-  authenticate,
   checkSchema(validator.record),
   validateRequest,
   authenticate,

@@ -1,6 +1,7 @@
 import { Record } from '../../models';
 import { isAuthorized, responseHandler } from '../../utils/helpers';
 
+// const singular = param => param.replace(/s$/, '');
 export default class RedFlagsController {
   /**
    * Fetch all red-flag records
@@ -13,7 +14,9 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static index(request, response, next) {
-    Record.all()
+    const { type } = request;
+
+    Record.all(type)
       .then(records => responseHandler(response, records))
       .catch(next);
   }
@@ -28,15 +31,13 @@ export default class RedFlagsController {
    *
    * @memberOf RedFlagsController
    */
-  static async show(request, response, next) {
-    const recordId = parseInt(request.params.id, 10);
+  static show(request, response, next) {
+    const { type } = request;
 
-    try {
-      const record = await Record.find(recordId);
-      return responseHandler(response, [record]);
-    } catch (error) {
-      return next(error);
-    }
+    const recordId = parseInt(request.params.id, 10);
+    Record.find(recordId, type)
+      .then(record => responseHandler(response, [record]))
+      .catch(next);
   }
 
   /**
@@ -50,14 +51,14 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static create(request, response, next) {
-    const { user } = request;
+    const { user, type } = request;
     const recordData = request.body;
     recordData.createdBy = user.id;
 
     const newRecord = new Record(recordData);
-    newRecord.save()
+    newRecord.save(type)
       .then(({ id }) => {
-        const data = [{ id, message: 'Created red-flag record' }];
+        const data = [{ id, message: `Created ${type} record` }];
         return responseHandler(response, data, 201);
       })
       .catch(next);
@@ -74,9 +75,9 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static update(request, response, next) {
-    const { user } = request;
+    const { user, type } = request;
     const recordId = parseInt(request.params.id, 10);
-    Record.find(recordId)
+    Record.find(recordId, type)
       .then((record) => {
         // validate user authorization
         isAuthorized(user, record);
@@ -87,7 +88,7 @@ export default class RedFlagsController {
           .then(({ id }) => {
             const data = [{
               id,
-              message: `Updated red-flag record's ${attribute}`,
+              message: `Updated ${type} record's ${attribute}`,
             }];
             return responseHandler(response, data, 202);
           });
@@ -106,16 +107,16 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static destroy(request, response, next) {
-    const { user } = request;
+    const { user, type } = request;
     const recordId = parseInt(request.params.id, 10);
 
-    Record.find(recordId)
+    Record.find(recordId, type)
       .then((record) => {
         record.delete()
           .then((result) => {
             const data = [{
               id: recordId,
-              message: 'Red-flag record has been deleted',
+              message: `${type} record has been deleted`,
             }];
             return responseHandler(response, data);
           });

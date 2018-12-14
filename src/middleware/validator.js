@@ -1,6 +1,8 @@
 import createError from 'http-errors';
 import { validationResult } from 'express-validator/check';
 
+const singular = param => param.replace(/s$/, '');
+
 export const validator = {
   auth: {
     username: {
@@ -88,6 +90,18 @@ export const validator = {
       ltrim: { options: [[' ', '']] },
       rtrim: { options: [[' ', '']] },
     },
+    images: {
+      custom: {
+        errorMessage: 'images must be an array',
+        options: value => Array.isArray(value),
+      },
+    },
+    videos: {
+      custom: {
+        errorMessage: 'viedoes must be an array',
+        options: value => Array.isArray(value),
+      },
+    },
   },
 };
 
@@ -106,4 +120,11 @@ export function validateRequest(req, res, next) {
   }
 
   return next();
+}
+
+export function validateType(req, res, next) {
+  let { params: { type } } = req;
+  type = singular(type);
+  req.type = type;
+  next();
 }

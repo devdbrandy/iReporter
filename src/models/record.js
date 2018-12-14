@@ -65,7 +65,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static async find(id) {
+  static find(id) {
     const queryString = `${Record.selectQuery()} WHERE id=$1`;
 
     return new Promise((resolve, reject) => {
@@ -126,7 +126,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  save(attributes) {
+  save() {
     const queryString = `
       INSERT INTO records(
         user_id, type, location, images, videos, comment
@@ -152,9 +152,7 @@ export default class Record {
           this.createdOn = record.created_at;
           resolve(this);
         })
-        .catch((error) => {
-          throw createError(400, error.message);
-        });
+        .catch(reject);
     });
   }
 
@@ -181,19 +179,20 @@ export default class Record {
           const [data] = rows;
           resolve(data);
         })
-        .catch(handlerError);
+        .catch(reject);
     });
   }
 
-  async delete() {
+  delete() {
     const queryString = 'DELETE FROM records WHERE id=$1 RETURNING *';
-
-    try {
-      await db.query(queryString, [this.id]);
-      return this.id;
-    } catch (error) {
-      throw handlerError(error);
-    }
+    return new Promise((resolve, reject) => {
+      db.query(queryString, [this.id])
+        .then(({ rows }) => {
+          const [data] = rows;
+          resolve(data);
+        })
+        .catch(reject);
+    });
   }
 
   static selectQuery() {

@@ -60,10 +60,6 @@ export const validator = {
       isMobilePhone: {
         errorMessage: 'Phone number is invalid',
       },
-      isLength: {
-        errorMessage: 'Phone number is invalid',
-        options: { min: 9 },
-      },
       rtrim: { options: [[' ', '-']] },
     },
     email: {

@@ -16,7 +16,7 @@ export default class AuthController {
           user,
         }]);
       })
-      .catch(next);
+      .catch(error => next(createError(401, 'Wrong username or password')));
     return true;
   }
 }

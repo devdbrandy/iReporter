@@ -16,11 +16,12 @@ const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiTWlrZSIsI
 
 const token2 = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IlBvc25hbiIsInBob25lTnVtYmVyIjoiNjIyLTEzMi05MjIzIiwiZW1haWwiOiJ0aWdlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6InVwdG9uZSIsInJlZ2lzdGVyZWQiOiIyMDE4LTEyLTEzVDIxOjUxOjMyLjU3OVoiLCJpc0FkbWluIjpmYWxzZX0.xxUD-wrdJNN-e5BN5SCJYeXkZ6urmJrXHH0bkuO8ubc';
 
-before(() => {
+before((done) => {
   // reset database tables
   exec('npm run migrate');
   // insert dummy data
   exec('npm run seed');
+  done();
 });
 
 describe('routes: index', () => {

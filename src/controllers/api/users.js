@@ -58,15 +58,5 @@ export default class UsersController {
         }], 201);
       })
       .catch(next);
-
-    // try {
-    //   const { id } = await ;
-
-    //   return jwt.sign({ user }, env('APP_KEY'), (err, token) => {
-
-    //   });
-    // } catch (err) {
-    //   return next(err);
-    // }
   }
 }

@@ -1,0 +1,940 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>iReporter API Documentation</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#signup-request-body-parameters" class="toc-h2 toc-link" data-title="Signup Request Body Parameters">Signup Request Body Parameters</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#red-flag-records" class="toc-h1 toc-link" data-title="Red-flag records">Red-flag records</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fetch-all-red-flag-records" class="toc-h2 toc-link" data-title="Fetch all red-flag records">Fetch all red-flag records</a>
+                  </li>
+                  <li>
+                    <a href="#get-a-specific-red-flag-record" class="toc-h2 toc-link" data-title="Get a Specific red-flag record">Get a Specific red-flag record</a>
+                  </li>
+                  <li>
+                    <a href="#create-a-new-red-flag-record" class="toc-h2 toc-link" data-title="Create a new red-flag record">Create a new red-flag record</a>
+                  </li>
+                  <li>
+                    <a href="#update-a-red-flag-record-39-s-location" class="toc-h2 toc-link" data-title="Update a red-flag record's location">Update a red-flag record's location</a>
+                  </li>
+                  <li>
+                    <a href="#update-a-red-flag-record-39-s-comment" class="toc-h2 toc-link" data-title="Update a red-flag record's comment">Update a red-flag record's comment</a>
+                  </li>
+                  <li>
+                    <a href="#delete-a-specific-red-flag-record" class="toc-h2 toc-link" data-title="Delete a specific red-flag record">Delete a specific red-flag record</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#intervention-records" class="toc-h1 toc-link" data-title="Intervention records">Intervention records</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fetch-all-intervention-records" class="toc-h2 toc-link" data-title="Fetch all intervention records">Fetch all intervention records</a>
+                  </li>
+                  <li>
+                    <a href="#get-a-specific-intervention-record" class="toc-h2 toc-link" data-title="Get a Specific intervention record">Get a Specific intervention record</a>
+                  </li>
+                  <li>
+                    <a href="#create-a-new-intervention-record" class="toc-h2 toc-link" data-title="Create a new intervention record">Create a new intervention record</a>
+                  </li>
+                  <li>
+                    <a href="#update-a-intervention-record-39-s-location" class="toc-h2 toc-link" data-title="Update a intervention record's location">Update a intervention record's location</a>
+                  </li>
+                  <li>
+                    <a href="#update-a-intervention-record-39-s-comment" class="toc-h2 toc-link" data-title="Update a intervention record's comment">Update a intervention record's comment</a>
+                  </li>
+                  <li>
+                    <a href="#delete-a-specific-intervention-record" class="toc-h2 toc-link" data-title="Delete a specific intervention record">Delete a specific intervention record</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+          </li>
+      </ul>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/devdbrandy/iReporter'>Visit our github page</a></li>
+            <li><a href='#'>iReporter Documentation</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to the iReporter App! You can use our API to access incidents API endpoints, which can get information on various incidents posted by several user.</p>
+
+<p>We have language bindings in Shell, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<h1 id='authentication'>Authentication</h1>
+<blockquote>
+<p>To authorize, use this code:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
+curl <span class="s2">"api_endpoint_here"</span>
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
+</blockquote>
+
+<p>iReporter uses API keys to allow access to the API. You can register a new iReporter API token by binding a call to: <a href="http://irepot.herokuapp.com/auth/signup">http://irepot.herokuapp.com/auth/signup</a> or login: <a href="http://irepot.herokuapp.com/auth/login">http://irepot.herokuapp.com/auth/login</a>. For signup, provide the required parameters as listed in the table below:</p>
+<h3 id='signup-request-body-parameters'>Signup Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>firstname</td>
+<td>Your first name</td>
+</tr>
+<tr>
+<td>lastname</td>
+<td>Your last name</td>
+</tr>
+<tr>
+<td>othernames</td>
+<td>Your other names <code>optional</code></td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>Your phone number</td>
+</tr>
+<tr>
+<td>username</td>
+<td>Provide a username</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Your email address</td>
+</tr>
+<tr>
+<td>password</td>
+<td>Your password</td>
+</tr>
+</tbody></table>
+
+<p>As for login, iReporter requires only two, your <code>username</code> and <code>password</code>. After successful request, an API token will be delivered along with your response. iReporter expects for the API token to be included in all API requests to the server in a header that looks like the following:</p>
+
+<p><code>Authorization: Bearer meowmeowmeow</code></p>
+
+<aside class="notice">
+You must replace <code>meowmeowmeow</code> with your personal API key.
+</aside>
+<h1 id='red-flag-records'>Red-flag records</h1><h2 id='fetch-all-red-flag-records'>Fetch all red-flag records</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags"</span>
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"red-flag"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,121.213"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Innovation needed"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:41:44.824Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:41:44.824Z"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"red-flag"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,121.213"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bad roads need renovating"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:45:28.649Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:45:28.649Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all red-flags record.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/red-flags</code></p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<p>None</p>
+
+<aside class="success">
+Remember — you have to be authenticated!
+</aside>
+<h2 id='get-a-specific-red-flag-record'>Get a Specific red-flag record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;"</span>
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"red-flag"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,125.49"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bad roads need renovating"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T21:34:20.891Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves a specific red-flag.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;</code></p>
+<h3 id='url-parameters'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>red-flag-id</td>
+<td>The ID of the red-flag to retrieve</td>
+</tr>
+</tbody></table>
+<h2 id='create-a-new-red-flag-record'>Create a new red-flag record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags"</span>
+  -X POST
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Created red-flag record"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint creates a new red-flag record.</p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/red-flags</code></p>
+<h3 id='url-parameters-2'>URL Parameters</h3>
+<p>None</p>
+<h3 id='request-body-parameters'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>The type of the incident record (red-flag or intervention)</td>
+</tr>
+<tr>
+<td>location</td>
+<td>The location of the incident</td>
+</tr>
+<tr>
+<td>comment</td>
+<td>A short note description on the incident</td>
+</tr>
+<tr>
+<td>images</td>
+<td>Optional images of incident</td>
+</tr>
+<tr>
+<td>videos</td>
+<td>Optional videos of incident</td>
+</tr>
+</tbody></table>
+<h2 id='update-a-red-flag-record-39-s-location'>Update a red-flag record&#39;s location</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;/location"</span>
+  -X PATCH
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated red-flag record's location"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint updates a red-flag record&#39;s location.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;/location</code></p>
+<h3 id='url-parameters-3'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>red-flag-id</td>
+<td>The ID of the red-flag record to delete</td>
+</tr>
+</tbody></table>
+<h3 id='request-body-parameters-2'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>location</td>
+<td>The location of the incident</td>
+</tr>
+</tbody></table>
+<h2 id='update-a-red-flag-record-39-s-comment'>Update a red-flag record&#39;s comment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;/comment"</span>
+  -X PATCH
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated red-flag record's comment"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint updates a red-flag record&#39;s comment.</p>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;/comment</code></p>
+<h3 id='url-parameters-4'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>red-flag-id</td>
+<td>The ID of the red-flag record to delete</td>
+</tr>
+</tbody></table>
+<h3 id='request-body-parameters-3'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>comment</td>
+<td>A comment on the incident</td>
+</tr>
+</tbody></table>
+<h2 id='delete-a-specific-red-flag-record'>Delete a specific red-flag record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;"</span>
+  -X DELETE
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Red-flag record has been deleted"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint deletes a specific red-flag record.</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>DELETE http://irepot.herokuapp.com/api/v1/red-flags/&lt;red-flag-id&gt;</code></p>
+<h3 id='url-parameters-5'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>red-flag-id</td>
+<td>The ID of the red-flag record to delete</td>
+</tr>
+</tbody></table>
+<h1 id='intervention-records'>Intervention records</h1><h2 id='fetch-all-intervention-records'>Fetch all intervention records</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention"</span>
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intervention"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,121.213"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Innovation needed"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:41:44.824Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:41:44.824Z"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intervention"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,121.213"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bad roads need renovating"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updatedOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:45:28.649Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T23:45:28.649Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all intervention record.</p>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/intervention</code></p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<p>None</p>
+
+<aside class="success">
+Remember — you have to be authenticated!
+</aside>
+<h2 id='get-a-specific-intervention-record'>Get a Specific intervention record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;"</span>
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intervention"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-42.2078,125.49"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bad roads need renovating"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"https://via.placeholder.com/650x450"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"videos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draft"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createdOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-13T21:34:20.891Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves a specific intervention.</p>
+<h3 id='http-request-8'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;</code></p>
+<h3 id='url-parameters-6'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>intervention-id</td>
+<td>The ID of the intervention to retrieve</td>
+</tr>
+</tbody></table>
+<h2 id='create-a-new-intervention-record'>Create a new intervention record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention"</span>
+  -X POST
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Created intervention record"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint creates a new intervention record.</p>
+<h3 id='http-request-9'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/intervention</code></p>
+<h3 id='url-parameters-7'>URL Parameters</h3>
+<p>None</p>
+<h3 id='request-body-parameters-4'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>The type of the incident record (red-flag or intervention)</td>
+</tr>
+<tr>
+<td>location</td>
+<td>The location of the incident</td>
+</tr>
+<tr>
+<td>comment</td>
+<td>A short note description on the incident</td>
+</tr>
+<tr>
+<td>images</td>
+<td>Optional images of incident</td>
+</tr>
+<tr>
+<td>videos</td>
+<td>Optional videos of incident</td>
+</tr>
+</tbody></table>
+<h2 id='update-a-intervention-record-39-s-location'>Update a intervention record&#39;s location</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;/location"</span>
+  -X PATCH
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated intervention record's location"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint updates a intervention record&#39;s location.</p>
+<h3 id='http-request-10'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;/location</code></p>
+<h3 id='url-parameters-8'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>intervention-id</td>
+<td>The ID of the intervention record to delete</td>
+</tr>
+</tbody></table>
+<h3 id='request-body-parameters-5'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>location</td>
+<td>The location of the incident</td>
+</tr>
+</tbody></table>
+<h2 id='update-a-intervention-record-39-s-comment'>Update a intervention record&#39;s comment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;/comment"</span>
+  -X PATCH
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated intervention record's comment"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint updates a intervention record&#39;s comment.</p>
+<h3 id='http-request-11'>HTTP Request</h3>
+<p><code>GET http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;/comment</code></p>
+<h3 id='url-parameters-9'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>intervention-id</td>
+<td>The ID of the intervention record to delete</td>
+</tr>
+</tbody></table>
+<h3 id='request-body-parameters-6'>Request Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>comment</td>
+<td>A comment on the incident</td>
+</tr>
+</tbody></table>
+<h2 id='delete-a-specific-intervention-record'>Delete a specific intervention record</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;"</span>
+  -X DELETE
+  -H <span class="s2">"Authorization: Bearer meowmeowmeow"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Intervention record has been deleted"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint deletes a specific intervention record.</p>
+<h3 id='http-request-12'>HTTP Request</h3>
+<p><code>DELETE http://irepot.herokuapp.com/api/v1/intervention/&lt;intervention-id&gt;</code></p>
+<h3 id='url-parameters-10'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>intervention-id</td>
+<td>The ID of the intervention record to delete</td>
+</tr>
+</tbody></table>
+<h1 id='errors'>Errors</h1>
+<!-- <aside class="notice">
+This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
+</aside> -->
+
+<p>The iReporter API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request is invalid.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is wrong.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- The process requested is hidden for administrators/record owners only .</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The specified record could not be found.</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed -- You tried to access a record with an invalid method.</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone -- The record requested has been removed from our servers.</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity -- You provided invalid param.</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

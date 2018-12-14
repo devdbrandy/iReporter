@@ -1,4 +1,8 @@
+import createError from 'http-errors';
 import db from '../database';
+import User from './user';
+
+const handlerError = ({ message }) => createError(404, message);
 
 export default class Record {
   /**
@@ -8,23 +12,91 @@ export default class Record {
   * @memberOf Record
   */
   constructor({
+    id,
     createdBy,
     type,
     location,
     comment,
     images,
     videos,
+    status,
+    createdOn,
   }) {
-    Record.incrementCount();
-    this.id = Record.count;
-    this.creadedOn = Date();
+    this.id = id;
     this.createdBy = createdBy;
     this.type = type;
     this.location = location;
     this.comment = comment;
     this.images = images;
     this.videos = videos;
-    this.status = 'draft';
+    this.status = status;
+    this.createdOn = createdOn;
+  }
+
+  belongsTo(user) {
+    return (this.createdBy === user.id);
+  }
+
+  /**
+   * Run a select query on provided param
+   *
+   * @static
+   * @param {string} query select query
+   * @param {string} param values applied
+   * @returns {[Record]} a list of record resources
+   *
+   * @memberOf User
+   */
+  static async select(query, param) {
+    try {
+      const { rows } = await db.queryAsync(query, [param]);
+      return rows;
+    } catch (error) {
+      throw createError(400, error.message);
+    }
+  }
+
+  /**
+   * Find resource by given id
+   *
+   * @static
+   * @param {string} id resource id
+   * @returns {Record} a Record resource
+   *
+   * @memberOf Record
+   */
+  static find(id) {
+    const queryString = `${Record.selectQuery()} WHERE id=$1`;
+
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, [id])
+        .then(({ rows }) => {
+          const [data] = rows;
+          if (!data) throw createError(404, 'Resource not found');
+          resolve(new Record(data));
+        })
+        .catch(reject);
+    });
+  }
+
+  /**
+   * Run a select WHERE query on provided param
+   *
+   * @static
+   * @param {string} query select query
+   * @param {string} param values applied
+   * @returns {[User]} a list of record resources
+   *
+   * @memberOf Record
+   */
+  static async where(param, value) {
+    const queryString = `${Record.selectQuery()} WHERE ${param}=$1`;
+    try {
+      const data = await Record.select(queryString, value);
+      return data;
+    } catch (error) {
+      throw createError(error.code, error.message);
+    }
   }
 
   /**
@@ -36,24 +108,17 @@ export default class Record {
    * @memberOf Record
    */
   static all() {
-    return Record.table;
+    const queryString = Record.selectQuery();
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString)
+        .then(({ rows }) => {
+          resolve(rows);
+        });
+    });
   }
 
   /**
-   * Find resource by given id
-   *
-   * @static
-   * @param {string} id resource identity number
-   * @returns {Record} a Record resource
-   *
-   * @memberOf Record
-   */
-  static find(id) {
-    return Record.table.find(record => record.id === id);
-  }
-
-  /**
-   * Create a new resource
+   * Persist a new resource
    *
    * @static
    * @param {Object} attributes the resource attributes
@@ -61,10 +126,34 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static create(attributes) {
-    const record = new Record(attributes);
-    Record.table.push(record);
-    return record;
+  save() {
+    const queryString = `
+      INSERT INTO records(
+        user_id, type, location, images, videos, comment
+      )
+      VALUES($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `;
+    const values = [
+      this.createdBy,
+      this.type,
+      this.location,
+      this.images,
+      this.videos,
+      this.comment,
+    ];
+
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, values)
+        .then(({ rows }) => {
+          const [record] = rows;
+          this.id = record.id;
+          this.status = record.status;
+          this.createdOn = record.created_at;
+          resolve(this);
+        })
+        .catch(reject);
+    });
   }
 
   /**
@@ -76,35 +165,41 @@ export default class Record {
    * @memberOf Record
    */
   update(data) {
-    if (this.status === 'draft') {
-      if (data.location) {
-        this.location = data.location || this.location;
-      } else {
-        this.comment = data.comment || this.comment;
-        this.type = data.type || this.type;
-        this.images = data.images || this.images;
-        this.videos = data.videos || this.videos;
-      }
-    }
+    const field = data.location ? 'location' : 'comment';
+    const queryString = `
+      UPDATE records SET ${field}=$1
+      WHERE id=$2
+      RETURNING *
+    `;
+    const values = [data[field], this.id];
 
-    return this;
+    return new Promise((resolve, reject) => {
+      db.queryAsync(queryString, values)
+        .then(({ rows }) => {
+          const [data] = rows;
+          resolve(data);
+        })
+        .catch(reject);
+    });
   }
 
-  static incrementCount() {
-    Record.count += 1;
+  delete() {
+    const queryString = 'DELETE FROM records WHERE id=$1 RETURNING *';
+    return new Promise((resolve, reject) => {
+      db.query(queryString, [this.id])
+        .then(({ rows }) => {
+          const [data] = rows;
+          resolve(data);
+        })
+        .catch(reject);
+    });
   }
 
-  /**
-   * Reset records table
-   *
-   * @static
-   * @memberOf Record
-   */
-  static resetTable() {
-    Record.table = [];
-    Record.count = 0;
+  static selectQuery() {
+    return `
+      SELECT id, user_id as "createdBy", type, location, images, videos,
+        comment, status, updated_at as "updatedOn", created_at as "createdOn"
+      FROM records
+    `;
   }
 }
-
-Record.table = db.records;
-Record.count = 0;

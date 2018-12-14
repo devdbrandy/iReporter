@@ -6,8 +6,8 @@ import logger from 'morgan';
 import { exceptionHandler } from './middleware';
 import { config } from './utils/helpers';
 
-import webRouter from './routes/web';
 import apiRouter from './routes/api';
+import authRouter from './routes/auth';
 
 const app = express();
 const version = config('app:version');
@@ -24,8 +24,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use('/', webRouter);
+app.get('/', (req, res) => {
+  res.status(200)
+    .json({
+      message: 'Welcome to iReporter',
+    });
+});
+
 app.use(`/api/${version}/`, apiRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

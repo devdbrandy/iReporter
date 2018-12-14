@@ -1,10 +1,6 @@
-// import { User, Record } from './index';
-
-// const password = '$2a$10$6bWcliaMM5VrKrkuWXvbq.BGQkb.ZUZ77JxrYkvyaP72Z5gipIyju'; // secret
 const mock = {
   users: [
     {
-      // id: 1,
       firstname: 'Johnny',
       lastname: 'Bravo',
       othernames: 'Afro',
@@ -15,7 +11,6 @@ const mock = {
       password: 'secret',
     },
     {
-      // id: 2,
       firstname: 'Dana',
       lastname: 'Russel',
       othernames: 'Louvenia',

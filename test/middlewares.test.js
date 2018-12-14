@@ -1,11 +1,11 @@
 import sinon from 'sinon';
 import chai from 'chai';
-import { verifyToken } from '../src/middleware';
+import { authenticate } from '../src/middleware';
 
 const should = chai.should();
 
 describe('middlewares', () => {
-  describe('verifyToken()', () => {
+  describe('authenticate()', () => {
     it('should throw error on missing Authorization Header', (done) => {
       const callback = sinon.spy();
       const request = {
@@ -14,7 +14,7 @@ describe('middlewares', () => {
         },
       };
       const response = {};
-      verifyToken(request, response, callback);
+      authenticate(request, response, callback);
       callback.calledOnce.should.equal(true);
       done();
     });
@@ -27,7 +27,7 @@ describe('middlewares', () => {
         },
       };
       const response = {};
-      verifyToken(request, response, callback);
+      authenticate(request, response, callback);
       callback.calledOnce.should.equal(true);
       done();
     });

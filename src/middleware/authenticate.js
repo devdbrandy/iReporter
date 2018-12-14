@@ -23,8 +23,18 @@ function authenticate(req, res, next) {
 
   return jwt.verify(token, env('APP_KEY'), (err, decoded) => {
     if (err || !decoded) return next(createError(403, 'Failed authentication'));
-    req.user = decoded.user;
-    return next();
+
+    const { user } = decoded;
+    const { id } = user;
+    return User.find(id)
+      .then((user) => {
+        if (user) {
+          req.user = decoded.user;
+          return next();
+        }
+        return false;
+      })
+      .catch(error => next(createError(401, 'Unauthorized')));
   });
 }
 

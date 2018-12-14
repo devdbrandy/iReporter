@@ -11,58 +11,71 @@ import {
 import {
   validator,
   validateRequest,
+  validateType,
   authenticate,
 } from '../middleware';
 
 const router = express.Router();
+
+/* Handy validator */
+const validateIdParam = () => check('id').isInt().withMessage("'id' must be an integer");
+const validateStringParam = (param) => {
+  return check(param).isString().withMessage(`'${param}' must be a string`);
+};
 
 /* Fetch all users */
 router.get('/users', authenticate, UsersController.index);
 
 /* Fetch a specific user */
 router.get('/users/:id', [
-  check('id').isInt(),
+  validateIdParam(),
   validateRequest,
   authenticate,
 ], UsersController.show);
 
 /* Fetch all red-flag records */
-router.get('/red-flags', RedFlagsController.index);
+router.get('/:type', validateType, RedFlagsController.index);
 
 /* Fetch a specific red-flag record */
-router.get('/red-flags/:id', [
-  check('id').isInt(),
+router.get('/:type/:id', [
+  validateIdParam(),
   validateRequest,
+  validateType,
   authenticate,
 ], RedFlagsController.show);
 
 /* Create a new red-flag record */
-router.post('/red-flags', [
+router.post('/:type', [
   checkSchema(validator.record),
   validateRequest,
+  validateType,
   authenticate,
 ], RedFlagsController.create);
 
 /* Update the location of a specific red-flag record */
-router.patch('/red-flags/:id/location', [
-  check('id').isInt(),
-  check('location').isString(),
+router.patch('/:type/:id/location', [
+  validateIdParam(),
+  validateStringParam('location'),
   validateRequest,
+  validateType,
   authenticate,
 ], RedFlagsController.update);
 
 /* Update the comment of a specific red-flag record */
-router.patch('/red-flags/:id/comment', [
-  check('id').isInt(),
-  check('comment').isString(),
+router.patch('/:type/:id/comment', [
+  validateIdParam(),
+  // check('comment').isString().withMessage("'comment' must be a string"),
+  validateStringParam('comment'),
   validateRequest,
+  validateType,
   authenticate,
 ], RedFlagsController.update);
 
 /* Delete a specific red-flag record */
-router.delete('/red-flags/:id', [
-  check('id').isInt(),
+router.delete('/:type/:id', [
+  validateIdParam(),
   validateRequest,
+  validateType,
   authenticate,
 ], RedFlagsController.destroy);
 

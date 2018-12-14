@@ -65,11 +65,11 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static find(id) {
-    const queryString = `${Record.selectQuery()} WHERE id=$1`;
+  static find(id, type) {
+    const queryString = `${Record.selectQuery()} WHERE id=$1 AND type=$2`;
 
     return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, [id])
+      db.queryAsync(queryString, [id, type])
         .then(({ rows }) => {
           const [data] = rows;
           if (!data) throw createError(404, 'Resource not found');
@@ -107,13 +107,14 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static all() {
-    const queryString = Record.selectQuery();
+  static all(type) {
+    const queryString = `${Record.selectQuery()} WHERE type=$1`;
     return new Promise((resolve, reject) => {
-      db.queryAsync(queryString)
+      db.queryAsync(queryString, [type])
         .then(({ rows }) => {
           resolve(rows);
-        });
+        })
+        .catch(resolve);
     });
   }
 
@@ -126,7 +127,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  save() {
+  save(type) {
     const queryString = `
       INSERT INTO records(
         user_id, type, location, images, videos, comment
@@ -136,7 +137,7 @@ export default class Record {
     `;
     const values = [
       this.createdBy,
-      this.type,
+      type,
       this.location,
       this.images,
       this.videos,

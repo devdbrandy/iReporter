@@ -15,7 +15,7 @@ services:
   - postgresql
 
 before_script:
-  - psql -c 'create database ireporter;' -U postgres
+  - psql -c 'CREATE DATABASE ireporter_test;' -U postgres
   - npm run migrate
 
 deploy:

@@ -3,7 +3,7 @@ import { check, checkSchema } from 'express-validator/check';
 
 /* Controllers */
 import {
-  RedFlagsController,
+  RecordsController,
   UsersController,
 } from '../controllers/api';
 
@@ -20,7 +20,9 @@ const router = express.Router();
 /* Handy validator */
 const validateIdParam = () => check('id').isInt().withMessage("'id' must be an integer");
 const validateStringParam = (param) => {
-  return check(param).isString().withMessage(`'${param}' must be a string`);
+  check(param)
+    .isString()
+    .withMessage(`'${param}' must be a string`);
 };
 
 /* Fetch all users */
@@ -34,7 +36,7 @@ router.get('/users/:id', [
 ], UsersController.show);
 
 /* Fetch all red-flag records */
-router.get('/:type', validateType, RedFlagsController.index);
+router.get('/:type', [validateType, authenticate], RecordsController.index);
 
 /* Fetch a specific red-flag record */
 router.get('/:type/:id', [
@@ -42,7 +44,7 @@ router.get('/:type/:id', [
   validateRequest,
   validateType,
   authenticate,
-], RedFlagsController.show);
+], RecordsController.show);
 
 /* Create a new red-flag record */
 router.post('/:type', [
@@ -50,26 +52,24 @@ router.post('/:type', [
   validateRequest,
   validateType,
   authenticate,
-], RedFlagsController.create);
+], RecordsController.create);
 
 /* Update the location of a specific red-flag record */
 router.patch('/:type/:id/location', [
   validateIdParam(),
-  validateStringParam('location'),
+  check('location').isLatLong().withMessage('Invalid coordinates'),
   validateRequest,
   validateType,
   authenticate,
-], RedFlagsController.update);
+], RecordsController.update);
 
 /* Update the comment of a specific red-flag record */
 router.patch('/:type/:id/comment', [
   validateIdParam(),
-  // check('comment').isString().withMessage("'comment' must be a string"),
-  validateStringParam('comment'),
   validateRequest,
   validateType,
   authenticate,
-], RedFlagsController.update);
+], RecordsController.update);
 
 /* Delete a specific red-flag record */
 router.delete('/:type/:id', [
@@ -77,6 +77,6 @@ router.delete('/:type/:id', [
   validateRequest,
   validateType,
   authenticate,
-], RedFlagsController.destroy);
+], RecordsController.destroy);
 
 export default router;

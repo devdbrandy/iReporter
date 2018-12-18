@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import createError from 'http-errors';
-import db from '../database';
+import db from '../config/database';
 import { generateUsername } from '../utils/helpers';
 
 const privateProps = new WeakMap();
@@ -55,6 +55,49 @@ export default class User {
    */
   get password() {
     return privateProps.get(this).password;
+  }
+
+  /**
+   * Persist a new resource
+   *
+   * @static
+   * @param {Object} attributes the resource attributes
+   * @returns {Record} a Record resource
+   *
+   * @memberOf Record
+   */
+  static async create(data) {
+    const queryString = `
+      INSERT INTO users(
+        firstname, lastname, othernames, phone_number, email, username, password
+      )
+      VALUES($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *
+    `;
+
+    const {
+      firstname,
+      lastname,
+      othernames,
+      phoneNumber,
+      email,
+      username,
+      password,
+    } = data;
+
+    const values = [
+      firstname,
+      lastname,
+      othernames,
+      phoneNumber,
+      email,
+      username,
+      bcrypt.hashSync(password, 8),
+    ];
+
+    const { rows } = await db.query(queryString, values);
+    const [user] = rows;
+    return new this(user);
   }
 
   /**
@@ -135,19 +178,15 @@ export default class User {
    *
    * @memberOf User
    */
-  static find(id) {
+  static async find(id) {
     const field = Number.isInteger(id) ? 'id' : 'username';
     const queryString = `${User.query('password')} WHERE ${field}=$1`;
 
-    return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, [id])
-        .then(({ rows }) => {
-          const [data] = rows;
-          if (!data) throw createError(404, 'Resource not found');
-          resolve(new User(data));
-        })
-        .catch(reject);
-    });
+    const { rows } = await db.query(queryString, [id]);
+    const [user] = rows;
+
+    if (!user) return null;
+    return new this(user);
   }
 
   /**

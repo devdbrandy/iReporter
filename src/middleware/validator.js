@@ -94,7 +94,7 @@ export const validator = {
     },
     videos: {
       custom: {
-        errorMessage: 'viedoes must be an array',
+        errorMessage: 'videos must be an array',
         options: value => Array.isArray(value),
       },
     },
@@ -112,7 +112,7 @@ export const validator = {
 export function validateRequest(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next(createError(422, '', { errors: errors.array() }));
+    return next(createError(400, '', { errors: errors.array() }));
   }
 
   return next();

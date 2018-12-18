@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import db from '../database';
+import db from '../config/database';
 import User from './user';
 
 const handlerError = ({ message }) => createError(404, message);
@@ -38,22 +38,46 @@ export default class Record {
   }
 
   /**
-   * Run a select query on provided param
+   * Update resource attributes
+   *
+   * @param {object} data attributes to modify
+   * @returns {Record} record recource
+   *
+   * @memberOf Record
+   */
+  async update(data) {
+    const [field, param] = Object.entries(data)[0];
+    // const field = data.location ? 'location' : 'comment';
+    const queryString = `
+      UPDATE records SET ${field}=$1
+      WHERE id=$2
+      RETURNING *
+    `;
+    const values = [param, this.id];
+    const { rows } = await db.query(queryString, values);
+    const [record] = rows;
+    return record;
+  }
+
+  async delete() {
+    const queryString = 'DELETE FROM records WHERE id=$1 RETURNING *';
+    const { rows } = await db.query(queryString, [this.id]);
+    const [row] = rows;
+    return row;
+  }
+
+  /**
+   * Returns a list of user resources
    *
    * @static
-   * @param {string} query select query
-   * @param {string} param values applied
-   * @returns {[Record]} a list of record resources
+   * @returns {[Record]} a list of user resources
    *
-   * @memberOf User
+   * @memberOf Record
    */
-  static async select(query, param) {
-    try {
-      const { rows } = await db.queryAsync(query, [param]);
-      return rows;
-    } catch (error) {
-      throw createError(400, error.message);
-    }
+  static async all() {
+    const queryString = `${this.selectQuery()}`;
+    const { rows } = await db.query(queryString);
+    return rows;
   }
 
   /**
@@ -65,18 +89,23 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static find(id, type) {
-    const queryString = `${Record.selectQuery()} WHERE id=$1 AND type=$2`;
+  static async find(fields) {
+    const keys = Object.keys(fields);
+    const values = Object.values(fields);
+    let params = '';
 
-    return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, [id, type])
-        .then(({ rows }) => {
-          const [data] = rows;
-          if (!data) throw createError(404, 'Resource not found');
-          resolve(new Record(data));
-        })
-        .catch(reject);
-    });
+    for (let index = 0; index < keys.length; index += 1) {
+      const currentIndex = keys[index];
+      const keyIndex = index + 1;
+      params += `${currentIndex}=$${keyIndex}`;
+      if (keyIndex !== keys.length) params += ' AND ';
+    }
+
+    const queryString = `${this.selectQuery()} WHERE ${params}`;
+    const { rows: [record] } = await db.query(queryString, values);
+
+    if (!record) return null;
+    return new this(record);
   }
 
   /**
@@ -89,33 +118,21 @@ export default class Record {
    *
    * @memberOf Record
    */
-  static async where(param, value) {
-    const queryString = `${Record.selectQuery()} WHERE ${param}=$1`;
-    try {
-      const data = await Record.select(queryString, value);
-      return data;
-    } catch (error) {
-      throw createError(error.code, error.message);
-    }
-  }
+  static async where(fields) {
+    const keys = Object.keys(fields);
+    const values = Object.values(fields);
+    let params = '';
 
-  /**
-   * Returns a list of user resources
-   *
-   * @static
-   * @returns {[Record]} a list of user resources
-   *
-   * @memberOf Record
-   */
-  static all(type) {
-    const queryString = `${Record.selectQuery()} WHERE type=$1`;
-    return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, [type])
-        .then(({ rows }) => {
-          resolve(rows);
-        })
-        .catch(resolve);
-    });
+    for (let index = 0; index < keys.length; index += 1) {
+      const currentIndex = keys[index];
+      const keyIndex = index + 1;
+      params += `${currentIndex}=$${keyIndex}`;
+      if (keyIndex !== keys.length) params += ' AND ';
+    }
+
+    const queryString = `${this.selectQuery()} WHERE ${params}`;
+    const { rows } = await db.query(queryString, values);
+    return rows;
   }
 
   /**
@@ -127,7 +144,7 @@ export default class Record {
    *
    * @memberOf Record
    */
-  save(type) {
+  static async create(data) {
     const queryString = `
       INSERT INTO records(
         user_id, type, location, images, videos, comment
@@ -135,65 +152,19 @@ export default class Record {
       VALUES($1, $2, $3, $4, $5, $6)
       RETURNING *
     `;
-    const values = [
-      this.createdBy,
+
+    const {
+      createdBy,
       type,
-      this.location,
-      this.images,
-      this.videos,
-      this.comment,
-    ];
-
-    return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, values)
-        .then(({ rows }) => {
-          const [record] = rows;
-          this.id = record.id;
-          this.status = record.status;
-          this.createdOn = record.created_at;
-          resolve(this);
-        })
-        .catch(reject);
-    });
-  }
-
-  /**
-   * Update resource attributes
-   *
-   * @param {object} data attributes to modify
-   * @returns {Record} record recource
-   *
-   * @memberOf Record
-   */
-  update(data) {
-    const field = data.location ? 'location' : 'comment';
-    const queryString = `
-      UPDATE records SET ${field}=$1
-      WHERE id=$2
-      RETURNING *
-    `;
-    const values = [data[field], this.id];
-
-    return new Promise((resolve, reject) => {
-      db.queryAsync(queryString, values)
-        .then(({ rows }) => {
-          const [data] = rows;
-          resolve(data);
-        })
-        .catch(reject);
-    });
-  }
-
-  delete() {
-    const queryString = 'DELETE FROM records WHERE id=$1 RETURNING *';
-    return new Promise((resolve, reject) => {
-      db.query(queryString, [this.id])
-        .then(({ rows }) => {
-          const [data] = rows;
-          resolve(data);
-        })
-        .catch(reject);
-    });
+      location,
+      images,
+      videos,
+      comment,
+    } = data;
+    const values = [createdBy, type, location, images, videos, comment];
+    const { rows } = await db.query(queryString, values);
+    const [record] = rows;
+    return record;
   }
 
   static selectQuery() {

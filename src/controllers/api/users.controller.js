@@ -1,7 +1,5 @@
-import jwt from 'jsonwebtoken';
 import { User } from '../../models';
 import { responseHandler } from '../../utils/helpers';
-import { env } from '../../utils';
 
 export default class UsersController {
   /**
@@ -34,29 +32,6 @@ export default class UsersController {
     const userId = parseInt(request.params.id, 10);
     User.find(userId)
       .then(user => responseHandler(response, [user]))
-      .catch(next);
-  }
-
-  /**
-   * Create new user
-   *
-   * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
-   *
-   * @memberOf UsersController
-   */
-  static create(request, response, next) {
-    const user = new User(request.body);
-    user.save()
-      .then((user) => {
-        const token = jwt.sign({ user }, env('APP_KEY'));
-        responseHandler(response, [{
-          token,
-          user,
-        }], 201);
-      })
       .catch(next);
   }
 }

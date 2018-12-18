@@ -14,13 +14,12 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build && npm run migrate",
     "lint": "eslint src/",
     "migrate": "babel-node src/database/migrations/index.js",
-    "migrate:rollback": "babel-node src/database/migrations/index.js",
-    "mocha": "cross-env NODE_ENV=test mocha --require babel-polyfill --require babel-register",
+    "mocha": "cross-env NODE_ENV=test mocha -r babel-polyfill -r babel-register -r dotenv/config",
     "mocha:watch": "npm run mocha -- -w",
-    "test": "nyc --reporter=html --reporter=text mocha --require babel-polyfill --require babel-register",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha -r babel-polyfill -r babel-register -r dotenv/config",
     "seed": "babel-node src/database/seeds/index.js",
     "serve": "npm run start -- -r dotenv/config",
-    "start": "babel-node --require babel-polyfill dist/index.js",
+    "start": "node dist/index.js",
     "watch": "nodemon --exec npm run dev"
   },
   "keywords": [

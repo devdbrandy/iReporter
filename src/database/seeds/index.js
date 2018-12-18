@@ -1,12 +1,9 @@
-const { Pool } = require('pg');
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
 
-const pool = new Pool({
-  host: 'localhost',
-  database: 'ireporter',
-  user: 'postgres',
-  password: '',
-  port: 5432,
-});
+dotenv.config();
+
+const pool = new Pool();
 
 (async () => {
   const client = await pool.connect();
@@ -21,11 +18,13 @@ const pool = new Pool({
       RETURNING id
     `;
     const password = '$2a$08$dEaZzY9fp1BkawSQnQ9xnukRx/Z03Us/RB2vZbP/H9xqm4fsIarXy';
-    const userValues1 = ['Mike', 'Philip', 'Eyin', '622-132-9283', 'luiz@email.com', 'dbrandy', password];
-    const { rows } = await client.query(insertUser, userValues1);
-    const userValues2 = ['John', 'Philip', 'Posnan', '622-132-9223', 'tiger@email.com', 'uptone', password];
-    await client.query(insertUser, userValues2);
 
+    const adminValues = ['James', 'Bond', 'Administrator', '622-132-9223', 'admin@ireporter.com', 'admin', password];
+    await client.query(insertUser, adminValues);
+
+    const userValues = ['Mike', 'Posnan', 'Eyin', '622-132-9283', 'luiz@email.com', 'mikepos', password];
+    const { rows: [row] } = await client.query(insertUser, userValues);
+    const { id: userId } = row;
 
     const insertRecord = `
       INSERT INTO records(
@@ -34,8 +33,12 @@ const pool = new Pool({
       VALUES($1, $2, $3, $4, $5, $6)
       RETURNING id
     `;
-    const recordValues = [rows[0].id, 'red-flag', 'location', [], [], 'comment'];
-    await client.query(insertRecord, recordValues);
+    const recordValues1 = [userId, 'red-flag', '-42.2078,98.33', [], [], 'Bad roads'];
+    const recordValues2 = [userId, 'red-flag', '-33.2078,18.023', [], [], 'Leader tips street thugs'];
+    const recordValues3 = [userId, 'intervention', '-45.2078,138.441', [], [], 'Bridge contruction needed'];
+    await client.query(insertRecord, recordValues1);
+    await client.query(insertRecord, recordValues2);
+    await client.query(insertRecord, recordValues3);
     await client.query('COMMIT');
   } catch (e) {
     await client.query('ROLLBACK');

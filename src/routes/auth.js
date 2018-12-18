@@ -3,10 +3,7 @@ import Router from 'express-promise-router';
 import { checkSchema } from 'express-validator/check';
 
 /* Controllers */
-import {
-  AuthController,
-  UsersController,
-} from '../controllers/api';
+import { AuthController } from '../controllers/api';
 
 /* Middleware */
 import {
@@ -16,16 +13,16 @@ import {
 
 const router = Router();
 
-/* Authenticate user */
-router.post('/login', [
-  checkSchema(validator.auth),
-  validateRequest,
-], AuthController.auth);
-
 /* Create new user */
 router.post('/signup', [
   checkSchema(validator.user),
   validateRequest,
-], UsersController.create);
+], AuthController.signup);
+
+/* Authenticate user */
+router.post('/login', [
+  checkSchema(validator.auth),
+  validateRequest,
+], AuthController.login);
 
 export default router;

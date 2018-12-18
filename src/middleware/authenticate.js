@@ -1,7 +1,6 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { env } from '../utils';
-import { User } from '../models';
 
 /**
  * Verify user token
@@ -21,20 +20,11 @@ function authenticate(req, res, next) {
   const token = bearer.split(' ')[1];
   if (!token) return next(createError(400, 'Please provide a valid token'));
 
-  return jwt.verify(token, env('APP_KEY'), (err, decoded) => {
+  return jwt.verify(token, env('APP_KEY'), async (err, decoded) => {
     if (err || !decoded) return next(createError(403, 'Failed authentication'));
 
-    const { user } = decoded;
-    const { id } = user;
-    return User.find(id)
-      .then((user) => {
-        if (user) {
-          req.user = decoded.user;
-          return next();
-        }
-        return false;
-      })
-      .catch(error => next(createError(401, 'Unauthorized')));
+    req.user = decoded;
+    return next();
   });
 }
 

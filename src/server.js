@@ -24,14 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
-  res.status(200)
-    .json({
-      message: 'Welcome to iReporter',
-    });
-});
-
-app.use(`/api/${version}/`, apiRouter);
+app.use(`/api/${version}`, apiRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler

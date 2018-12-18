@@ -1,8 +1,7 @@
 import { Pool } from 'pg';
-import * as log from 'loglevel';
 import { env } from '../utils';
 
-if (process.env.DATABASE_URL) {
+if (env('DATABASE_URL')) {
   const url = new URL(env('DATABASE_URL'));
   const {
     hostname,
@@ -12,14 +11,20 @@ if (process.env.DATABASE_URL) {
   } = url;
   const [database] = url.pathname.split('/').slice(1);
 
-  process.env.PGHOST = hostname;
-  process.env.PGPORT = port;
-  process.env.PGDATABASE = database;
-  process.env.PGUSER = username;
-  process.env.PGPASSWORD = password;
+  process.env.DB_HOST = hostname;
+  process.env.DB_PORT = port;
+  process.env.DB_DATABASE = database;
+  process.env.DB_USERNAME = username;
+  process.env.DB_PASSWORD = password;
 }
 
-const pool = new Pool();
+const pool = new Pool({
+  host: env('DB_HOST', 'localhost'),
+  port: env('DB_PORT', 5432),
+  database: env('DB_DATABASE', 'ireporter'),
+  user: env('DB_USERNAME', 'ireporter'),
+  password: env('DB_PASSWORD', ''),
+});
 
 export default {
   query(text, params) {

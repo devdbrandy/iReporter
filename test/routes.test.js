@@ -14,7 +14,7 @@ const apiVersion = config('app:version');
 const prefix = `/api/${apiVersion}`;
 
 // Setup database prefix for test environment
-process.env.PGDATABASE = `${env('PGDATABASE')}_test`;
+process.env.DB_DATABASE = 'ireporter_test';
 
 describe('GET /', () => {
   it('should render the index page', (done) => {

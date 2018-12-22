@@ -13,7 +13,7 @@ import authRouter from './routes/auth';
 const app = express();
 const version = config('app:version');
 
-let envFile = app.get('env') === 'test' ? '.env.test' : '.env';
+const envFile = app.get('env') === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: envFile });
 
 // view engine setup

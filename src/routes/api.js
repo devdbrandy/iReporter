@@ -17,13 +17,13 @@ import {
 
 const router = express.Router();
 
-/* Handy validator */
+/* Shorthand validators */
 const validateIdParam = () => check('id').isInt().withMessage("'id' must be an integer");
-const validateStringParam = (param) => {
-  check(param)
-    .isString()
-    .withMessage(`'${param}' must be a string`);
-};
+const validateCommentParam = () => (
+  check('comment')
+    .isLength({ min: 10 })
+    .withMessage('Comment should be atleast 10 chars long')
+);
 
 /* Fetch all users */
 router.get('/users', authenticate, UsersController.index);
@@ -35,10 +35,10 @@ router.get('/users/:id', [
   authenticate,
 ], UsersController.show);
 
-/* Fetch all red-flag records */
+/* Fetch all red-flag/intervention records */
 router.get('/:type', [validateType, authenticate], RecordsController.index);
 
-/* Fetch a specific red-flag record */
+/* Fetch a specific red-flag/intervention record */
 router.get('/:type/:id', [
   validateIdParam(),
   validateRequest,
@@ -46,7 +46,7 @@ router.get('/:type/:id', [
   authenticate,
 ], RecordsController.show);
 
-/* Create a new red-flag record */
+/* Create a new red-flag/intervention record */
 router.post('/:type', [
   checkSchema(validator.record),
   validateRequest,
@@ -54,7 +54,7 @@ router.post('/:type', [
   authenticate,
 ], RecordsController.create);
 
-/* Update the location of a specific red-flag record */
+/* Update the location of a specific red-flag/intervention record */
 router.patch('/:type/:id/location', [
   validateIdParam(),
   check('location').isLatLong().withMessage('Invalid coordinates'),
@@ -63,15 +63,16 @@ router.patch('/:type/:id/location', [
   authenticate,
 ], RecordsController.update);
 
-/* Update the comment of a specific red-flag record */
+/* Update the comment of a specific red-flag/intervention record */
 router.patch('/:type/:id/comment', [
   validateIdParam(),
+  validateCommentParam(),
   validateRequest,
   validateType,
   authenticate,
 ], RecordsController.update);
 
-/* Delete a specific red-flag record */
+/* Delete a specific red-flag/intervention record */
 router.delete('/:type/:id', [
   validateIdParam(),
   validateRequest,

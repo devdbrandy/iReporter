@@ -22,7 +22,7 @@ const pool = new Pool({
   host: env('DB_HOST', 'localhost'),
   port: env('DB_PORT', 5432),
   database: env('DB_DATABASE', 'ireporter'),
-  user: env('DB_USERNAME', 'ireporter'),
+  user: env('DB_USERNAME', 'postgres'),
   password: env('DB_PASSWORD', ''),
 });
 
@@ -30,9 +30,7 @@ export default {
   query(text, params) {
     return pool.query(text, params);
   },
-  getClient(callback) {
-    pool.connect((err, client, done) => {
-      callback(err, client, done);
-    });
+  getClient() {
+    return pool.connect();
   },
 };

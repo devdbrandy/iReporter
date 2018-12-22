@@ -14,28 +14,13 @@ export function config(token, defValue) {
   return appConfig[key][value] || defValue;
 }
 
-/**
- * Generate username from firstname and lastname
- *
- * @static
- * @param {string} firstname user firstname attribute
- * @param {string} lastname user lastname
- * @returns {string} generated username
- */
-export function generateUsername(user) {
-  return (
-    user.lastname.substring(0, 5)
-      + user.firstname.substring(0, 3)
-      + Math.floor(Math.random() * 10)
-  );
-}
-
 export const isAuthorized = (user, record) => {
-  if (!record.belongsTo(user) && !user.isAdmin) {
-    throw createError(403, 'Forbidden');
+  if (
+    (!record.belongsTo(user) && !user.isAdmin)
+    || (!user.isAdmin && record.status !== 'draft')
+  ) {
+    throw createError(403, 'Not allowed');
   }
-
-  if (record.status !== 'draft') throw createError(403, 'Not allowed');
 
   return true;
 };
@@ -55,4 +40,24 @@ export const responseHandler = (response, data, status = 200) => {
       status,
       data,
     });
+};
+
+/**
+ * Extract and build params fields inline with WHERE query
+ *
+ * @param {Object} fields model field params
+ * @returns {Array} sorted list of params
+ */
+export const extractParams = (fields) => {
+  const keys = Object.keys(fields);
+  let params = '';
+
+  for (let index = 0; index < keys.length; index += 1) {
+    const currentIndex = keys[index];
+    const keyIndex = index + 1;
+    params += `${currentIndex}=$${keyIndex}`;
+    if (keyIndex !== keys.length) params += ' AND ';
+  }
+
+  return params;
 };

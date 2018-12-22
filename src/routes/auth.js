@@ -1,5 +1,4 @@
-// import express from 'express';
-import Router from 'express-promise-router';
+import express from 'express';
 import { checkSchema } from 'express-validator/check';
 
 /* Controllers */
@@ -11,7 +10,7 @@ import {
   validateRequest,
 } from '../middleware';
 
-const router = Router();
+const router = express.Router();
 
 /* Create new user */
 router.post('/signup', [

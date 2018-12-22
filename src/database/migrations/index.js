@@ -1,19 +1,10 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
-import { env } from '../../utils';
+import * as log from 'loglevel';
+import db from '../../config/database';
 
-dotenv.config();
-
-const pool = new Pool({
-  host: env('DB_HOST'),
-  port: env('DB_PORT'),
-  database: env('DB_DATABASE'),
-  user: env('DB_USERNAME'),
-  password: env('DB_PASSWORD'),
-});
+db.getClient();
 
 (async () => {
-  const client = await pool.connect();
+  const client = await db.getClient();
 
   try {
     await client.query('BEGIN');
@@ -64,5 +55,7 @@ const pool = new Pool({
     throw e;
   } finally {
     client.release();
+    log.warn('Migration complete!');
+    process.exit();
   }
-})().catch(e => console.error(e.stack));
+})().catch(e => log.error(e.stack));

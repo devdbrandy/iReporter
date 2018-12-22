@@ -37,8 +37,9 @@ export default class AuthController {
     const { body: { username, password } } = request;
 
     try {
-      const user = await User.find(username);
+      const user = await User.find({ username });
       if (!user) throw createError(401, 'Unauthenticated');
+
       if (!isValidUser(user, password)) {
         throw createError(401, 'Wrong username or password');
       }

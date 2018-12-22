@@ -1,12 +1,8 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const pool = new Pool();
+import * as log from 'loglevel';
+import db from '../../config/database';
 
 (async () => {
-  const client = await pool.connect();
+  const client = await db.getClient();
 
   try {
     await client.query('BEGIN');
@@ -45,5 +41,7 @@ const pool = new Pool();
     throw e;
   } finally {
     client.release();
+    log.warn('Seed complete!');
+    process.exit();
   }
-})().catch(e => console.error(e.stack));
+})().catch(e => log.warn(e.stack));

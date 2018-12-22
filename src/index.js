@@ -1,9 +1,6 @@
 import * as log from 'loglevel';
-import dotenv from 'dotenv';
 import server from './server';
 import { env } from './utils';
 
-dotenv.config({ silent: true });
-
-const port = env('PORT', 3000);
+const port = env('PORT', process.env.npm_package_config_port);
 server.listen(port, () => log.warn(`Listening on port ${port}`));

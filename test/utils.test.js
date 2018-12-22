@@ -5,7 +5,7 @@ import { config } from '../src/utils/helpers';
 const should = chai.should();
 
 describe('Utilities and Helpers Function', () => {
-  describe("config('name:value')", () => {
+  context("config('name:value')", () => {
     it('returns the value of the configuration variable', (done) => {
       config('app:name').should.equal(appConfig.name);
       done();

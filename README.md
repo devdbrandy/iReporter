@@ -1,4 +1,4 @@
-<h1 align="center">iReporter<h1> 
+<h1 align="center">iReporter<h1>
 
 <p align="center">
   <a href="https://travis-ci.org/devdbrandy/iReporter.svg?branch=develop">
@@ -14,52 +14,82 @@
   </a>
 </p>
 
-## 1. Overview
+# Overview
+
 iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public. Visit app url: [https://irepot.herokuapp.com](https://irepot.herokuapp.com)
 
-## 2. Table of Contents
+<!-- TOC depthFrom:2 -->
 
-- [1. Overview](#1-overview)
-- [2. Table of Contents](#2-table-of-contents)
-- [3. Installation](#3-installation)
-  - [3.1. Run locally](#31-run-locally)
-  - [3.2. Test Locally](#32-test-locally)
-- [4. Authentication](#4-authentication)
-- [5. API Versioning](#5-api-versioning)
-- [6. HTTP Requests](#6-http-requests)
-- [7. HTTP Response Codes](#7-http-response-codes)
-- [8. Usage](#8-usage)
-  - [8.1 Fetch all red-flag records](#81-fetch-all-red-flag-records)
-  - [8.2. Fetch a specific red-flag record](#82-fetch-a-specific-red-flag-record)
-  - [8.3. Create a red-flag record](#83-create-a-red-flag-record)
-  - [8.4. Edit the location of a specific red-flag record](#84-edit-the-location-of-a-specific-red-flag-record)
-  - [8.5. Edit the comment of a specific red-flag record](#85-edit-the-comment-of-a-specific-red-flag-record)
-  - [8.6. Delete a specific red-flag record](#86-delete-a-specific-red-flag-record)
-- [9. :pencil: License](#9-pencil-license)
+- [1. :rocket: Getting Started](#1-rocket-getting-started)
+  - [1.1. Run locally](#11-run-locally)
+  - [1.2. Building](#12-building)
+  - [1.3. Test Locally](#13-test-locally)
+  - [1.4. Running Test](#14-running-test)
+- [2. :lock: Authentication](#2-lock-authentication)
+- [3. API Versioning](#3-api-versioning)
+- [4. HTTP Requests](#4-http-requests)
+- [5. HTTP Response Codes](#5-http-response-codes)
+- [:bookmark: 6. Resources](#bookmark-6-resources)
+  - [6.1. Authentication](#61-authentication)
+  - [6.2. API Routes](#62-api-routes)
+- [7. :pencil: License](#7-pencil-license)
 
-## 3. Installation
+<!-- /TOC -->
 
-### 3.1. Run locally
-To run app locally, make sure you have `nodejs` installed.
+## 1. :rocket: Getting Started
 
-```bash
-git clone https://github.com/devdbrandy/iReporter.git # or clone your own fork
-cd iReporter
-npm install
-npm run watch
-```
+### 1.1. Run locally
 
-### 3.2. Test Locally
-To test or consume api locally, you can make use of [Postman](https://www.getpostman.com) or [Insomnia](https://insomnia.rest/download/)
+- To run app locally, make sure you have `nodejs`, `postgres` installed.
+- Clone repository or clone your own fork
 
-## 4. Authentication
+  ```bash
+    git clone https://github.com/devdbrandy/iReporter.git
+    cd iReporter
+    cp .env.example .env
+    npm install
+  ```
 
-Access to restricted API endpoints requires an access token, iReporter uses access tokens to associate API requests with your account. To obtain your access token, make a request along with `username` and `password` field to `https://irepot.herokuapp.com/api/v1/auth`
+- Create a PostgreSQL database for the project via `pgAdmin` or run the below command on your terminal:
+
+    ```bash
+      createdb -h localhost -p 5432 -U postgres ireporter
+    ```
+
+- Configure `.env` environment variable with your credentials
+- Run migration `npm run migrate`
+- (Optional) Seed dummy data `npm run seed`
+- Two npm scripts are availiable to spin up the app server:
+  - `npm run dev` spin up the server without watching for any file changes
+  - `npm run watch` watches for any file changes and reloads the server
+
+### 1.2. Building
+
+`npm run build`
+
+### 1.3. Test Locally
+
+To test or consume api locally, you can make use of [*Postman*](https://www.getpostman.com) or [*Insomnia*](https://insomnia.rest/download/)
+
+### 1.4. Running Test
+
+Test specs are implemented using [*mocha*](https://mochajs.org) + [*chai*](https://chiajs.com) + [*sinon*](https://sinonjs.org).
+
+Make a duplicate of `.env` and rename to `.env.test`, then configure your test credentials.
+
+Two npm scripts are available to run the test suite:
+
+1. `npm run mocha` or `npm run mocha:watch` - The later watches for any file changes and runs the full test suite (without code coverage)
+2. `npm test` - Performs a single full test suite run, including instanbul code coverage reporting. Summary coverage reports are written to stdout, and detailed HTML reports are available in `/coverage/index.html`
+
+## 2. :lock: Authentication
+
+Access to restricted API endpoints requires an access token, iReporter uses access tokens to associate API requests with your account. To obtain your access token, make a request along with `username` and `password` credentials to `https://irepot.herokuapp.com/auth/login`
 
 **Sample Response:**
 
 ```http
-POST https://irepot.herokuapp.com/api/v1/auth
+POST https://irepot.herokuapp.com/auth/login
 HTTP/1.1
 Accept: application/json
 
@@ -70,22 +100,23 @@ Content-Type: application/json
   "status": 200,
   "data": [
     {
-      "token": "ahd64jfhHG7832KFM5",
+      "token": "...",
       "user": {}
     }
   ]
 }
 ```
 
-## 5. API Versioning
+## 3. API Versioning
 
 The second part of the URI specifies the API version you wish to access in the format `v{version_number}`.
 For example, version 1 of the API (most current) is accessible via:
+
 ```http
   https://irepot.herokuapp.com/api/v1
 ```
 
-## 6. HTTP Requests
+## 4. HTTP Requests
 
 All API requests are made by sending  asecure HTTPS request using one of the following methods, depending on the being taken:
 
@@ -96,7 +127,7 @@ All API requests are made by sending  asecure HTTPS request using one of the fol
 
 For `POST` and `PATCH` requests, the body of your request may include a JSON payload.
 
-## 7. HTTP Response Codes
+## 5. HTTP Response Codes
 
 Each response will be returned with one of the following HTTP status codes:
 
@@ -104,276 +135,35 @@ Each response will be returned with one of the following HTTP status codes:
 - `400` `Bad Request` There was a problem with the request (security, malformed)
 - `401` `Unauthorized` The supplied API credentials are invalid
 - `403` `Forbidden` The credentials provided do not have permissions to access the requested resource
-- `404` `Not found` An attempt was made to access a resource that does not exist in the API
+- `404` `Not Found` An attempt was made to access a resource that does not exist in the API
 - `500` `Server Error` An error on the server occurred
 
+## :bookmark: 6. Resources
 
-## 8. Usage
+### 6.1. Authentication
 
-### 8.1 Fetch all red-flag records
+  | URI                                                        | HTTP Method | Description    |
+  |------------------------------------------------------------|-------------|----------------|
+  | [<code>**/auth/signup**</code>](/docs/auth/POST_signup.md) | `POST`      | Account signup |
+  | [<code>**/auth/login**</code>](/docs/auth/POST_login.md)   | `POST`      | Account login  |
 
-API endpoint that represents a list of red-flags records
-- **URL Endpoint:** `/api/v1/red-flags`
-- **Method:** `GET`
-- **URL Params:** `None`
-- **Request Body:** `None`
-- **Success Response**
-  - **Code:** `200`
-  - **Content:**
+### 6.2. API Routes
 
-  ```http
-    [
-      {
-        "status": 200,
-        "data": [
-          {
-            "id": 1,
-            "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
-            "type": "intervention",
-            "location": "-42.7871,138.0694",
-            "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
-            "images": [
-              "https://via.placeholder.com/650x450",
-              "https://via.placeholder.com/650x450"
-            ],
-            "status": "draft"
-          },
-      },
-    ]
-  ```
-- **Usage Sample:**
+  | URI                                                                                         | HTTP Method | Description |
+  |--------------------------------------------------------------------------------------------|-------------|-------------------------------------|
+  | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/GET_list.md)                           | `GET`       | Fetch all red-flag records |
+  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/GET_id.md)                        | `GET`       | Fetch a specific red-flag record |
+  | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/POST_create.md)                        | `POST`      | Create a red-flag record |
+  | [<code>**/api/v1/red-flags/{id}/location**</code>](/docs/red_flags/PATCH_location.md)       | `PATCH`     | Edit red-flag's location |
+  | [<code>**/api/v1/red-flags/{id}/comment**</code>](/docs/red_flags/PATCH_comment.md)         | `PATCH`     | Edit red-flag's comment |
+  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/DELETE_id.md)                     | `DELETE`    | Delete specific red-flag |
+  | [<code>**/api/v1/intervention**</code>](/docs/intervention/GET_list.md)                     | `GET`       | Fetch all intervention records |
+  | [<code>**/api/v1/intervention/{id}**</code>](/docs/intervention/GET_id.md)                  | `GET`       | Fetch a specific intervention record |
+  | [<code>**/api/v1/intervention**</code>](/docs/intervention/POST_create.md)                  | `POST`      | Create an intervention record |
+  | [<code>**/api/v1/intervention/{id}/location**</code>](/docs/intervention/PATCH_location.md) | `PATCH`     | Edit intervention's location |
+  | [<code>**/api/v1/intervention/{id}/comment**</code>](/docs/intervention/PATCH_comment.md)   | `PATCH`     | Edit intervention's comment |
+  | [<code>**/api/v1/intervention/{id}**</code>](/docs/intervention/DELETE_id.md)               | `DELETE`    | Delete specific intervention |
 
-    ```http
-    GET https://irepot.herokuapp.com/api/v1/red-flags
-    HTTP/1.1
-    Accept: application/json
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-
-    {
-      "status": 200,
-      "data": [
-        {
-          "id": 1,
-          "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
-          "type": "intervention",
-          "location": "-42.7871,138.0694",
-          "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
-          "images": [
-            "https://via.placeholder.com/650x450",
-            "https://via.placeholder.com/650x450"
-          ],
-          "videos": [
-            "https://via.placeholder.com/sample-video.mp4",
-          ],
-          "status": "draft"
-        },
-      ]
-    },
-    ```
-
-### 8.2. Fetch a specific red-flag record
-API endpoint that represents a single red-flags records
-- **URL Endpoint:** `/api/v1/red-flags/{id}`
-- **Method:** `GET`
-- **URL Params:**
-
-  Name | Type | Description
-  ----------|------|------------
-  `id` | `integer` | **[Required]** The record's id
-  
-- **Request Body:** `None`
-- **Success Response**
-  - **Code:** `200`
-  - **Content:**
-  ```http
-    {
-      "status": 200,
-      "data": [
-        {
-          "id": 1,
-          "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
-          "type": "intervention",
-          "location": "-42.7871,138.0694",
-          "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
-          "images": [
-            "https://via.placeholder.com/650x450",
-            "https://via.placeholder.com/650x450"
-          ],
-          "videos": [
-            "https://via.placeholder.com/sample-video.mp4",
-          ],
-          "status": "draft"
-        }
-    }
-  ```
-- **Error Response**
-  - **Code:** `404 - NOT FOUND`
-  - **Content:**
-    ```http
-      {
-        "status": 404,
-        "error": "Resource not found"
-      }
-    ```
-
-- **Usage Sample:**
-
-    ```http
-    GET https://irepot.herokuapp.com/api/v1/red-flags/1
-    HTTP/1.1
-    Accept: application/json
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-
-    [
-      {
-        "status": 200,
-        "data": [
-          {
-            "id": 1,
-            "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
-            "type": "intervention",
-            "location": "-42.7871,138.0694",
-            "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
-            "images": [
-              "https://via.placeholder.com/650x450",
-              "https://via.placeholder.com/650x450"
-            ],
-            "status": "draft"
-          }
-        ]
-      }
-    ]
-    ```
-
-### 8.3. Create a red-flag record
-
-API endpoint that represents the creation of red-flag record
-- **URL Endpoint:** `/api/v1/red-flags`
-- **Method:** `POST`
-- **URL Params:** `None`
-- **Header Options:**
-  - Authorization: Bearer `access_token`
-- **Request Body:**
-  
-  Name | Type | Description
-  ----------|------|------------
-  `type` | `string` | **[Required]** The incident type (red-flag or intervention)
-  `location` | `string` | **[Required]** The incident location
-  `images` | `image` | **[Required]** Attached images
-  `videos` | `video` | **[Required]** Attached videos
-  `comment` | `string` | **[Required]** The record's comment
-
-- **Success Response**
-  - **Code:** `201`
-  - **Content:**
-  ```http
-    {
-      "status": 201,
-      "data": [
-        {
-          "id": 3,
-          "message": "Created red-flag record"
-        }
-      ]
-    }
-  ```
-
-### 8.4. Edit the location of a specific red-flag record
-
-API endpoint that represents editing the location of red-flag record
-- **URL Endpoint:** `/api/v1/red-flags/{id}/location`
-- **Method:** `PATCH`
-- **URL Params:**
-  
-  Name | Type | Description
-  ----------|------|------------
-  `id` | `integer` | **[Required]** The record id
-
-- **Request Body:** 
-
-  
-  Name | Type | Description
-  ----------|------|------------
-  `location` | `string` | **[Required]** The incident's new location
-
-- **Success Response**
-  - **Code:** `200`
-  - **Content:**
-  ```http
-    {
-      "status": 200,
-      "data": [
-        {
-          "id": 3,
-          "message": "Updated red-flag record's location"
-        }
-      ]
-    }
-  ```
-
-### 8.5. Edit the comment of a specific red-flag record
-
-API endpoint that represents editing a specific red-flag record
-- **URL Endpoint:** `/api/v1/red-flags/{id}/comment`
-- **Method:** `PATCH`
-- **URL Params:** 
-  
-  Name | Type | Description
-  ----------|------|------------
-  `id` | `integer` | **[Required]** The record id
-
-- **Request Body:** 
-
-  Name | Type | Description
-  ----------|------|------------
-  `comment` | `string` | **[Required]** The record's comment
-
-- **Success Response**
-  - **Code:** `200`
-  - **Content:**
-  ```http
-    {
-      "status": 200,
-      "data": [
-        {
-          "id": 3,
-          "message": "Updated red-flag record's comment"
-        }
-      ]
-    }
-  ```
-
-### 8.6. Delete a specific red-flag record
-
-API endpoint that represents deleting a specific red-flag record
-- **URL Endpoint:** `/api/v1/red-flags/{id}`
-- **Method:** `DELETE`
-- **URL Params:** `None`
-- **Request Body:** 
-
-  Name | Type | Description
-  ----------|------|------------
-  `id` | `integer` | **[Required]** The record's id
-
-- **Success Response**
-  - **Code:** `200`
-  - **Content:**
-  ```http
-    {
-      "status": 200,
-      "data": [
-        {
-          "id": 3,
-          "message": "Red-flag record has been deleted"
-        }
-      ]
-    }
-  ```
-
-## 9. :pencil: License
+## 7. :pencil: License
 
 The iReporter REST API is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

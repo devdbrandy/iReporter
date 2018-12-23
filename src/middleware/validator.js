@@ -3,6 +3,18 @@ import { validationResult } from 'express-validator/check';
 
 const singular = param => param.replace(/s$/, '');
 
+const validateNameRule = param => (
+  {
+    isAlpha: true,
+    isLength: {
+      errorMessage: `${param} should be at least 3 chars long`,
+      options: { min: 3 },
+    },
+    ltrim: { options: [[' ', '']] },
+    rtrim: { options: [[' ', '']] },
+  }
+);
+
 export const validator = {
   auth: {
     username: {
@@ -23,24 +35,8 @@ export const validator = {
     },
   },
   user: {
-    firstname: {
-      isAlpha: true,
-      isLength: {
-        errorMessage: 'First name should be at least 3 chars long',
-        options: { min: 3 },
-      },
-      ltrim: { options: [[' ', '']] },
-      rtrim: { options: [[' ', '']] },
-    },
-    lastname: {
-      isAlpha: true,
-      isLength: {
-        errorMessage: 'Last name should be at least 3 chars long',
-        options: { min: 3 },
-      },
-      ltrim: { options: [[' ', '']] },
-      rtrim: { options: [[' ', '']] },
-    },
+    firstname: validateNameRule('First name'),
+    lastname: validateNameRule('Last name'),
     username: {
       isAlphanumeric: {
         errorMessage: 'Username is invalid',

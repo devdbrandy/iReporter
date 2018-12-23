@@ -19,7 +19,7 @@
     "migrate": "babel-node src/database/migrations/index.js",
     "mocha": "cross-env NODE_ENV=test mocha",
     "mocha:watch": "npm run mocha -- -w",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov mocha",
     "seed": "babel-node src/database/seeds/index.js",
     "serve": "npm run start -- -r dotenv/config",
     "start": "node dist/index.js",

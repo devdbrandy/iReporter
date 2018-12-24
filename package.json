@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run clean && babel src -d dist",
     "build:serve": "npm run build & npm run serve",
-    "dev": "babel-node src/index.js",
+    "dev": "babel-node src/index.js -r dotenv/config",
     "clean": "rimraf dist",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "gh:deploy": "gh-pages -d UI",
@@ -21,7 +21,7 @@
     "mocha:watch": "npm run mocha -- -w",
     "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov mocha",
     "seed": "babel-node src/database/seeds/index.js",
-    "serve": "npm run start -- -r dotenv/config",
+    "serve": "npm start -- -r dotenv/config",
     "start": "node dist/index.js",
     "watch": "nodemon --exec npm run dev"
   },

@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import path from 'path';
 import logger from 'morgan';
-import dotenv from 'dotenv';
 import { exceptionHandler } from './middleware';
 import { config } from './utils/helpers';
 
@@ -12,9 +11,6 @@ import authRouter from './routes/auth';
 
 const app = express();
 const version = config('app:version');
-
-const envFile = app.get('env') === 'test' ? '.env.test' : '.env';
-dotenv.config({ path: envFile });
 
 // view engine setup
 app.set('views', path.join(__dirname, '../resources/views'));

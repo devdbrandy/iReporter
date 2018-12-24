@@ -140,14 +140,14 @@ Each response will be returned with one of the following HTTP status codes:
 ### 6.1. Authentication
 
   | URI                                                        | HTTP Method | Description    |
-  |------------------------------------------------------------|-------------|----------------|
+  |------------------------------------------------------------|:-----------:|----------------|
   | [<code>**/auth/signup**</code>](/docs/auth/POST_signup.md) | `POST`      | Account signup |
   | [<code>**/auth/login**</code>](/docs/auth/POST_login.md)   | `POST`      | Account login  |
 
 ### 6.2. API Routes
 
-  | URI                                                                                         | HTTP Method | Description |
-  |--------------------------------------------------------------------------------------------|-------------|-------------------------------------|
+  | URI | HTTP Method | Description |
+  |-----|:-----------:|-------------|
   | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/GET_list.md)                           | `GET`       | Fetch all red-flag records |
   | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/GET_id.md)                        | `GET`       | Fetch a specific red-flag record |
   | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/POST_create.md)                        | `POST`      | Create a red-flag record |

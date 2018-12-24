@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import * as log from 'loglevel';
 import server from './server';
 import { env } from './utils';

@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import chai from 'chai';
-import { authenticate } from '../src/middleware';
+import { authenticate } from '../../src/middleware';
 
 const should = chai.should();
 

@@ -1,8 +1,8 @@
 import request from 'supertest';
 import chai from 'chai';
-import app from '../src/server';
-import { User, Record } from '../src/models';
-import { config } from '../src/utils/helpers';
+import app from '../../src/server';
+import { User, Record } from '../../src/models';
+import { config } from '../../src/utils/helpers';
 
 const should = chai.should();
 

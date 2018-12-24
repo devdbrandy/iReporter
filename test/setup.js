@@ -8,7 +8,7 @@ dotenv.config({ path: '.env.test' });
  * Called before loading of test cases
  * @param {Function} done mocha async done method
  */
-const setupDB = (done) => {
+const initSetup = (done) => {
   runAll(['migrate', 'seed'])
     .then(() => done())
     .catch(done);
@@ -18,10 +18,10 @@ const setupDB = (done) => {
  * Called after all test completes (regardless of errors)
  * @param {Function} done mocha async done method
  */
-const tearDownDB = (done) => {
+const tearDown = (done) => {
   runAll(['migrate'])
     .then(() => done())
     .catch(done);
 };
 
-prepare(setupDB, tearDownDB);
+prepare(initSetup, tearDown);

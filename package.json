@@ -8,8 +8,7 @@
     "port": "3000"
   },
   "scripts": {
-    "build": "npm run clean && babel src -d dist",
-    "build:serve": "npm run build & npm run serve",
+    "build": "babel src -d dist",
     "dev": "babel-node src/index.js -r dotenv/config",
     "clean": "rimraf dist",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -17,9 +16,11 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build && npm run migrate",
     "lint": "eslint src/",
     "migrate": "babel-node src/database/migrations/index.js",
-    "mocha": "cross-env NODE_ENV=test mocha",
+    "mocha": "mocha",
     "mocha:watch": "npm run mocha -- -w",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov mocha",
+    "prebuild": "npm run clean",
+    "preserve": "npm run build",
+    "test": "nyc --reporter=html --reporter=text --reporter=lcov mocha",
     "seed": "babel-node src/database/seeds/index.js",
     "serve": "npm start -- -r dotenv/config",
     "start": "node dist/index.js",

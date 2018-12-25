@@ -9,7 +9,7 @@ dotenv.config({ path: '.env.test' });
  * @param {Function} done mocha async done method
  */
 const initSetup = (done) => {
-  runAll(['migrate', 'seed'])
+  runAll(['db:migrate', 'db:seed'])
     .then(() => done())
     .catch(done);
 };
@@ -19,7 +19,7 @@ const initSetup = (done) => {
  * @param {Function} done mocha async done method
  */
 const tearDown = (done) => {
-  runAll(['migrate'])
+  runAll(['db:reset'])
     .then(() => done())
     .catch(done);
 };

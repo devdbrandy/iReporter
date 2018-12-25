@@ -8,17 +8,35 @@ import db from '../../config/database';
     await client.query('BEGIN');
     const insertUser = `
       INSERT INTO users(
-        firstname, lastname, othernames, phone_number, email, username, password
+        firstname, lastname, othernames, phone_number, email, username, is_admin, password
       )
-      VALUES($1, $2, $3, $4, $5, $6, $7)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING id
     `;
     const password = '$2a$08$dEaZzY9fp1BkawSQnQ9xnukRx/Z03Us/RB2vZbP/H9xqm4fsIarXy';
 
-    const adminValues = ['James', 'Bond', 'Administrator', '622-132-9223', 'admin@ireporter.com', 'admin', password];
+    const adminValues = [
+      'James',
+      'Bond',
+      'Administrator',
+      '622-132-9223',
+      'admin@admin.com',
+      'admin',
+      true,
+      password,
+    ];
     await client.query(insertUser, adminValues);
 
-    const userValues = ['Mike', 'Posnan', 'Eyin', '622-132-9283', 'luiz@email.com', 'mikepos', password];
+    const userValues = [
+      'John',
+      'Doe',
+      'Bravo',
+      '602-362-9283',
+      'user@user.com',
+      'user123',
+      false,
+      password,
+    ];
     const { rows: [row] } = await client.query(insertUser, userValues);
     const { id: userId } = row;
 
@@ -44,4 +62,4 @@ import db from '../../config/database';
     log.warn('Seed complete!');
     process.exit();
   }
-})().catch(e => log.warn(e.stack));
+})();

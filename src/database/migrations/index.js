@@ -1,16 +1,11 @@
 import * as log from 'loglevel';
 import db from '../../config/database';
 
-db.getClient();
-
-(async () => {
+export const migrate = async () => {
   const client = await db.getClient();
 
   try {
     await client.query('BEGIN');
-    // Drop tables
-    await client.query('DROP TABLE IF EXISTS users CASCADE');
-    await client.query('DROP TABLE IF EXISTS records');
 
     // Create users table
     const createUsersTable = `
@@ -31,8 +26,6 @@ db.getClient();
 
     // Create records table
     const createRecordsTable = `
-      DROP TYPE IF EXISTS record_type;
-      DROP TYPE IF EXISTS record_status;
       CREATE TYPE record_type AS ENUM ('red-flag', 'intervention');
       CREATE TYPE record_status AS ENUM (
         'draft', 'under-investigation', 'resolved', 'rejected');
@@ -58,4 +51,22 @@ db.getClient();
     log.warn('Migration complete!');
     process.exit();
   }
-})().catch(e => log.error(e.stack));
+};
+
+export const reset = async () => {
+  try {
+    const client = await db.getClient();
+    // Drop tables and types
+    await client.query('DROP TABLE IF EXISTS users CASCADE');
+    await client.query('DROP TABLE IF EXISTS records');
+    await client.query('DROP TYPE IF EXISTS record_type');
+    await client.query('DROP TYPE IF EXISTS record_status');
+  } catch (e) {
+    log.warn(e.stack);
+  } finally {
+    log.warn('DB reset complete!');
+    process.exit();
+  }
+};
+
+require('make-runnable');

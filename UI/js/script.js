@@ -36,7 +36,7 @@ const removeButton = document.querySelectorAll('.remove');
 if (removeButton.length > 0) {
   removeButton.forEach((button) => {
     button.addEventListener('click', () => {
-      alert('Hey Captain, sure you wanna do that?');
+      confirm('Hey Captain, sure you wanna do that?');
     });
   });
 }

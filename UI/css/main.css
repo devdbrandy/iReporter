@@ -8,10 +8,8 @@
   width: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   height: 92vh;
-  padding: 4rem;
 }
 
 .jumbotron h1 {
@@ -24,12 +22,12 @@
   display: flex;
   flex-direction: column;
   height: 91vh;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
 .home--signup--form {
-  width: 60%;
+  width: 80%;
   padding: 8rem;
   border: 1px solid #555;
   border-radius: 0.2rem;

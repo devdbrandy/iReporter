@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Dashboard - iReporter</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
 </head>
@@ -16,14 +16,6 @@
         <div class="navbar--logo">
           <a href="index.html"><span class="primary-text">i</span>Reporter</a>
         </div>
-        <nav class="navbar--links">
-          <a href="records.html">Visit App</a>
-        </nav>
-        <div class="column">
-          <div class="navbar--search">
-            <input type="search" name="search" placeholder="Search records...">
-          </div>
-        </div>
         <div class="column">
           <div class="navbar--right row middle">
             <!-- TODO: add menu -->
@@ -31,8 +23,10 @@
         </div>
         <div class="column">
           <div class="navbar--right row middle">
-            <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
-            <a href="add-record.html" class="btn-primary">Write a record</a>
+            <div class="add-button">
+              <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
+              <a href="add-record.html" class="btn-primary">Add a record</a>
+            </div>
             <div class="navbar--icons">
               <a href="#!"><i class="far fa-bell"></i></a>
               <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i></a>
@@ -75,14 +69,12 @@
                   <tr>
                     <th>Title</th>
                     <th>Type</th>
-                    <th>Comments</th>
                     <th>Created By</th>
                     <th>Status</th>
                   </tr>
-                  <tr>
-                    <td><a href="record.html">Bad Roads</a></td>
+                  <tr class="record">
+                    <td>Bad Roads</td>
                     <td><span class="tag tag-redflag">Red Flag</span></td>
-                    <td>5</td>
                     <td>John Doe</td>
                     <td>
                       <div class="row admin--record--status">
@@ -93,14 +85,13 @@
                             <option value="resolved">resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Robbery Attack</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>6</td>
                     <td>Joe Harts</td>
                     <td>
                       <div class="row admin--record--status">
@@ -111,14 +102,13 @@
                             <option value="resolved">resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Bad Water</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>21</td>
                     <td>Kelvin Stone</td>
                     <td>
                       <div class="row admin--record--status">
@@ -129,14 +119,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Lack of Transportation</td>
                     <td><span class="tag tag-redflag">red flag</span></td>
-                    <td>20</td>
                     <td>Joe Wartson</td>
                     <td>
                       <div class="row admin--record--status">
@@ -147,14 +136,13 @@
                             <option value="resolved" >resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Citizens Kidnapp</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>2</td>
                     <td>Mimi Stanley</td>
                     <td>
                       <div class="row admin--record--status">
@@ -165,14 +153,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Lorem ipsum dolor sit amet, consectetur</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>11</td>
                     <td>Spike Johnny</td>
                     <td>
                       <div class="row admin--record--status">
@@ -183,14 +170,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Lorem, ipsum dolor.</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>6</td>
                     <td>Willy Pompie</td>
                     <td>
                       <div class="row admin--record--status">
@@ -201,14 +187,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>ipsum dolor sit.</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>15</td>
                     <td>Mary Tracy</td>
                     <td>
                       <div class="row admin--record--status">
@@ -219,14 +204,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Education Sector</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>8</td>
                     <td>John Doe</td>
                     <td>
                       <div class="row admin--record--status">
@@ -237,14 +221,13 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="record">
                     <td>Molestiae, assumenda.</td>
                     <td><span class="tag tag-intervention">Intervention</span></td>
-                    <td>4</td>
                     <td>Tim Godfrey</td>
                     <td>
                       <div class="row admin--record--status">
@@ -255,7 +238,7 @@
                             <option value="resolved" selected>resolved</option>
                           </select>
                         </div>
-                        <a class="action--process"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="action--process"><i class="fas fa-check-circle"></i></a>
                       </div>
                     </td>
                   </tr>
@@ -281,5 +264,14 @@
       </div>
     </main>
   </div>
+
+  <script>
+    const recordRows = document.querySelectorAll('.records--table tr.record td:first-child');
+    recordRows.forEach((row) => {
+      row.addEventListener('click', function (e) {
+        alert(this.innerHTML);
+      });
+    });
+  </script>
 </body>
 </html>

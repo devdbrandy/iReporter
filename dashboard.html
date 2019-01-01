@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Dashboard - iReporter</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,18 +15,12 @@
         <div class="navbar--logo">
           <a href="index.html"><span class="primary-text">i</span>Reporter</a>
         </div>
-        <nav class="navbar--links">
-          <a href="records.html">Browse Reports</a>
-        </nav>
-        <div class="column">
-          <div class="navbar--search">
-            <input type="search" name="search" placeholder="Search records...">
-          </div>
-        </div>
         <div class="column">
           <div class="navbar--right row middle">
-            <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
-            <a href="add-record.html" class="btn-primary">Write a record</a>
+            <div class="add-button">
+              <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
+              <a href="add-record.html" class="btn-primary">Add a record</a>
+            </div>
             <div class="navbar--icons">
               <a href="#!"><i class="far fa-bell"></i></a>
               <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i></a>
@@ -85,7 +79,6 @@
 
                     <div class="record--links">
                       <a href="edit-record.html" class="btn btn-default">Edit</a>
-                      <a href="#!" class="btn btn-default">Add map</a>
                       <a href="#!" class="btn btn-danger remove">Delete</a>
                     </div>
                   </div>
@@ -102,7 +95,6 @@
 
                     <div class="record--links">
                       <a href="edit-record.html" class="btn btn-default">Edit</a>
-                      <a class="btn btn-default">Add map</a>
                       <a class="btn btn-danger remove">Delete</a>
                     </div>
                   </div>

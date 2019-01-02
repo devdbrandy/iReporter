@@ -47,11 +47,13 @@ if (removeButton.length > 0) {
 const modal = document.getElementById('modal');
 const modalBtn = document.getElementById('modalBtn');
 const closeBtn = document.querySelector('.modal--close');
+const cancelBtn = document.querySelector('.modal--footer .btn.cancel');
 
 const openModal = () => { modal.style.display = 'block'; };
 const closeModal = () => { modal.style.display = 'none'; };
 
 closeBtn.addEventListener('click', closeModal);
+cancelBtn.addEventListener('click', closeModal);
 window.onclick = (event) => {
   if (event.target === modal) closeModal();
 };

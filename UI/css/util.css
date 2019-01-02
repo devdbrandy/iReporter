@@ -52,3 +52,105 @@
 }
 
 /* ----- End Margin/Padding -----*/
+
+/* ------ Tooltip ----- */
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  min-width: 100px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 90%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+/* ----- End Tooltip ----- */
+
+/* ----- Modal ----- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  border-radius: 10px;
+}
+
+.modal--content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.modal--header {
+  background: var(--primary-color);
+}
+
+.modal--header,
+.modal--body,
+.modal--footer {
+  padding: 1rem 2rem;
+}
+
+.modal--header h3 {
+  display: inline-block;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.modal--header h3,
+.modal--header i {
+  color: white;
+}
+
+.modal--close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.modal--close:hover,
+.modal--close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ----- End Modal ----- */

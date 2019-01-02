@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');
 const goBack = () => window.history.back();
@@ -40,3 +42,20 @@ if (removeButton.length > 0) {
     });
   });
 }
+
+/* Modal toggler */
+const modal = document.getElementById('modal');
+const modalBtn = document.getElementById('modalBtn');
+const closeBtn = document.querySelector('.modal--close');
+
+const openModal = () => { modal.style.display = 'block'; };
+const closeModal = () => { modal.style.display = 'none'; };
+
+closeBtn.addEventListener('click', closeModal);
+window.onclick = (event) => {
+  if (event.target === modal) closeModal();
+};
+if (modalBtn) {
+  modalBtn.addEventListener('click', openModal);
+}
+/* End Modal trigger */

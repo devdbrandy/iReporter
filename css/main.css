@@ -1,7 +1,8 @@
 .home--header {
-  /* background: var(--bg-color); */
   background: linear-gradient(55.91953897964004deg, rgba(26, 26, 26,1) 27.33785822021116%,rgba(26, 26, 26,1) 32.1210407239819%,rgba(26, 26, 26,1) 38.68401206636501%,rgba(29, 29, 29,1) 79.61915535444946%);
   color: var(--white);
+  height: 100vh;
+  padding-top: 4rem;
 }
 
 .home--header .jumbotron {
@@ -24,6 +25,7 @@
   height: 91vh;
   align-items: flex-end;
   justify-content: center;
+  overflow: hidden;
 }
 
 .home--signup--form {
@@ -50,11 +52,19 @@
   .md-hide {
     display: flex;
   }
+
+  .sm-hide {
+    display: none;
+  }
 }
 
 @media (min-width: 800px) {
   .md-hide {
     display: none;
+  }
+
+  .sm-hide {
+    display: flex;
   }
 }
 

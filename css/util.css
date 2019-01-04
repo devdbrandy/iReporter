@@ -38,6 +38,21 @@
 
 
 /* ----- Margin/Padding ----- */
+.mt-60 {
+  margin-top: 6rem;
+}
+
+.mt-40 {
+  margin-top: 4rem;
+}
+
+.mt-20 {
+  margin-top: 2rem;
+}
+
+.mt-10 {
+  margin-top: 1rem;
+}
 
 .ml-20 {
   margin-left: 2rem;
@@ -51,4 +66,181 @@
   padding-left: 1rem;
 }
 
+.pl-4 {
+  padding-left: 4px;
+}
+
+.pr-4 {
+  padding-right: 4px;
+}
+
 /* ----- End Margin/Padding -----*/
+
+/* ------ Tooltip ----- */
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  min-width: 100px;
+  background-color: var(--gray90);
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 90%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--gray90) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+/* ----- End Tooltip ----- */
+
+/* ----- Modal ----- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal--content {
+  width: 90%;
+  background-color: #fefefe;
+  font-size: 9px;
+  margin-top: 1rem;
+}
+
+.modal--header {
+  background: var(--primary-color);
+}
+
+.modal--header,
+.modal--body,
+.modal--footer {
+  padding: 1rem 2rem;
+}
+
+.modal--header h3 {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+
+.modal--header h3,
+.modal--header i {
+  color: white;
+}
+
+.modal--close {
+  color: #aaa;
+  float: right;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.modal--close:hover,
+.modal--close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal--footer {
+  border-top: 1px solid var(--gray80);
+  overflow: hidden;
+}
+
+.modal--footer .btn {
+  font-size: 1.32rem;
+  letter-spacing: 1px;
+}
+
+.modal--footer .wrapper {
+  float: right;
+}
+
+/* ----- End Modal ----- */
+
+/* ----- Snackbar ----- */
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1.3em;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+/* ----- End Snackbar */
+
+@media only screen and (min-width: 992px) {
+  .modal-sm {
+    width: 60%;
+  }
+}

@@ -5,30 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Browse Reports - iReporter</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <nav class="main--navbar">
     <div class="container">
       <div class="row middle">
-        <div class="column">
-          <div class="navbar--logo">
-            <a href="index.html"><span class="primary-text">i</span>Reporter</a>
-          </div>
-        </div>
-        <nav class="navbar--links">
-          <a href="records.html">Browse Reports</a>
-        </nav>
-        <div class="column">
-          <div class="navbar--search">
-            <input type="search" name="search" placeholder="Search records...">
-          </div>
+        <div class="navbar--logo">
+          <a href="index.html"><span class="primary-text">i</span>Reporter</a>
         </div>
         <div class="column">
           <div class="navbar--right row middle">
-            <a href="signin.html" class="btn-primary">sign in</a>
-            <a href="signin.html" class="btn-primary">sign up</a>
+            <a href="records.html" class="btn btn-secondary"><i class="fas fa-search"></i>
+              Browse<span class="text"> Records</span></a>
+            <a href="add-record.html" class="btn btn-primary add-button">
+              <i class="fas fa-plus"></i>
+              <span class="text">Add a record</span>
+            </a>
+            <div class="navbar--icons">
+              <a href="#!" title="notification"><i class="far fa-bell"></i></a>
+              <div class="dropdown">
+                <a href="#!" title="dashboard menu"><i class="fa fa-th"></i></a>
+                <div class="dropdown--menu">
+                  <a href="dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i>Dashboard
+                  </a>
+                  <a href="profile.html">
+                    <i class="far fa-user"></i>Profile
+                  </a>
+                  <a href="settings.html">
+                    <i class="fas fa-cog"></i>Settings
+                  </a>
+                  <hr>
+                  <a href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>Sign Out
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -36,7 +51,7 @@
   </nav>
 
   <div class="container">
-    <main class="row">
+    <main id="main" class="row">
       <div class="column">
         <div class="panel">
           <div class="panel--heading">
@@ -45,60 +60,59 @@
           <div class="panel--body">
             <div class="records-list">
               <div class="row">
-                <div class="record">
-                  <div class="card">
-                    <div class="record--heading">
-                      <a href="record.html"><h3>Bad Roads</h3></a>
-                      <span class="details">
-                        <a href="#!">
-                          <span class="tag tag-redflag">red-flag</span>
-                        </a>
-                        2 days ago by
-                        <a href="profile.html" class="username">John Doe</a>
-                      </span>
-                    </div>
-                    <div class="record--content">
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae blanditiis quia cumque voluptate hic eius harum corrupti debitis doloremque eos. Facilis, architecto! Facilis voluptatem est corporis architecto necessitatibus atque quibusdam exercitationem laudantium. Illo eveniet magnam aliquid ducimus qui voluptates ipsum perspiciatis quod nulla quis quos alias, molestias officia consequatur voluptatem!
-                      </p>
-                    </div>
+                <div class="card" data-record='{
+                  "id": 1,
+                  "createdBy": 2,
+                  "type": "intervention",
+                  "location": "6.6200756,3.478314599999976",
+                  "comment": "Some comment here...",
+                  "status": "draft",
+                  "title": "Lack of electricity"
+                }'>
+                  <div class="record-cover">
+                    <img src="img/cover-img.jpeg" alt="">
+                    <div class="overlay"></div>
+                    <span class="author">By: <span class="name">John Doe</span></span>
+                    <span class="tag tag-intervention">intervention</span>
                   </div>
+                  <div class="record-body">
+                    <h4 class="record-title">Lack of electricity <i class="far fa-check-circle"></i></h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam omnis animi molestias officiis aspernatur, cumque. another </p>
+                    <span class="location"><i class="fas fa-map-marker-alt"></i> Surulere, Lagos</span>
+                  </div>
+                  <div class="record-status">Resolved</div>
+                </div>
+                <div class="card" data-record='{
+                  "id": 1,
+                  "createdBy": 2,
+                  "type": "red-flag",
+                  "location": "6.6200756,3.478314599999976",
+                  "comment": "Some comment here...",
+                  "status": "draft",
+                  "title": "Bad Roads"
+                }'>
+                  <div class="record-cover">
+                    <img src="img/cover-img.jpeg" alt="">
+                    <div class="overlay"></div>
+                    <span class="tag tag-redflag">red-flag</span>
+                    <span class="author">By: <span class="name">John Doe</span></span>
+                  </div>
+                  <div class="record-body">
+                    <h4 class="record-title">Bad Roads</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam omnis animi molestias officiis aspernatur, cumque.</p>
+                    <span class="location"><i class="fas fa-map-marker-alt"></i> Surulere, Lagos</span>
+                  </div>
+                  <div class="record-status">Under-investigation</div>
                 </div>
               </div>
-              <div class="row">
-                <div class="record">
-                  <div class="card">
-                    <div class="record--heading">
-                      <a href="record.html"><h3>Power Failure </h3></a>
-                      <span class="details">
-                        <a href="#!">
-                          <span class="tag tag-intervention">Intervention</span>
-                        </a>
-                        2 days ago by
-                        <a href="profile.html" class="username">Mary Tracy</a>
-                      </span>
-                    </div>
-                    <div class="record--content">
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae blanditiis quia cumque voluptate hic eius harum corrupti debitis doloremque eos. Facilis, architecto! Facilis voluptatem est corporis architecto necessitatibus atque quibusdam exercitationem laudantium. Illo eveniet magnam aliquid ducimus qui voluptates ipsum perspiciatis quod nulla quis quos alias, molestias officia consequatur voluptatem!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
 
-              <!-- Pagination -->
-              <div class="row">
-                <div class="pagination">
-                    <a href="#">&laquo;</a>
-                    <a href="#">1</a>
-                    <a class="active" href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a>
-                    <a href="#">&raquo;</a>
-                  </div>
+            <!-- Pagination -->
+            <div class="row">
+              <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a class="active" href="#">1</a>
+                <a href="#">&raquo;</a>
               </div>
             </div>
           </div>
@@ -106,5 +120,80 @@
       </div>
     </main>
   </div>
+
+  <!-- Record Modal -->
+  <div id="modal" class="modal">
+    <div class="modal--content modal-sm">
+      <header class="modal--header">
+        <h3>Record information</h3>
+        <span class="modal--close"><i class="fas fa-times"></i></span>
+      </header>
+      <div class="modal--body">
+        <!-- Map -->
+        <div id="map"></div>
+        <!-- Record event location -->
+        <span class="location"><i class="fas fa-map-marker-alt"></i> <span class="text">Surulere, Lagos</span></span>
+        <!-- Record title -->
+        <div class="title">
+          <h4></h4>
+          <span class="author">By: <a href="#" title="">John Doe</a></span>
+        </div>
+        <!-- Record comment -->
+        <p class="comment mt-10"></p>
+        <!-- Record media -->
+        <div class="media">
+          <h6>Media</h6>
+          <div class="row">
+            <div class="column">
+              <img src="img/cover-img.jpeg" alt="cover-image">
+              <img src="img/cover2.jpg" alt="cover-image">
+            </div>
+            <div class="column">
+              <img src="img/cover2.jpg" alt="cover-image">
+              <img src="img/cover-img.jpeg" alt="cover-image">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal--footer">
+        <div class="wrapper">
+          <button class="btn btn-primary cancel">Close</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="main--footer">
+    <div class="footer--content">
+      <p class="credit">Made with <span><i class="fas fa-heart"></i></span> by <a href="https://github.com/devdbrandy">Dbrandy</a></p>
+      <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    const recordCards = document.querySelectorAll('.records-list .card');
+    recordCards.forEach((row) => {
+      row.addEventListener('click', function (e) {
+        const {
+          title,
+          comment,
+          location,
+        } = JSON.parse(this.getAttribute('data-record'));
+
+        const modalBody = document.querySelector('.modal--body');
+        modalBody.querySelector('.title h4').innerText = title;
+        modalBody.querySelector('.comment').innerText = comment;
+
+        const [latitude, longitude] = location.split(',');
+        initMap(parseFloat(latitude), parseFloat(longitude));
+        openModal();
+      });
+    });
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA"
+  async defer></script>
 </body>
 </html>

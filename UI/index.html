@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <nav class="main--navbar">
+  <nav class="main--navbar home">
     <div class="container">
       <div class="row middle">
         <div class="column">
@@ -17,61 +17,50 @@
             <a href="#!"><span class="primary-text">i</span>Reporter</a>
           </div>
         </div>
-        <nav class="navbar--links">
-          <a href="records.html">Browse Incidents</a>
-        </nav>
         <div class="column">
-          <div class="navbar--search">
-            <input type="search" name="search" placeholder="Search records...">
+          <div class="navbar--right row middle sm-hide">
+            <a href="signin.html" class="btn btn-primary">sign in</a>
           </div>
         </div>
-        <div class="column">
-          <div class="navbar--right row middle">
-            <a href="signin.html" class="btn-primary">sign in</a>
-            <a href="signin.html" class="btn-primary">sign up</a>
-          </div>
-        </div>
-
-        <a href="javascript:void(0);" class="snackbar" onclick="snackbar()">
-          <i class="fa fa-bars"></i>
-        </a>
       </div>
     </div>
   </nav>
 
   <header class="home--header">
-    <div class="row">
-      <div class="column">
-        <div class="jumbotron">
-          <h1><span class="primary-text">i</span>Reporter Community</h1>
-          <p>
-            iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public
-          </p>
-          <div class="row md-hide">
-            <a href="signin.html" class="btn-primary block">Sign In</a>
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <div class="jumbotron">
+            <h1><span class="primary-text">i</span>Reporter</h1>
+            <p>
+              A platform that encourages users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public. Report issues affecting the community while also seeking government's quick intervention.
+            </p>
+            <div class="row md-hide">
+              <a href="signin.html" class="btn btn-primary">Sign In</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="column">
-        <div class="home--signup">
-          <form action="dashboard.html" class="home--signup--form">
-            <div>
-              <input type="text" placeholder="First Name">
-            </div>
-            <div>
-              <input type="text" placeholder="Last Name">
-            </div>
-            <div>
-              <input type="text" placeholder="Email address">
-            </div>
-            <div>
-              <input type="password" placeholder="Password">
-            </div>
-            <div>
-              <input type="password" placeholder="Repeat Password">
-            </div>
-            <button type="submit" class="btn-primary">Register</button>
-          </form>
+        <div class="column">
+          <div class="home--signup">
+            <form action="dashboard.html" class="home--signup--form">
+              <div>
+                <input type="text" placeholder="First Name">
+              </div>
+              <div>
+                <input type="text" placeholder="Last Name">
+              </div>
+              <div>
+                <input type="text" placeholder="Email address">
+              </div>
+              <div>
+                <input type="password" placeholder="Password">
+              </div>
+              <div>
+                <input type="password" placeholder="Repeat Password">
+              </div>
+              <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

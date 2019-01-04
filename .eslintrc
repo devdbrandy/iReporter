@@ -5,9 +5,13 @@
     "mocha": true,
     "browser": true
   },
+  "globals": {
+    "google": true
+  },
   "rules": {
     "no-unused-vars": 0,
     "no-shadow": 0,
+    "no-alert": 0,
     "import/no-cycle": 0,
     "prefer-rest-params": 0
   }

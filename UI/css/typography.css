@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300|ABeeZee:400');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300|ABeeZee:400|Orbitron:900|Fira+Sans');
 
 :root {
-  --header-font: Roboto, sans-serif;
-  --text-font: ABeeZee, sans-serif;
+  --header-font: 'Roboto', sans-serif;
+  --text-font: 'ABeeZee', sans-serif;
+  --link-font: 'Fira Sans', sans-serif;
+  --logo-font: 'Orbitron', sans-serif;
 }
 
 html,

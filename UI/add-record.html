@@ -17,14 +17,32 @@
         </div>
         <div class="column">
           <div class="navbar--right row middle">
-            <div class="add-button">
-              <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
-              <a href="add-record.html" class="btn-primary">Add a record</a>
-            </div>
+            <a href="records.html" class="btn btn-secondary"><i class="fas fa-search"></i>
+              Browse<span class="text"> Records</span></a>
+            <a href="add-record.html" class="btn btn-primary add-button">
+              <i class="fas fa-plus"></i>
+              <span class="text">Add a record</span>
+            </a>
             <div class="navbar--icons">
-              <a href="#!"><i class="far fa-bell"></i></a>
-              <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i></a>
-              <a href="profile.html"><i class="far fa-user"></i></a>
+              <a href="#!" title="notification"><i class="far fa-bell"></i></a>
+              <div class="dropdown">
+                <a href="#!" title="dashboard menu"><i class="fa fa-th"></i></a>
+                <div class="dropdown--menu">
+                  <a href="dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i>Dashboard
+                  </a>
+                  <a href="profile.html">
+                    <i class="far fa-user"></i>Profile
+                  </a>
+                  <a href="settings.html">
+                    <i class="fas fa-cog"></i>Settings
+                  </a>
+                  <hr>
+                  <a href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>Sign Out
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -33,7 +51,7 @@
   </nav>
 
   <div class="container">
-    <main class="row">
+    <main id="main">
       <div class="column">
         <div class="panel">
           <div class="panel--heading">
@@ -49,52 +67,74 @@
           <div class="panel--body">
             <form action="dashboard.html">
               <div class="form-control">
-                <input type="text" name="title" placeholder="Record comment">
-              </div>
-              <div class="form-control">
-                <input type="text" name="description" placeholder="Record description">
-              </div>
-              <div class="form-control">
-                <label>
-                  <input type="radio" name="type" value="redflag" checked id="redflag"> Red Flag
-                </label>
-                <label>
-                  <input type="radio" name="type" value="intervention"> Intervention
-                </label>
-              </div>
-              <div class="form-control">
-                <textarea name="record_body" placeholder="Record body"></textarea>
-              </div>
-              <div class="form-control">
-                <div class="upload-btn-wrapper">
+                <div class="col-2">
+                  <label>Record Type</label>
+                </div>
+                <div class="col-10">
                   <label>
-                    <button>
-                      <i class="fas fa-paperclip"></i>
-                    </button>
-                    <input type="file" id="mediaFiles" name="media" multiple>
-                    <small>Upload media files</small>
+                    <input type="radio" name="type" value="redflag" checked id="redflag"> Red Flag
+                  </label>
+                  <label>
+                    <input type="radio" name="type" value="intervention"> Intervention
                   </label>
                 </div>
-                <div class="media-list"></div>
               </div>
               <div class="form-control">
-                <select name="status">
-                  <option>choose status...</option>
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
-                </select>
+                <div class="col-2">
+                  <label for="title">Title</label>
+                </div>
+                <div class="col-10">
+                  <input type="text" name="title" id="title" placeholder="Enter record title">
+                </div>
               </div>
-              <div class="row">
-                <div class="column">
-                  <div class="row">
-                    <button class="btn-primary">Add map</button>
-                  </div>
+              <div class="form-control">
+                <div class="col-2">
+                  <label for="comment">Comment</label>
                 </div>
-                <div class="column">
-                  <div class="row end">
-                    <button type="submit" class="btn-primary">Create record</button>
-                  </div>
+                <div class="col-10">
+                  <textarea name="record_comment" id="comment" placeholder="Enter record comment"></textarea>
                 </div>
+              </div>
+              <div class="form-control">
+                <div class="col-2">
+                  <label for="location">Location</label>
+                </div>
+                <div class="col-10">
+                  <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter event location">
+                  <input type="hidden" name="location" id="location">
+                </div>
+              </div>
+              <div class="form-control">
+                <div class="col-2"></div>
+                <div class="col-10">
+                  <div class="upload-btn-wrapper">
+                    <label>
+                      <button>
+                        <i class="fas fa-paperclip"></i>
+                      </button>
+                      <input type="file" id="mediaFiles" name="media" multiple>
+                      <small>Upload media files</small>
+                    </label>
+                  </div>
+                  <div class="media-list"></div>
+                </div>
+              </div>
+              <div class="form-control">
+                <div class="col-2">
+                  <label for="status">Status</label>
+                </div>
+                <div class="col-10">
+                  <label>
+                    <input type="radio" name="status" value="draft" checked> Draft
+                  </label>
+                  <label>
+                    <input type="radio" name="status" value="publish"> Publish
+                  </label>
+                </div>
+              </div>
+
+              <div class="row end mt-60">
+                <button type="submit" class="btn btn-primary">Create record</button>
               </div>
             </form>
           </div>
@@ -103,6 +143,16 @@
     </main>
   </div>
 
+  <!-- FOOTER -->
+  <footer class="main--footer">
+    <div class="footer--content">
+      <p class="credit">Made with <span><i class="fas fa-heart"></i></span> by <a href="https://github.com/devdbrandy">Dbrandy</a></p>
+      <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+    </div>
+  </footer>
+
   <script src="js/script.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"
+  async defer></script>
 </body>
 </html>

@@ -17,14 +17,32 @@
         </div>
         <div class="column">
           <div class="navbar--right row middle">
-            <div class="add-button">
-              <a href="add-record.html" class="circle-add"><i class="fas fa-plus-circle"></i></a>
-              <a href="add-record.html" class="btn-primary">Add a record</a>
-            </div>
+            <a href="records.html" class="btn btn-secondary"><i class="fas fa-search"></i>
+              Browse<span class="text"> Records</span></a>
+            <a href="add-record.html" class="btn btn-primary add-button">
+              <i class="fas fa-plus"></i>
+              <span class="text">Add a record</span>
+            </a>
             <div class="navbar--icons">
-              <a href="#!"><i class="far fa-bell"></i></a>
-              <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i></a>
-              <a href="profile.html"><i class="far fa-user"></i></a>
+              <a href="#!" title="notification"><i class="far fa-bell"></i></a>
+              <div class="dropdown">
+                <a href="#!" title="dashboard menu"><i class="fa fa-th"></i></a>
+                <div class="dropdown--menu">
+                  <a href="dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i>Dashboard
+                  </a>
+                  <a href="profile.html">
+                    <i class="far fa-user"></i>Profile
+                  </a>
+                  <a href="settings.html">
+                    <i class="fas fa-cog"></i>Settings
+                  </a>
+                  <hr>
+                  <a href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>Sign Out
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -33,7 +51,7 @@
   </nav>
 
   <div class="container">
-    <main class="row">
+    <main id="main">
       <div class="column">
         <div class="panel">
           <div class="panel--heading">
@@ -46,7 +64,7 @@
               </div>
               <div class="user--detail column center">
                 <h3>John Doe</h3>
-                <a href="settings.html" class="btn-primary">Edit Profile</a>
+                <a href="settings.html" class="btn btn-primary">Edit Profile</a>
                 <hr class="dash">
                 <p class="user--bio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro sapiente labore perspiciatis provident illum minus. Minus nihil exercitationem laboriosam totam modi explicabo, obcaecati cupiditate earum. Magnam aliquam libero magni minus!</p>
               </div>
@@ -64,6 +82,14 @@
       </div>
     </main>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="main--footer">
+    <div class="footer--content">
+      <p class="credit">Made with <span><i class="fas fa-heart"></i></span> by <a href="https://github.com/devdbrandy">Dbrandy</a></p>
+      <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+    </div>
+  </footer>
 
   <script src="js/script.js"></script>
 </body>

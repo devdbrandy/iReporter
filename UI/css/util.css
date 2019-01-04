@@ -38,6 +38,21 @@
 
 
 /* ----- Margin/Padding ----- */
+.mt-60 {
+  margin-top: 6rem;
+}
+
+.mt-40 {
+  margin-top: 4rem;
+}
+
+.mt-20 {
+  margin-top: 2rem;
+}
+
+.mt-10 {
+  margin-top: 1rem;
+}
 
 .ml-20 {
   margin-left: 2rem;
@@ -51,6 +66,14 @@
   padding-left: 1rem;
 }
 
+.pl-4 {
+  padding-left: 4px;
+}
+
+.pr-4 {
+  padding-right: 4px;
+}
+
 /* ----- End Margin/Padding -----*/
 
 /* ------ Tooltip ----- */
@@ -61,7 +84,7 @@
 .tooltip .tooltip-text {
   visibility: hidden;
   min-width: 100px;
-  background-color: #555;
+  background-color: var(--gray90);
   color: #fff;
   text-align: center;
   padding: 5px 0;
@@ -87,7 +110,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: var(--gray90) transparent transparent transparent;
 }
 
 .tooltip:hover .tooltip-text {
@@ -108,14 +131,15 @@
   overflow: auto;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
-  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .modal--content {
+  width: 90%;
   background-color: #fefefe;
-  margin: 15% auto;
-  border: 1px solid #888;
-  width: 80%;
+  font-size: 9px;
+  margin-top: 1rem;
 }
 
 .modal--header {
@@ -130,7 +154,9 @@
 
 .modal--header h3 {
   display: inline-block;
+  font-size: 2rem;
   font-weight: bold;
+  text-transform: capitalize;
   margin-bottom: 0;
 }
 
@@ -142,7 +168,7 @@
 .modal--close {
   color: #aaa;
   float: right;
-  font-size: 28px;
+  font-size: 1.8rem;
   font-weight: bold;
 }
 
@@ -153,4 +179,68 @@
   cursor: pointer;
 }
 
+.modal--footer {
+  border-top: 1px solid var(--gray80);
+  overflow: hidden;
+}
+
+.modal--footer .btn {
+  font-size: 1.32rem;
+  letter-spacing: 1px;
+}
+
+.modal--footer .wrapper {
+  float: right;
+}
+
 /* ----- End Modal ----- */
+
+/* ----- Snackbar ----- */
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1.3em;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+/* ----- End Snackbar */
+
+@media only screen and (min-width: 992px) {
+  .modal-sm {
+    width: 60%;
+  }
+}

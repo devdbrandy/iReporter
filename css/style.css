@@ -10,6 +10,7 @@
   --primary-color: #8E24AA;
   --secondary-color: #7B1FA2;
   --bg-color: #181818;
+  --dark-navbar: #24292e;
   --lightgray: #1d1d1d;
   --darkgray: #1a1a1a;
   --gray90: #424242;
@@ -398,6 +399,10 @@ hr.dash {
   font-family: var(--link-font);
 }
 
+.main--navbar.home {
+  background: var(--dark-navbar);
+}
+
 #main {
   margin: 8rem 0;
 }
@@ -415,7 +420,7 @@ hr.dash {
   font-family: var(--logo-font);
   font-weight: 700;
   padding: 5px;
-  background: var(--black);
+  background: var(--dark-navbar);
   border-radius: 5px;
   margin: 5px 0;
 }

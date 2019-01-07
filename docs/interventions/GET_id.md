@@ -2,7 +2,7 @@
 
 API endpoint that represents a single intervention record
 
-- **URL Endpoint:** `/api/v1/intervention/{id}`
+- **URL Endpoint:** `/api/v1/interventions/{id}`
 - **Method:** `GET`
 - **URL Params:**
 
@@ -53,7 +53,7 @@ API endpoint that represents a single intervention record
 - **Usage Sample:**
 
   ```http
-  GET https://irepot.herokuapp.com/api/v1/intervention/1
+  GET https://irepot.herokuapp.com/api/v1/interventions/1
   HTTP/1.1
   Accept: application/json
   Authorization: Bearer {access_token}

@@ -2,7 +2,7 @@
 
 API endpoint that represents the creation of red-flag record
 
-- **URL Endpoint:** `/api/v1/red-flags`
+- **URL Endpoint:** `/api/v1/interventions`
 - **Method:** `POST`
 - **URL Params:** `None`
 - **Header Options:**
@@ -11,7 +11,7 @@ API endpoint that represents the creation of red-flag record
   
   | Name       | Type     | Required           | Description             |
   |------------|----------|--------------------|-------------------------|
-  | `location` | `string` | :white_check_mark: | The red-flag's location |
+  | `location` | `string` | :white_check_mark: | The intervention's location |
   | `images`   | `image`  | :white_check_mark: | Attached images         |
   | `videos`   | `video`  | :white_check_mark: | Attached videos         |
   | `comment`  | `string` | :white_check_mark: | The record's comment    |

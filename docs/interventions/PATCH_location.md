@@ -1,8 +1,8 @@
-# Edit intervention's comment
+# Edit intervention's location
 
-API endpoint that represents editing the comment of intervention record
+API endpoint that represents editing the location of intervention record
 
-- **URL Endpoint:** `/api/v1/intervention/{id}/comment`
+- **URL Endpoint:** `/api/v1/interventions/{id}/location`
 - **Method:** `PATCH`
 - **URL Params:**
   
@@ -14,9 +14,9 @@ API endpoint that represents editing the comment of intervention record
   - Authorization: Bearer `access_token`
 - **Request Body:**
   
-  | Name      | Type     | Required           | Description      |
-  |-----------|----------|--------------------|------------------|
-  | `comment` | `string` | :white_check_mark: | Proposed comment |
+  | Name       | Type     | Required           | Description       |
+  |------------|----------|--------------------|-------------------|
+  | `location` | `string` | :white_check_mark: | Proposed location |
 
 - **Success Response**
   - **Code:** `200 OK`
@@ -28,7 +28,7 @@ API endpoint that represents editing the comment of intervention record
       "data": [
         {
           "id": 3,
-          "message": "Updated intervention record's comment"
+          "message": "Updated intervention record's location"
         }
       ]
     }

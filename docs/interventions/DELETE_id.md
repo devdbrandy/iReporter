@@ -2,7 +2,7 @@
 
 API endpoint that represents deleting a specific intervention record
 
-- **URL Endpoint:** `/api/v1/intervention/{id}`
+- **URL Endpoint:** `/api/v1/interventions/{id}`
 - **Method:** `DELETE`
 - **URL Params:** `None`
 - **Request Body:**
@@ -33,7 +33,7 @@ API endpoint that represents deleting a specific intervention record
 - **Usage Sample:**
 
   ```http
-  DELETE https://irepot.herokuapp.com/api/v1/intervention/3
+  DELETE https://irepot.herokuapp.com/api/v1/interventions/3
   HTTP/1.1
   Accept: application/json
 

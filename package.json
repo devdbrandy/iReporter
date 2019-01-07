@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "babel src -d dist",
-    "dev": "babel-node src/index.js -r dotenv/config",
+    "dev": "node -r dotenv/config -r babel-register src/index.js",
     "db": "babel-node src/database/migrations/index.js",
     "db:migrate": "npm run db -- migrate",
     "db:reset": "npm run db -- reset",
@@ -25,7 +25,7 @@
     "prebuild": "npm run clean",
     "preserve": "npm run build",
     "test": "nyc --reporter=html --reporter=text --reporter=lcov mocha",
-    "serve": "npm start -- -r dotenv/config",
+    "serve": "node -r dotenv/config dist/index.js",
     "start": "node dist/index.js",
     "watch": "nodemon --exec npm run dev"
   },
@@ -43,7 +43,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "express": "~4.16.0",
     "express-promise-router": "^3.0.3",
     "express-validator": "^5.3.0",

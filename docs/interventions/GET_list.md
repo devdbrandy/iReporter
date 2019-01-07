@@ -2,7 +2,7 @@
 
 API endpoint that represents a list of intervention records
 
-- **URL Endpoint:** `/api/v1/intervention`
+- **URL Endpoint:** `/api/v1/interventions`
 - **Method:** `GET`
 - **URL Params:** `None`
 - **Header Options:**
@@ -37,7 +37,7 @@ API endpoint that represents a list of intervention records
 - **Usage Sample:**
 
   ```http
-  GET https://irepot.herokuapp.com/api/v1/intervention
+  GET https://irepot.herokuapp.com/api/v1/interventions
   HTTP/1.1
   Accept: application/json
   Authorization: Bearer {access_token}

@@ -154,12 +154,12 @@ Each response will be returned with one of the following HTTP status codes:
   | [<code>**/api/v1/red-flags/{id}/location**</code>](/docs/red_flags/PATCH_location.md)       | `PATCH`     | Edit red-flag's location |
   | [<code>**/api/v1/red-flags/{id}/comment**</code>](/docs/red_flags/PATCH_comment.md)         | `PATCH`     | Edit red-flag's comment |
   | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/DELETE_id.md)                     | `DELETE`    | Delete specific red-flag |
-  | [<code>**/api/v1/intervention**</code>](/docs/intervention/GET_list.md)                     | `GET`       | Fetch all intervention records |
-  | [<code>**/api/v1/intervention/{id}**</code>](/docs/intervention/GET_id.md)                  | `GET`       | Fetch a specific intervention record |
-  | [<code>**/api/v1/intervention**</code>](/docs/intervention/POST_create.md)                  | `POST`      | Create an intervention record |
-  | [<code>**/api/v1/intervention/{id}/location**</code>](/docs/intervention/PATCH_location.md) | `PATCH`     | Edit intervention's location |
-  | [<code>**/api/v1/intervention/{id}/comment**</code>](/docs/intervention/PATCH_comment.md)   | `PATCH`     | Edit intervention's comment |
-  | [<code>**/api/v1/intervention/{id}**</code>](/docs/intervention/DELETE_id.md)               | `DELETE`    | Delete specific intervention |
+  | [<code>**/api/v1/interventions**</code>](/docs/interventions/GET_list.md)                     | `GET`       | Fetch all intervention records |
+  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/GET_id.md)                  | `GET`       | Fetch a specific intervention record |
+  | [<code>**/api/v1/interventions**</code>](/docs/interventions/POST_create.md)                  | `POST`      | Create an intervention record |
+  | [<code>**/api/v1/interventions/{id}/location**</code>](/docs/interventions/PATCH_location.md) | `PATCH`     | Edit intervention's location |
+  | [<code>**/api/v1/interventions/{id}/comment**</code>](/docs/interventions/PATCH_comment.md)   | `PATCH`     | Edit intervention's comment |
+  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/DELETE_id.md)               | `DELETE`    | Delete specific intervention |
 
 ## 7. :pencil: License
 

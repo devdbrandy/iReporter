@@ -33,7 +33,8 @@ deploy:
     on:
       branch: develop
     run:
-      - "npm run build"
+      - "npm run db:migrate"
+      - "npm run db:seed"
   - provider: pages
     skip-cleanup: true
     github-token: $GITHUB_TOKEN

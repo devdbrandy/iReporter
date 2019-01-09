@@ -3,6 +3,17 @@ import { validationResult } from 'express-validator/check';
 
 const singular = param => param.replace(/s$/, '');
 
+const validateTextRule = (param, minLength) => (
+  {
+    isLength: {
+      errorMessage: `${param} should be atleast ${minLength} chars long`,
+      options: { min: minLength },
+    },
+    ltrim: { options: [[' ', '']] },
+    rtrim: { options: [[' ', '']] },
+  }
+);
+
 const validateNameRule = param => (
   {
     isAlpha: true,
@@ -74,14 +85,8 @@ export const validator = {
       errorMessage: 'Invalid coordinates',
       isLatLong: true,
     },
-    comment: {
-      isLength: {
-        errorMessage: 'Comment should be atleast 10 chars long',
-        options: { min: 10 },
-      },
-      ltrim: { options: [[' ', '']] },
-      rtrim: { options: [[' ', '']] },
-    },
+    title: validateTextRule('Title', 5),
+    comment: validateTextRule('Comment', 10),
     images: {
       custom: {
         errorMessage: 'images must be an array',

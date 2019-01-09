@@ -149,6 +149,7 @@ describe('API routes', () => {
       location: '-81.2078,138.02',
       images: [],
       videos: [],
+      title: 'Record title',
       comment: 'some comment',
     });
 
@@ -258,6 +259,7 @@ describe('API routes', () => {
           videos: [
             'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
           ],
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 
@@ -280,6 +282,7 @@ describe('API routes', () => {
         const recordData = {
           type: 'red-flag',
           location: 'invalid data',
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 
@@ -304,6 +307,7 @@ describe('API routes', () => {
           videos: [
             'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
           ],
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 

@@ -42,14 +42,32 @@ import db from '../../config/database';
 
     const insertRecord = `
       INSERT INTO records(
-        user_id, type, location, images, videos, comment
+        user_id, type, location, images, videos, title, comment
       )
-      VALUES($1, $2, $3, $4, $5, $6)
+      VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `;
-    const record1 = [userId, 'red-flag', '-42.2078,98.33', [], [], 'Bad roads'];
-    const record2 = [userId, 'red-flag', '-33.2078,18.023', [], [], 'Leader tips street thugs'];
-    const record3 = [userId, 'intervention', '-45.2078,138.441', [], [], 'Bridge contruction needed'];
+    const record1 = [
+      userId, 'red-flag', '-42.2078,98.33', [], [], 'Record 1 title', 'Bad roads',
+    ];
+    const record2 = [
+      userId,
+      'red-flag',
+      '-33.2078,18.023',
+      [],
+      [],
+      'Record 2 title',
+      'Leader tips street thugs',
+    ];
+    const record3 = [
+      userId,
+      'intervention',
+      '-45.2078,138.441',
+      [],
+      [],
+      'Record 3 title',
+      'Bridge contruction needed',
+    ];
     await client.query(insertRecord, record1);
     await client.query(insertRecord, record2);
     await client.query(insertRecord, record3);

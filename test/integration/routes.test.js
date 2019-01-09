@@ -57,8 +57,8 @@ describe('routes: /auth', () => {
         lastname: 'Doe',
         othernames: 'Posnan',
         phoneNumber: '6221329283',
-        username: 'johnd',
         email: 'johnd@email.com',
+        username: 'johnd',
         password: 'secret',
       };
 
@@ -82,6 +82,7 @@ describe('routes: /auth', () => {
     it('should authenticate a user and respond with a token', (done) => {
       request(app)
         .post('/auth/login')
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send({
           username: 'johnd',
@@ -127,8 +128,8 @@ describe('API routes', () => {
       lastname: 'Boi',
       othernames: 'Posnan',
       phoneNumber: '6221329283',
-      username: 'dicy',
       email: 'dicy@email.com',
+      username: 'dicy',
       password: 'secret',
     });
 
@@ -137,8 +138,8 @@ describe('API routes', () => {
       lastname: 'Doe',
       othernames: 'Dolly',
       phoneNumber: '6200329283',
-      username: 'janeh',
       email: 'jane@email.com',
+      username: 'janeh',
       password: 'secret',
     });
 
@@ -149,6 +150,7 @@ describe('API routes', () => {
       location: '-81.2078,138.02',
       images: [],
       videos: [],
+      title: 'Record title',
       comment: 'some comment',
     });
 
@@ -258,6 +260,7 @@ describe('API routes', () => {
           videos: [
             'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
           ],
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 
@@ -280,6 +283,7 @@ describe('API routes', () => {
         const recordData = {
           type: 'red-flag',
           location: 'invalid data',
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 
@@ -304,6 +308,7 @@ describe('API routes', () => {
           videos: [
             'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
           ],
+          title: 'Record title',
           comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
         };
 

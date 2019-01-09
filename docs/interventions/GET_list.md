@@ -21,6 +21,7 @@ API endpoint that represents a list of intervention records
             "id": 1,
             "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
             "type": "intervention",
+            "title": "Intervention title",
             "location": "-42.7871,138.0694",
             "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
             "images": [
@@ -53,6 +54,7 @@ API endpoint that represents a list of intervention records
         "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
         "type": "intervention",
         "location": "-42.7871,138.0694",
+        "title": "Intervention title",
         "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
         "images": [
           "https://via.placeholder.com/650x450",

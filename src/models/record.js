@@ -8,27 +8,18 @@ export default class Record extends Model {
   *
   * @memberOf Record
   */
-  constructor({
-    id,
-    createdBy,
-    type,
-    location,
-    comment,
-    images,
-    videos,
-    status,
-    createdOn,
-  }) {
+  constructor(attributes) {
     super();
-    this.id = id;
-    this.createdBy = createdBy;
-    this.type = type;
-    this.location = location;
-    this.comment = comment;
-    this.images = images;
-    this.videos = videos;
-    this.status = status;
-    this.createdOn = createdOn;
+    this.id = attributes.id;
+    this.createdBy = attributes.createdBy;
+    this.type = attributes.type;
+    this.location = attributes.location;
+    this.title = attributes.title;
+    this.comment = attributes.comment;
+    this.images = attributes.images;
+    this.videos = attributes.videos;
+    this.status = attributes.status;
+    this.createdOn = attributes.createdOn;
   }
 
   /**
@@ -74,25 +65,13 @@ export default class Record extends Model {
   }
 
   static get fields() {
-    return ['user_id', 'type', 'location', 'images', 'videos', 'comment'];
+    return ['user_id', 'type', 'location', 'images', 'videos', 'title', 'comment'];
   }
 
   static get abstractFields() {
     return `
-      id, user_id as "createdBy", type, location, images, videos,
+      id, user_id as "createdBy", type, location, images, videos, title,
       comment, status, updated_at as "updatedOn", created_at as "createdOn"
     `;
-  }
-
-  static abstractValues(data) {
-    const {
-      createdBy,
-      type,
-      location,
-      images,
-      videos,
-      comment,
-    } = data;
-    return [createdBy, type, location, images, videos, comment];
   }
 }

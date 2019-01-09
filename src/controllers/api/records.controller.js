@@ -58,12 +58,18 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static async create(request, response, next) {
-    const { user, type, body: recordData } = request;
-    recordData.createdBy = user.id;
-    recordData.type = type;
+    const { user, type, body } = request;
 
     try {
-      const { id } = await Record.create(recordData);
+      const { id } = await Record.create({
+        createdBy: user.id,
+        type,
+        location: body.location,
+        images: body.images,
+        videos: body.videos,
+        title: body.title,
+        comment: body.comment,
+      });
       const data = [{ id, message: `Created ${type} record` }];
       return responseHandler(response, data, 201);
     } catch (error) {

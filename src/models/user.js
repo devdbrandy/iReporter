@@ -10,30 +10,20 @@ export default class User extends Model {
    *
    * @memberOf User
    */
-  constructor({
-    id,
-    firstname,
-    lastname,
-    othernames,
-    phoneNumber,
-    username,
-    email,
-    registered,
-    isAdmin,
-    password,
-  }) {
+  constructor(attributes) {
     super();
-    const [attributes] = arguments;
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.othernames = othernames;
-    this.phoneNumber = phoneNumber || attributes.phone_number;
-    this.email = email;
-    this.username = username;
-    this.registered = registered || attributes.created_at;
-    this.isAdmin = isAdmin || attributes.is_admin;
-    privateProps.set(this, { password });
+    this.id = attributes.id;
+    this.firstname = attributes.firstname;
+    this.lastname = attributes.lastname;
+    this.othernames = attributes.othernames;
+    this.phoneNumber = attributes.phoneNumber;
+    this.email = attributes.email;
+    this.username = attributes.username;
+    this.registered = attributes.registered;
+    this.isAdmin = attributes.isAdmin;
+    privateProps.set(this, {
+      password: bcrypt.hashSync(attributes.password, 10),
+    });
   }
 
   /**
@@ -70,26 +60,5 @@ export default class User extends Model {
     return `id, firstname, lastname, othernames,
       phone_number as "phoneNumber", email, username,
       created_at as "registered", is_admin as "isAdmin" ${this.addFields()}`;
-  }
-
-  static abstractValues(data) {
-    const {
-      firstname,
-      lastname,
-      othernames,
-      phoneNumber,
-      email,
-      username,
-      password,
-    } = data;
-    return [
-      firstname,
-      lastname,
-      othernames,
-      phoneNumber,
-      email,
-      username,
-      bcrypt.hashSync(password, 10),
-    ];
   }
 }

@@ -22,6 +22,7 @@ API endpoint that represents a list of red-flag records
             "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
             "type": "red-flag",
             "location": "-42.7871,138.0694",
+            "title": "Red-flag title",
             "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
             "images": [
               "https://via.placeholder.com/650x450",
@@ -53,6 +54,7 @@ API endpoint that represents a list of red-flag records
         "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
         "type": "red-flag",
         "location": "-42.7871,138.0694",
+        "title": "Red-flag title",
         "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
         "images": [
           "https://via.placeholder.com/650x450",

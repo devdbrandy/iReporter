@@ -115,8 +115,14 @@ export function validateRequest(req, res, next) {
 }
 
 export function validateType(req, res, next) {
+  const recordTypes = ['red-flags', 'interventions'];
   let { params: { type } } = req;
+
+  if (recordTypes.indexOf(type) === -1) {
+    return next(createError(404, 'Provided route is invalid'));
+  }
+
   type = singular(type);
   req.type = type;
-  next();
+  return next();
 }

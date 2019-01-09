@@ -86,7 +86,7 @@ describe('routes: /auth', () => {
         })
         .expect(401, {
           status: 401,
-          error: 'Wrong username or password',
+          error: 'Invalid credentials',
         }, done);
     });
   });

@@ -14,12 +14,12 @@ Step-by-step guide to test proposed changes manually
 
 ### What are the relevant pivotal tracker stories
 
-#162496418
+[#162496418]
 
 ### Screenshots (if appropriate)
 
 N/A
 
-### Questions:
+### Questions
 
 N/A

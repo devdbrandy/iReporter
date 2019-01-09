@@ -15,7 +15,7 @@ import db from '../../config/database';
     `;
     const password = '$2a$08$dEaZzY9fp1BkawSQnQ9xnukRx/Z03Us/RB2vZbP/H9xqm4fsIarXy';
 
-    const adminValues = [
+    const admin = [
       'James',
       'Bond',
       'Administrator',
@@ -25,9 +25,9 @@ import db from '../../config/database';
       true,
       password,
     ];
-    await client.query(insertUser, adminValues);
+    await client.query(insertUser, admin);
 
-    const userValues = [
+    const user = [
       'John',
       'Doe',
       'Bravo',
@@ -37,7 +37,7 @@ import db from '../../config/database';
       false,
       password,
     ];
-    const { rows: [row] } = await client.query(insertUser, userValues);
+    const { rows: [row] } = await client.query(insertUser, user);
     const { id: userId } = row;
 
     const insertRecord = `
@@ -47,19 +47,19 @@ import db from '../../config/database';
       VALUES($1, $2, $3, $4, $5, $6)
       RETURNING id
     `;
-    const recordValues1 = [userId, 'red-flag', '-42.2078,98.33', [], [], 'Bad roads'];
-    const recordValues2 = [userId, 'red-flag', '-33.2078,18.023', [], [], 'Leader tips street thugs'];
-    const recordValues3 = [userId, 'intervention', '-45.2078,138.441', [], [], 'Bridge contruction needed'];
-    await client.query(insertRecord, recordValues1);
-    await client.query(insertRecord, recordValues2);
-    await client.query(insertRecord, recordValues3);
+    const record1 = [userId, 'red-flag', '-42.2078,98.33', [], [], 'Bad roads'];
+    const record2 = [userId, 'red-flag', '-33.2078,18.023', [], [], 'Leader tips street thugs'];
+    const record3 = [userId, 'intervention', '-45.2078,138.441', [], [], 'Bridge contruction needed'];
+    await client.query(insertRecord, record1);
+    await client.query(insertRecord, record2);
+    await client.query(insertRecord, record3);
     await client.query('COMMIT');
   } catch (e) {
     await client.query('ROLLBACK');
     throw e;
   } finally {
     client.release();
-    log.warn('Seed complete!');
+    log.warn('Database seeding completed successfully.');
     process.exit();
   }
 })();

@@ -9,6 +9,27 @@ const should = chai.should();
 const version = config('app:version');
 const baseURI = `/api/${version}`;
 
+/**
+ * Authenticate user
+ *
+ * @param {User} user User object
+ * @returns {string} user access token
+ */
+async function auth(user) {
+  const { username } = user;
+
+  const { body: { data: [payload] } } = await request(app)
+    .post('/auth/login')
+    .set('Accept', 'application/json')
+    .send({
+      username,
+      password: 'secret',
+    })
+    .expect(200);
+
+  return payload.token;
+}
+
 describe('GET /', () => {
   it('should render the index page', (done) => {
     request(app)
@@ -93,13 +114,15 @@ describe('routes: /auth', () => {
 });
 
 describe('API routes', () => {
-  let resToken;
-  let user;
+  let user1;
+  let user2;
   let record;
+  let user1Token;
+  let user2Token;
 
   before(async () => {
-    // create user
-    user = await User.create({
+    // create users
+    user1 = await User.create({
       firstname: 'Miracle',
       lastname: 'Boi',
       othernames: 'Posnan',
@@ -109,8 +132,19 @@ describe('API routes', () => {
       password: 'secret',
     });
 
+    user2 = await User.create({
+      firstname: 'Jane',
+      lastname: 'Doe',
+      othernames: 'Dolly',
+      phoneNumber: '6200329283',
+      username: 'janeh',
+      email: 'jane@email.com',
+      password: 'secret',
+    });
+
+    // create record for user1
     record = await Record.create({
-      createdBy: user.id,
+      createdBy: user1.id,
       type: 'red-flag',
       location: '-81.2078,138.02',
       images: [],
@@ -118,19 +152,10 @@ describe('API routes', () => {
       comment: 'some comment',
     });
 
-    const { body: { data: [response] } } = await request(app)
-      .post('/auth/login')
-      .set('Accept', 'application/json')
-      .send({
-        username: 'dicy',
-        password: 'secret',
-      })
-      .expect(200);
+    user1Token = await auth(user1);
+    user2Token = await auth(user2);
 
-    const { token } = response;
-    resToken = token;
-
-    return resToken;
+    return user2Token;
   });
 
   describe('routes: /users', () => {
@@ -139,11 +164,11 @@ describe('API routes', () => {
         request(app)
           .get(`${baseURI}/users`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(200)
           .then((res) => {
             res.body.should.have.property('data')
-              .with.lengthOf(4);
+              .with.lengthOf(5);
             done();
           })
           .catch(done);
@@ -153,9 +178,9 @@ describe('API routes', () => {
     context(`GET ${baseURI}/users/:id`, () => {
       it('should fetch a specific user', (done) => {
         request(app)
-          .get(`${baseURI}/users/${user.id}`)
+          .get(`${baseURI}/users/${user1.id}`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(200)
           .then((res) => {
             const [data] = res.body.data;
@@ -173,7 +198,7 @@ describe('API routes', () => {
         request(app)
           .get(`${baseURI}/red-flags`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(200)
           .then((res) => {
             res.body.should.have.property('data')
@@ -189,7 +214,7 @@ describe('API routes', () => {
         request(app)
           .get(`${baseURI}/red-flags/1`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(200)
           .then((res) => {
             const [data] = res.body.data;
@@ -203,7 +228,7 @@ describe('API routes', () => {
         request(app)
           .get(`${baseURI}/red-flags/1000`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(404, {
             status: 404,
             error: 'Resource not found',
@@ -216,7 +241,7 @@ describe('API routes', () => {
         request(app)
           .get(`${baseURI}/red-flags/${id}`)
           .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .expect(400, done);
       });
     });
@@ -239,7 +264,7 @@ describe('API routes', () => {
         request(app)
           .post(`${baseURI}/red-flags`)
           .send(recordData)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(201)
@@ -261,7 +286,7 @@ describe('API routes', () => {
         request(app)
           .post(`${baseURI}/red-flags`)
           .send(recordData)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(400)
@@ -288,7 +313,7 @@ describe('API routes', () => {
           .set('Authorization', 'Bearer pefkewmffwefewfef')
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
-          .expect(403, done);
+          .expect(401, done);
       });
     });
 
@@ -301,7 +326,7 @@ describe('API routes', () => {
         request(app)
           .patch(`${baseURI}/red-flags/${record.id}/location`)
           .send(data)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(200)
@@ -317,7 +342,7 @@ describe('API routes', () => {
         request(app)
           .patch(`${baseURI}/red-flags/${record.id}/location`)
           .send({})
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(400, done);
@@ -327,7 +352,7 @@ describe('API routes', () => {
         request(app)
           .patch(`${baseURI}/red-flags/1000/location`)
           .send(data)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(404, {
@@ -336,8 +361,8 @@ describe('API routes', () => {
           }, done);
       });
 
-      specify('error for unauthorized user', (done) => {
-        const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiTWlrZSIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IkV5aW4iLCJwaG9uZU51bWJlciI6IjYyMi0xMzItOTI4MyIsImVtYWlsIjoibHVpekBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImRicmFuZHkiLCJyZWdpc3RlcmVkIjoiMjAxOC0xMi0xM1QyMToyNjozMC45MDhaIiwiaXNBZG1pbiI6ZmFsc2V9';
+      specify('error for unauthenticated user', (done) => {
+        const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiTWlrZSIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IkV5aW4iLCJwaG9uZU51bWJlciI6IjYyMi0xMzItOTI4MyIsImVtYWlsIjoibHVpekBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImRicmFuZHkiLCJyZWdpc3RlcmVkIjoiMjAxOC0xMi0xM1QyMToyNjozMC45MDhaIiwiaXNBZG1pbiI6ZmFsc2V';
 
         request(app)
           .patch(`${baseURI}/red-flags/${record.id}/location`)
@@ -345,7 +370,23 @@ describe('API routes', () => {
           .set('Authorization', token)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
-          .expect(403, done);
+          .expect(401, {
+            status: 401,
+            error: 'Failed authentication',
+          }, done);
+      });
+
+      specify('error for unauthorized user', (done) => {
+        request(app)
+          .patch(`${baseURI}/red-flags/${record.id}/location`)
+          .send(data)
+          .set('Authorization', `Bearer ${user2Token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(403, {
+            status: 403,
+            error: 'Forbidden',
+          }, done);
       });
     });
 
@@ -358,7 +399,7 @@ describe('API routes', () => {
         request(app)
           .patch(`${baseURI}/red-flags/${record.id}/comment`)
           .send(data)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(200)
@@ -375,7 +416,7 @@ describe('API routes', () => {
       it('should delete a specific red-flag record', (done) => {
         request(app)
           .delete(`${baseURI}/red-flags/${record.id}`)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Accept', 'application/json')
           .expect(200)
           .then((res) => {
@@ -389,7 +430,7 @@ describe('API routes', () => {
       specify('error for non-existing resource', (done) => {
         request(app)
           .delete(`${baseURI}/red-flags/10`)
-          .set('Authorization', `Bearer ${resToken}`)
+          .set('Authorization', `Bearer ${user1Token}`)
           .set('Accept', 'application/json')
           .expect(404, {
             status: 404,
@@ -397,18 +438,29 @@ describe('API routes', () => {
           }, done);
       });
 
-      specify('error for unauthorized user', (done) => {
+      specify('error for unauthenticated user', (done) => {
         const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiTWlrZSIsImxhc3RuYW1lIjoiUGhpbGlwIiwib3RoZXJuYW1lcyI6IkV5aW4iLCJwaG9uZU51bWJlciI6IjYyMi0xMzItOTI4MyIsImVtYWlsIjoibHVpekBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImRicmFuZHkiLCJyZWdpc3RlcmVkIjoiMjAxOC0xMi0xM1QyMToyNjozMC45MDhaIiwiaXNBZG1pbiI6ZmFsc2V9';
 
         request(app)
           .delete(`${baseURI}/red-flags/${record.id}`)
           .set('Authorization', token)
           .set('Accept', 'application/json')
-          .expect(403, {
-            status: 403,
+          .expect(401, {
+            status: 401,
             error: 'Failed authentication',
           }, done);
       });
+    });
+  });
+
+  describe('/undefined', () => {
+    it('should throw an error for invalid route', (done) => {
+      request(app)
+        .get(`${baseURI}/undefined`)
+        .expect(404, {
+          status: 404,
+          error: 'Provided route is invalid',
+        }, done);
     });
   });
 });

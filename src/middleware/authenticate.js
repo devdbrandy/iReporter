@@ -21,7 +21,7 @@ function authenticate(req, res, next) {
   if (!token) return next(createError(400, 'Please provide a valid token'));
 
   return jwt.verify(token, env('APP_KEY'), async (err, decoded) => {
-    if (err || !decoded) return next(createError(403, 'Failed authentication'));
+    if (err || !decoded) return next(createError(401, 'Failed authentication'));
 
     req.user = decoded;
     return next();

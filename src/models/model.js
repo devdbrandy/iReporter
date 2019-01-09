@@ -103,10 +103,6 @@ export default class Model {
     `;
   }
 
-  static get hidden() {
-    return [];
-  }
-
   static get showField() {
     return this.show;
   }
@@ -116,17 +112,17 @@ export default class Model {
   }
 
   static addFields() {
+    let fields = '';
+
     if (this.showField) {
       const hiddenFields = this.hidden;
-      let fields = '';
       hiddenFields.forEach((value, key) => {
         if (key === 0 || hiddenFields.length !== (key + 1)) {
           fields += ',';
         }
         fields += value;
       });
-      return fields;
     }
-    return '';
+    return fields;
   }
 }

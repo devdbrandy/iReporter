@@ -57,8 +57,8 @@ describe('routes: /auth', () => {
         lastname: 'Doe',
         othernames: 'Posnan',
         phoneNumber: '6221329283',
-        username: 'johnd',
         email: 'johnd@email.com',
+        username: 'johnd',
         password: 'secret',
       };
 
@@ -82,6 +82,7 @@ describe('routes: /auth', () => {
     it('should authenticate a user and respond with a token', (done) => {
       request(app)
         .post('/auth/login')
+        .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send({
           username: 'johnd',
@@ -127,8 +128,8 @@ describe('API routes', () => {
       lastname: 'Boi',
       othernames: 'Posnan',
       phoneNumber: '6221329283',
-      username: 'dicy',
       email: 'dicy@email.com',
+      username: 'dicy',
       password: 'secret',
     });
 
@@ -137,8 +138,8 @@ describe('API routes', () => {
       lastname: 'Doe',
       othernames: 'Dolly',
       phoneNumber: '6200329283',
-      username: 'janeh',
       email: 'jane@email.com',
+      username: 'janeh',
       password: 'secret',
     });
 

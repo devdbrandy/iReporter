@@ -19,7 +19,15 @@ export default class AuthController {
     const { body } = request;
 
     try {
-      const user = await User.create(body);
+      const user = await User.create({
+        firstname: body.firstname,
+        lastname: body.lastname,
+        othernames: body.othernames,
+        phoneNumber: body.phoneNumber,
+        email: body.email,
+        username: body.username,
+        password: body.password,
+      });
       const token = jwt.sign({ user }, env('APP_KEY'));
       return responseHandler(response, [{ token, user }], 201);
     } catch (error) {

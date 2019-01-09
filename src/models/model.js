@@ -27,6 +27,7 @@ export default class Model {
    * @memberOf Record
    */
   static async all() {
+    this.showField = false;
     const queryString = this.selectQuery();
     const { rows } = await db.query(queryString);
     return rows;
@@ -62,7 +63,7 @@ export default class Model {
    */
   static async create(data) {
     const queryString = this.insertQuery();
-    const values = this.abstractValues(data);
+    const values = Object.values(data);
     const { rows } = await db.query(queryString, values);
     const [row] = rows;
     return new this(row);

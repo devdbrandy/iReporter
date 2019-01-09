@@ -19,7 +19,7 @@ export const isAuthorized = (user, record) => {
     (!record.belongsTo(user) && !user.isAdmin)
     || (!user.isAdmin && record.status !== 'draft')
   ) {
-    throw createError(403, 'Not allowed');
+    throw createError(403, 'Forbidden');
   }
 
   return true;

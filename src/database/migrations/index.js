@@ -29,6 +29,7 @@ const createRecordsTable = `
     location VARCHAR(100) NOT NULL,
     images text[],
     videos text[],
+    title TEXT NOT NULL,
     comment TEXT NOT NULL,
     status record_status DEFAULT 'draft',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -64,7 +65,7 @@ export const reset = async () => {
   } catch (e) {
     throw e;
   } finally {
-    log.warn('Database reseting completed successfully.');
+    log.warn('Database resetting completed successfully.');
     process.exit();
   }
 };

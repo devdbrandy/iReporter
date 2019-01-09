@@ -13,6 +13,7 @@ export default class Record extends Model {
     createdBy,
     type,
     location,
+    title,
     comment,
     images,
     videos,
@@ -24,6 +25,7 @@ export default class Record extends Model {
     this.createdBy = createdBy;
     this.type = type;
     this.location = location;
+    this.title = title;
     this.comment = comment;
     this.images = images;
     this.videos = videos;
@@ -74,12 +76,12 @@ export default class Record extends Model {
   }
 
   static get fields() {
-    return ['user_id', 'type', 'location', 'images', 'videos', 'comment'];
+    return ['user_id', 'type', 'location', 'images', 'videos', 'title', 'comment'];
   }
 
   static get abstractFields() {
     return `
-      id, user_id as "createdBy", type, location, images, videos,
+      id, user_id as "createdBy", type, location, images, videos, title,
       comment, status, updated_at as "updatedOn", created_at as "createdOn"
     `;
   }
@@ -91,8 +93,9 @@ export default class Record extends Model {
       location,
       images,
       videos,
+      title,
       comment,
     } = data;
-    return [createdBy, type, location, images, videos, comment];
+    return [createdBy, type, location, images, videos, title, comment];
   }
 }

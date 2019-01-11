@@ -6,7 +6,8 @@
     "browser": true
   },
   "globals": {
-    "google": true
+    "google": true,
+    "snackbar": true
   },
   "rules": {
     "no-unused-vars": 0,

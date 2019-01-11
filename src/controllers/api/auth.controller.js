@@ -5,7 +5,7 @@ import { env } from '../../utils';
 import { isValidUser, responseHandler, alreadyTaken } from '../../utils/helpers';
 
 const handyConflictResponse = (param, next) => {
-  return next(createError(409, `${param} already taken`));
+  next(createError(409, `${param} already taken`));
 };
 
 export default class AuthController {

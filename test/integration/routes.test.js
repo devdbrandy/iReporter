@@ -60,6 +60,7 @@ describe('routes: /auth', () => {
         email: 'johnd@email.com',
         username: 'johnd',
         password: 'secret',
+        passwordConfirmation: 'secret',
       };
 
       request(app)

@@ -72,7 +72,8 @@ export default class User extends Model {
    * @memberOf User
    */
   static async create(data) {
-    data.password = bcrypt.hashSync(data.password, 10);
-    return super.create(data);
+    const userData = Object.assign({}, data);
+    userData.password = bcrypt.hashSync(data.password, 10);
+    return super.create(userData);
   }
 }

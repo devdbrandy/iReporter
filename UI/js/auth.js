@@ -15,7 +15,7 @@ function objectify(formData) {
 
 class AuthAPI {
   static get uri() {
-    return 'http://localhost:3000/auth';
+    return `${getEnv('API_URI')}/auth`;
   }
 
   /**
@@ -25,7 +25,7 @@ class AuthAPI {
    * @returns {Response} response to request
    */
   static async signup(data) {
-    const res = await fetch(`${this.uri}/signup`, {
+    const res = await fetch(`${AuthAPI.uri}/signup`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ class AuthAPI {
    * @returns {Response} response to request
    */
   static async login(data) {
-    const res = await fetch(`${this.uri}/login`, {
+    const res = await fetch(`${AuthAPI.uri}/login`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ class AuthUI {
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
         // Show notification message
-        snackbar('Signup was successful, loading dashboard...');
+        UI.snackbar('Signup was successful, loading dashboard...');
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = 'dashboard.html';
@@ -105,7 +105,7 @@ class AuthUI {
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
         // Show notification message
-        snackbar('Login was successful, loading dashboard...');
+        UI.snackbar('Login was successful, loading dashboard...');
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = 'dashboard.html';

@@ -2,7 +2,11 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { User } from '../../models';
 import { env } from '../../utils';
-import { isValidUser, responseHandler } from '../../utils/helpers';
+import { isValidUser, responseHandler, alreadyTaken } from '../../utils/helpers';
+
+const handyConflictResponse = (param, next) => {
+  return next(createError(409, `${param} already taken`));
+};
 
 export default class AuthController {
   /**
@@ -16,27 +20,38 @@ export default class AuthController {
    * @memberOf UsersController
    */
   static async signup(request, response, next) {
-    const { body } = request;
+    const {
+      body: {
+        firstname,
+        lastname,
+        othernames,
+        phoneNumber,
+        email,
+        username,
+        password,
+      },
+    } = request;
 
     try {
+      if (await alreadyTaken({ email })) {
+        return handyConflictResponse('Email address', next);
+      }
+      if (await alreadyTaken({ username })) {
+        return handyConflictResponse('Username', next);
+      }
+
       const user = await User.create({
-        firstname: body.firstname,
-        lastname: body.lastname,
-        othernames: body.othernames,
-        phoneNumber: body.phoneNumber,
-        email: body.email,
-        username: body.username,
-        password: body.password,
+        firstname,
+        lastname,
+        othernames,
+        phoneNumber,
+        email,
+        username,
+        password,
       });
       const token = jwt.sign({ user }, env('APP_KEY'));
       return responseHandler(response, [{ token, user }], 201);
     } catch (error) {
-      if (error.code === '23505' && error.constraint === 'users_email_key') {
-        return next(createError(409, 'Email address already exists'));
-      }
-      if (error.code === '23505' && error.constraint === 'users_username_key') {
-        return next(createError(409, 'Username already taken'));
-      }
       return next(error);
     }
   }

@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
 import appConfig from '../config';
+import { User } from '../models';
 
 /**
  * Gets the value of a configuration variable
@@ -61,3 +62,15 @@ export const extractParams = (fields) => {
 
   return params;
 };
+
+/**
+ * Validate existing user by email or username
+ *
+ * @export
+ * @param {Object} param User email or username
+ * @returns {Boolean} Truthy dependant on user existance
+ */
+export async function alreadyTaken(param) {
+  const user = await User.find(param);
+  return user;
+}

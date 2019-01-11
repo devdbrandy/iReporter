@@ -56,10 +56,10 @@ export default class Model {
    * Create and persist a new resource
    *
    * @static
-   * @param {Object} attributes the resource attributes
+   * @param {Object} data the resource attributes
    * @returns {Model} a Model resource
    *
-   * @memberOf Record
+   * @memberOf Model
    */
   static async create(data) {
     const queryString = this.insertQuery();

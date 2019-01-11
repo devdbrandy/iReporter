@@ -29,7 +29,6 @@ const validateNameRule = param => (
 export const validator = {
   auth: {
     username: {
-      in: ['body'],
       isAlphanumeric: {
         errorMessage: 'Username is invalid',
       },
@@ -77,6 +76,14 @@ export const validator = {
       isLength: {
         errorMessage: 'Password should be at least 7 chars long',
         options: { min: 6 },
+      },
+      custom: {
+        options: (value, { req }) => {
+          if (value !== req.body.passwordConfirmation) {
+            throw new Error('Passwords do not match');
+          }
+          return value;
+        },
       },
     },
   },

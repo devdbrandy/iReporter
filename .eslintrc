@@ -6,13 +6,15 @@
     "browser": true
   },
   "globals": {
-    "google": true
+    "google": true,
+    "snackbar": true
   },
   "rules": {
     "no-unused-vars": 0,
     "no-shadow": 0,
     "no-alert": 0,
     "import/no-cycle": 0,
-    "prefer-rest-params": 0
+    "prefer-rest-params": 0,
+    "no-restricted-syntax": 0
   }
 }

@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Home - iReporter</title>
+
+  <script>
+    // Validate user authentication
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    if (credentials) {
+      window.location = 'dashboard.html';
+    }
+  </script>
+
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -42,21 +51,30 @@
         </div>
         <div class="column">
           <div class="home--signup">
-            <form action="dashboard.html" class="home--signup--form">
+            <form class="home--signup--form" id="signup-form">
               <div>
-                <input type="text" placeholder="First Name">
+                <input type="text" placeholder="First name" name="firstname" required>
               </div>
               <div>
-                <input type="text" placeholder="Last Name">
+                <input type="text" placeholder="Last name" name="lastname" required>
               </div>
               <div>
-                <input type="text" placeholder="Email address">
+                <input type="text" placeholder="Other names" name="othernames">
               </div>
               <div>
-                <input type="password" placeholder="Password">
+                <input type="text" placeholder="Phone number" name="phoneNumber" required>
               </div>
               <div>
-                <input type="password" placeholder="Repeat Password">
+                <input type="text" placeholder="Username" name="username" required>
+              </div>
+              <div>
+                <input type="email" placeholder="Email address" name="email" required>
+              </div>
+              <div>
+                <input type="password" placeholder="Password" name="password" required>
+              </div>
+              <div>
+                <input type="password" placeholder="Repeat Password" name="passwordConfirmation" required>
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
@@ -66,15 +84,7 @@
     </div>
   </header>
 
-  <script>
-    function snackbar() {
-      var x = document.getElementById("myTopnav");
-      if (x.className === "topnav") {
-        x.className += " responsive";
-      } else {
-        x.className = "topnav";
-      }
-    }
-  </script>
+  <script src="js/script.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

@@ -20,19 +20,10 @@ export default class AuthController {
    * @memberOf UsersController
    */
   static async signup(request, response, next) {
-    const {
-      body: {
-        firstname,
-        lastname,
-        othernames,
-        phoneNumber,
-        email,
-        username,
-        password,
-      },
-    } = request;
+    const { body } = request;
 
     try {
+      const { email, username } = body;
       if (await alreadyTaken({ email })) {
         return handyConflictResponse('Email address', next);
       }
@@ -41,13 +32,13 @@ export default class AuthController {
       }
 
       const user = await User.create({
-        firstname,
-        lastname,
-        othernames,
-        phoneNumber,
+        firstname: body.firstname,
+        lastname: body.lastname,
+        othernames: body.othernames,
+        phoneNumber: body.phoneNumber,
         email,
         username,
-        password,
+        password: body.password,
       });
       const token = jwt.sign({ user }, env('APP_KEY'));
       return responseHandler(response, [{ token, user }], 201);

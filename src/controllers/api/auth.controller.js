@@ -4,7 +4,7 @@ import { User } from '../../models';
 import { env } from '../../utils';
 import { isValidUser, responseHandler, alreadyTaken } from '../../utils/helpers';
 
-const handyConflictResponse = (param, next) => {
+const handleConflictResponse = (param, next) => {
   next(createError(409, `${param} already taken`));
 };
 
@@ -25,10 +25,10 @@ export default class AuthController {
     try {
       const { email, username } = body;
       if (await alreadyTaken({ email })) {
-        return handyConflictResponse('Email address', next);
+        return handleConflictResponse('Email address', next);
       }
       if (await alreadyTaken({ username })) {
-        return handyConflictResponse('Username', next);
+        return handleConflictResponse('Username', next);
       }
 
       const user = await User.create({

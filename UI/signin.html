@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Sign In - iReporter</title>
+
+  <script>
+    // Validate user authentication
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    if (credentials) {
+      window.location = 'dashboard.html';
+    }
+  </script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -23,14 +32,14 @@
           </header>
           <div id="signin-view" class="row">
             <div class="column center">
-              <form class="signin--form" action="dashboard.html">
+              <form class="signin--form" id="login-form">
                 <div>
-                  <label for="email">Email Address</label>
-                  <input type="email" id="email">
+                  <label for="username">Username</label>
+                  <input type="text" name="username">
                 </div>
                 <div>
                   <label for="password">Password</label>
-                  <input type="password" id="password">
+                  <input type="password" name="password">
                 </div>
                 <button type="submit" class="btn btn-primary">Sign In</button>
               </form>
@@ -49,28 +58,29 @@
           <!-- SIGNUP POPUP -->
           <div id="signup-popup" class="row">
             <div class="column center">
-              <form class="signup--form" action="dashboard.html">
+              <form class="signup--form" id="signup-form">
                 <p class="hint">Fill the form below to create an account</p>
                 <hr class="dash">
                 <div>
-                  <label for="firstname">First Name</label>
-                  <input type="text" id="firstname">
+                  <input type="text" name="firstname" placeholder="First name">
                 </div>
                 <div>
-                  <label for="lastname">Last Name</label>
-                  <input type="text" id="lastname">
+                  <input type="text" name="lastname" placeholder="Last name">
                 </div>
                 <div>
-                  <label for="signup-email">Email Address</label>
-                  <input type="email" id="signup-email">
+                  <input type="text" name="phoneNumber" placeholder="Phone number">
                 </div>
                 <div>
-                  <label for="signup-password">Password</label>
-                  <input type="password" id="signup-password">
+                  <input type="email" name="email" placeholder="Email address">
                 </div>
                 <div>
-                  <label for="signup-password2">Repeat Password</label>
-                  <input type="password" id="signup-password2">
+                  <input type="text" name="username" placeholder="Username">
+                </div>
+                <div>
+                  <input type="password" name="password" placeholder="password">
+                </div>
+                <div>
+                  <input type="password" name="passwordConfirmation" placeholder="Repeat Password">
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
               </form>
@@ -86,6 +96,7 @@
           </div>
         </div>
         <footer class="signin--footer">
+          <p class="credit">Made with <span><i class="fas fa-heart"></i></span> by <a href="https://github.com/devdbrandy">Dbrandy</a></p>
           <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
         </footer>
       </section>
@@ -109,7 +120,7 @@
     const openForm = () => {
       signupPopup.style.display = 'block';
       signinView.style.display = 'none';
-      headerLogo.style.fontSize = '2.4em';
+      headerLogo.style.fontSize = '3em';
     };
 
     const closeForm = () => {
@@ -121,5 +132,6 @@
     openButton.addEventListener('click', openForm);
     closeButton.addEventListener('click', closeForm);
   </script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

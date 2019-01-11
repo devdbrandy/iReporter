@@ -22,7 +22,7 @@ export default class User extends Model {
     this.registered = attributes.registered;
     this.isAdmin = attributes.isAdmin;
     privateProps.set(this, {
-      password: bcrypt.hashSync(attributes.password, 10),
+      password: attributes.password,
     });
   }
 
@@ -60,5 +60,19 @@ export default class User extends Model {
     return `id, firstname, lastname, othernames,
       phone_number as "phoneNumber", email, username,
       created_at as "registered", is_admin as "isAdmin" ${this.addFields()}`;
+  }
+
+  /**
+   * Create and persist a new resource
+   *
+   * @static
+   * @param {Object} data the resource attributes
+   * @returns {Model} a User resource
+   *
+   * @memberOf User
+   */
+  static async create(data) {
+    data.password = bcrypt.hashSync(data.password, 10);
+    return super.create(data);
   }
 }

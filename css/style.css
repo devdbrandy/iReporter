@@ -359,6 +359,11 @@ main.signin {
 .signin--footer a {
   color: var(--primary-color);
 }
+
+.signin--footer p.credit span,
+.signin--footer p.credit a {
+  color: var(--red);
+}
 /* ----- END SIGNIN ----- */
 
 /* SIGNIN SHOWCASE */
@@ -403,6 +408,25 @@ hr.dash {
   margin-bottom: 1.6rem;
   text-align: center;
 }
+
+.signup--form p.hint {
+  font-size: 1.4em;
+  margin-bottom: 0;
+}
+
+.signin--form input,
+.signup--form input,
+.home--signup--form input {
+  width: 100%;
+  border-radius: 2px;
+  border: 1px solid #555;
+  background: var(--lightgray);
+  color: var(--gray80);
+  font-size: 1.4rem;
+  padding: 1rem;
+  margin: 5px 0;
+  transition: all 0.5s;
+}
 /* END SIGNUP POPUP ----- */
 
 /* ----- DASHBOARD ----- */
@@ -432,15 +456,11 @@ hr.dash {
   text-transform: uppercase;
 }
 
-.tag-redflag {
+.tag-red-flag {
   background: var(--red);
 }
 
 .tag-intervention {
-  background: var(--info);
-}
-
-.tag-status {
   background: var(--info);
 }
 /* ----- END DASHBOARD ----- */
@@ -620,7 +640,7 @@ tr:nth-child(even){
 }
 
 td {
-  max-width: 450px;
+  min-width: 100px;
 }
 
 #records-table td:last-child .wrapper {

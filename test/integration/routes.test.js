@@ -51,18 +51,18 @@ describe('/404', () => {
 
 describe('routes: /auth', () => {
   context('POST /auth/signup', () => {
-    it('should create a new user account', (done) => {
-      const userData = {
-        firstname: 'John',
-        lastname: 'Doe',
-        othernames: 'Posnan',
-        phoneNumber: '6221329283',
-        email: 'johnd@email.com',
-        username: 'johnd',
-        password: 'secret',
-        passwordConfirmation: 'secret',
-      };
+    const userData = {
+      firstname: 'John',
+      lastname: 'Doe',
+      othernames: 'Posnan',
+      phoneNumber: '6221329283',
+      email: 'johnd@email.com',
+      username: 'johnd',
+      password: 'secret',
+      passwordConfirmation: 'secret',
+    };
 
+    it('should create a new user account', (done) => {
       request(app)
         .post('/auth/signup')
         .send(userData)
@@ -76,6 +76,41 @@ describe('routes: /auth', () => {
           done();
         })
         .catch(done);
+    });
+
+    specify('error for already existing user with email', (done) => {
+      request(app)
+        .post('/auth/signup')
+        .send(userData)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(409, {
+          status: 409,
+          error: 'Email address already taken',
+        }, done);
+    });
+
+    specify('error for already existing user with username', (done) => {
+      userData.email = 'dummyemail@email.com';
+      request(app)
+        .post('/auth/signup')
+        .send(userData)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(409, {
+          status: 409,
+          error: 'Username already taken',
+        }, done);
+    });
+
+    specify('error for password mismatch', (done) => {
+      userData.passwordConfirmation = 'bacons';
+      request(app)
+        .post('/auth/signup')
+        .send(userData)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .expect(400, done);
     });
   });
 

@@ -348,15 +348,15 @@ label {
   color: white;
 }
 
-.modal--close {
+.modal-close {
   color: #aaa;
   float: right;
   font-size: 1.8rem;
   font-weight: bold;
 }
 
-.modal--close:hover,
-.modal--close:focus {
+.modal-close:hover,
+.modal-close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
@@ -400,6 +400,30 @@ label {
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
+/* ----- End Snackbar ----- */
+
+/* ----- Preloader */
+.loader {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  width: 4rem;
+  height: 4rem;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* ----- End Preloader ----- */
 
 @-webkit-keyframes fadein {
   from {bottom: 0; opacity: 0;}

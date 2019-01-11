@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Dashboard - iReporter</title>
+
+  <script>
+    // Validate user authentication
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    if (!credentials) {
+      window.location = 'signin.html';
+    }
+  </script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -83,80 +92,27 @@
 
             <div class="responsive-table">
               <table id="records-table">
-                <tr>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Created On</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-                <tr class="record" data-record='{
-                  "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Bad Roads"
-                }'>
-                  <td>Bad Roads</td>
-                  <td><span class="tag tag-redflag">Red Flag</span></td>
-                  <td>31/12/2018 5:19 AM</td>
-                  <td><span class="tag">Draft</span></td>
-                  <td>
-                    <div class="wrapper">
-                      <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                        <span class="text">View</span>
-                      </button>
-                      <a href="edit-record.html" class="btn btn-success action-btn edit">
-                        <i class="far fa-edit"></i>
-                        <span class="text">Edit</span>
-                      </a>
-                      <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                        <span class="text">Delete</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="record" data-record='{
-                  "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-                }'>
-                  <td>Robbery Attack</td>
-                  <td><span class="tag tag-intervention">Intervention</span></td>
-                  <td>28/12/2018 2:10 AM</td>
-                  <td><span class="tag">Resolved</span></td>
-                  <td>
-                    <div class="wrapper">
-                      <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                        <span class="text">View</span>
-                      </button>
-                      <a href="edit-record.html" class="btn btn-success action-btn edit">
-                        <i class="far fa-edit"></i>
-                        <span class="text">Edit</span>
-                      </a>
-                      <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                        <span class="text">Delete</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Created On</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="record-list"></tbody>
               </table>
             </div>
 
             <!-- Pagination -->
-            <div class="row">
+            <!-- <div class="row">
               <div class="pagination">
                 <a href="#">&laquo;</a>
                 <a class="active" href="#">1</a>
                 <a href="#">&raquo;</a>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -176,13 +132,13 @@
     <div class="modal--content modal-sm">
       <header class="modal--header">
         <h3>Record information</h3>
-        <span class="modal--close"><i class="fas fa-times"></i></span>
+        <span class="modal-close"><i class="fas fa-times"></i></span>
       </header>
       <div class="modal--body">
         <!-- Map -->
         <div id="map"></div>
         <!-- Record event location -->
-        <span class="location"><i class="fas fa-map-marker-alt"></i> <span class="text">Surulere, Lagos</span></span>
+        <span class="location"><i class="fas fa-map-marker-alt"></i> <span class="text"></span></span>
         <!-- Record title -->
         <div class="title">
           <h4></h4>
@@ -216,26 +172,6 @@
   </div>
 
   <script src="js/script.js"></script>
-  <script>
-    const recordRows = document.querySelectorAll('tr.record td:first-child');
-    recordRows.forEach((row) => {
-      row.addEventListener('click', function (e) {
-        const {
-          title,
-          comment,
-          location,
-        } = JSON.parse(this.parentNode.getAttribute('data-record'));
-
-        const modalBody = document.querySelector('.modal--body');
-        modalBody.querySelector('.title h4').innerText = title;
-        modalBody.querySelector('.comment').innerText = comment;
-
-        const [latitude, longitude] = location.split(',');
-        initMap(parseFloat(latitude), parseFloat(longitude));
-        openModal();
-      });
-    });
-  </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA"
   async defer></script>
 </body>

@@ -1,7 +1,7 @@
 import multer from 'multer';
 import { getFileExtension } from '../utils';
 
-export const storage = multer.diskStorage({
+export const storageConfig = {
   destination: 'uploads',
   filename: (req, { fieldname, originalname }, cb) => {
     const ext = getFileExtension(originalname);
@@ -13,6 +13,6 @@ export const storage = multer.diskStorage({
     }
     return cb(null, true);
   },
-});
+};
 
-export const upload = multer({ storage });
+export const upload = multer({ storage: multer.diskStorage(storageConfig) });

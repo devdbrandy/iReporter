@@ -188,6 +188,7 @@ describe('API routes', () => {
       videos: [],
       title: 'Record title',
       comment: 'some comment',
+      status: 'draft',
     });
 
     user1Token = await auth(user1);
@@ -285,21 +286,14 @@ describe('API routes', () => {
     });
 
     context(`POST ${baseURI}/red-flags`, () => {
-      it('should create a new red-flag record', (done) => {
-        const recordData = {
-          location: '-42.2078,138.0694',
-          images: [
-            'https://via.placeholder.com/650x450',
-            'https://via.placeholder.com/650x450',
-            'https://via.placeholder.com/650x450',
-          ],
-          videos: [
-            'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
-          ],
-          title: 'Record title',
-          comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
-        };
+      const recordData = {
+        location: '-42.2078,138.0694',
+        title: 'Record title',
+        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
+        status: 'draft',
+      };
 
+      it('should create a new red-flag record', (done) => {
         request(app)
           .post(`${baseURI}/red-flags`)
           .send(recordData)
@@ -334,20 +328,6 @@ describe('API routes', () => {
       });
 
       specify('error for unauthenticated user', (done) => {
-        const recordData = {
-          location: '-42.2078,138.0694',
-          images: [
-            'https://via.placeholder.com/650x450',
-            'https://via.placeholder.com/650x450',
-            'https://via.placeholder.com/650x450',
-          ],
-          videos: [
-            'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv',
-          ],
-          title: 'Record title',
-          comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
-        };
-
         request(app)
           .post(`${baseURI}/red-flags`)
           .send(recordData)

@@ -343,5 +343,4 @@ if (btnBack) {
 const mediaFiles = document.getElementById('media-files');
 if (mediaFiles) {
   mediaFiles.addEventListener('change', UI.listMedaiUpload);
-  mediaFiles.addEventListener('clear', (e) => console.log(e.detail));
 }

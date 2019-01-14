@@ -58,17 +58,31 @@ export default class RedFlagsController {
    * @memberOf RedFlagsController
    */
   static async create(request, response, next) {
-    const { user, type, body } = request;
+    const {
+      user,
+      type,
+      body,
+      files,
+    } = request;
+
+    const images = [];
+    const videos = [];
+    files.forEach(({ originalname, filename }) => {
+      if (originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        images.push(filename);
+      }
+    });
 
     try {
       const { id } = await Record.create({
         createdBy: user.id,
         type,
         location: body.location,
-        images: body.images,
-        videos: body.videos,
+        images,
+        videos,
         title: body.title,
         comment: body.comment,
+        status: body.status,
       });
       const data = [{ id, message: `Created ${type} record` }];
       return responseHandler(response, data, 201);

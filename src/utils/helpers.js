@@ -70,7 +70,7 @@ export const extractParams = (fields) => {
  * @param {Object} param User email or username
  * @returns {Boolean} Truthy dependant on user existance
  */
-export async function alreadyTaken(param) {
+export const alreadyTaken = async (param) => {
   const user = await User.find(param);
   return user;
-}
+};

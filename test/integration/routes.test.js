@@ -296,9 +296,12 @@ describe('API routes', () => {
       it('should create a new red-flag record', (done) => {
         request(app)
           .post(`${baseURI}/red-flags`)
-          .send(recordData)
+          .field('location', '-42.2078,138.0694')
+          .field('title', 'Record title')
+          .field('comment', 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti.')
+          .field('status', 'draft')
+          .attach('media', `${__dirname}/../files/dummy.png`)
           .set('Authorization', `Bearer ${user1Token}`)
-          .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
           .expect(201)
           .then((res) => {

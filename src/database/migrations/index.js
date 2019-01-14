@@ -21,11 +21,11 @@ const createUsersTable = `
 const createRecordsTable = `
   CREATE TYPE record_type AS ENUM ('red-flag', 'intervention');
   CREATE TYPE record_status AS ENUM (
-    'draft', 'under-investigation', 'resolved', 'rejected');
+    'draft', 'published', 'under-investigation', 'resolved', 'rejected');
   CREATE TABLE IF NOT EXISTS records(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    type record_type,
+    type record_type NOT NULL,
     location VARCHAR(100) NOT NULL,
     images text[],
     videos text[],
@@ -65,7 +65,6 @@ export const reset = async () => {
   } catch (e) {
     throw e;
   } finally {
-    log.warn('Database resetting completed successfully.');
     process.exit();
   }
 };

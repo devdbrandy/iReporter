@@ -1,18 +1,3 @@
-/**
- * Convert a FormData to Object literal type
- *
- * @param {FormData} formData formdata object
- * @returns {Object} key value pairs
- */
-function objectify(formData) {
-  const result = {};
-  for (const pairs of formData.entries()) {
-    const [key, value] = pairs;
-    result[key] = value;
-  }
-  return result;
-}
-
 class AuthAPI {
   static get uri() {
     return `${getEnv('API_URI')}/auth`;

@@ -94,18 +94,6 @@ export const validator = {
     },
     title: validateTextRule('Title', 5),
     comment: validateTextRule('Comment', 10),
-    images: {
-      custom: {
-        errorMessage: 'images must be an array',
-        options: value => Array.isArray(value),
-      },
-    },
-    videos: {
-      custom: {
-        errorMessage: 'videos must be an array',
-        options: value => Array.isArray(value),
-      },
-    },
   },
 };
 

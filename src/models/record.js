@@ -65,7 +65,7 @@ export default class Record extends Model {
   }
 
   static get fields() {
-    return ['user_id', 'type', 'location', 'images', 'videos', 'title', 'comment'];
+    return ['user_id', 'type', 'location', 'images', 'videos', 'title', 'comment', 'status'];
   }
 
   static get abstractFields() {

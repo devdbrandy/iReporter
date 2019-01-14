@@ -43,6 +43,21 @@ function getPath() {
   return paths[paths.length - 1];
 }
 
+/**
+ * Convert a FormData to Object literal type
+ *
+ * @param {FormData} formData formdata object
+ * @returns {Object} key value pairs
+ */
+function objectify(formData) {
+  const result = {};
+  for (const pairs of formData.entries()) {
+    const [key, value] = pairs;
+    result[key] = value;
+  }
+  return result;
+}
+
 // End Helper functions
 
 /* Toggle Modal */
@@ -111,6 +126,26 @@ class RecordAPI {
   }
 
   static fetchRecord(type, id) {}
+
+  /**
+   * Make a POST request to create a new record
+   *
+   * @param {Object} data user object parameters
+   * @returns {Response} response to request
+   */
+  static async create(data) {
+    const { token } = auth();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const { type } = objectify(data);
+    const res = await fetch(`${RecordAPI.uri}/${type}s`, {
+      method: 'post',
+      headers,
+      body: data,
+    });
+    return res;
+  }
 
   static deleteRecord(type, id) {}
 }
@@ -190,6 +225,49 @@ class UI {
     openModal();
   }
 
+  /**
+   * Handle create record form submit
+   *
+   * @static
+   * @param {Event} e Event object
+   *
+   * @memberOf UI
+   */
+  static async handleCreateRecord(e) {
+    const form = e.target;
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await RecordAPI.create(formData);
+      const { status } = await res.json();
+
+      if (status === 201) {
+        // Show notification message
+        UI.snackbar('Successfully created a new record.');
+        // Clear fields
+        UI.clearFields();
+      }
+    } catch (error) {
+      // TODO: handle error preview
+    }
+  }
+
+  /**
+   * Clear input fields
+   *
+   * @static
+   * @memberOf UI
+   */
+  static clearFields() {
+    document.querySelector('.media-list ul').remove();
+    document.getElementById('title').value = '';
+    document.getElementById('comment').value = '';
+    document.getElementById('geoautocomplete').value = '';
+    document.getElementById('location').value = '';
+    document.getElementById('media').value = '';
+  }
+
   static removeRecord(el) {
     console.log('REMOVE RECORD');
   }
@@ -198,9 +276,19 @@ class UI {
     window.history.back();
   }
 
-  static listMedaiUpload() {
+  /**
+   * Create a list of media files uploaded
+   *
+   * @static
+   * @param {Event} e Event object
+   *
+   * @memberOf UI
+   */
+  static listMedaiUpload(e) {
     const mediaList = document.querySelector('.media-list');
+    /* HTMLInputElement  */
     const { files } = e.target;
+    /* HTMLElement */
     const ul = document.createElement('ul');
 
     for (let i = 0; i < files.length; i += 1) {
@@ -238,6 +326,12 @@ class UI {
 
 /* Event: Load list of records */
 document.addEventListener('DOMContentLoaded', UI.showRecords);
+
+/* Event: add new record */
+const createRecordForm = document.getElementById('create-record-form');
+if (createRecordForm) {
+  createRecordForm.addEventListener('submit', UI.handleCreateRecord);
+}
 
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');

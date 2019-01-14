@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Add Record - iReporter</title>
+
+  <script>
+    // Validate user authentication
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    if (!credentials) {
+      window.location = 'signin.html';
+    }
+  </script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -65,14 +74,14 @@
             </div>
           </div>
           <div class="panel--body">
-            <form action="dashboard.html">
+            <form id="create-record-form">
               <div class="form-control">
                 <div class="col-2">
                   <label>Record Type</label>
                 </div>
                 <div class="col-10">
                   <label>
-                    <input type="radio" name="type" value="redflag" checked id="redflag"> Red Flag
+                    <input type="radio" name="type" value="red-flag" checked> Red Flag
                   </label>
                   <label>
                     <input type="radio" name="type" value="intervention"> Intervention
@@ -84,7 +93,7 @@
                   <label for="title">Title</label>
                 </div>
                 <div class="col-10">
-                  <input type="text" name="title" id="title" placeholder="Enter record title">
+                  <input type="text" name="title" placeholder="Enter record title" id="title">
                 </div>
               </div>
               <div class="form-control">
@@ -92,12 +101,12 @@
                   <label for="comment">Comment</label>
                 </div>
                 <div class="col-10">
-                  <textarea name="record_comment" id="comment" placeholder="Enter record comment"></textarea>
+                  <textarea name="comment" placeholder="Enter record comment" id="comment"></textarea>
                 </div>
               </div>
               <div class="form-control">
                 <div class="col-2">
-                  <label for="location">Location</label>
+                  <label for="geoautocomplete">Location</label>
                 </div>
                 <div class="col-10">
                   <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter event location">
@@ -112,7 +121,7 @@
                       <button>
                         <i class="fas fa-paperclip"></i>
                       </button>
-                      <input type="file" id="mediaFiles" name="media" multiple>
+                      <input type="file" name="media" multiple id="media-files">
                       <small>Upload media files</small>
                     </label>
                   </div>
@@ -128,7 +137,7 @@
                     <input type="radio" name="status" value="draft" checked> Draft
                   </label>
                   <label>
-                    <input type="radio" name="status" value="publish"> Publish
+                    <input type="radio" name="status" value="published"> Publish
                   </label>
                 </div>
               </div>
@@ -152,6 +161,7 @@
   </footer>
 
   <script src="js/script.js"></script>
+  <script src="js/geoautocomplete.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"
   async defer></script>
 </body>

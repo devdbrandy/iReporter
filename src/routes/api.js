@@ -1,5 +1,6 @@
 import express from 'express';
 import { check, checkSchema } from 'express-validator/check';
+import { upload } from '../config/storage';
 
 /* Controllers */
 import {
@@ -48,10 +49,11 @@ router.get('/:type/:id', [
 
 /* Create a new red-flag/intervention record */
 router.post('/:type', [
+  authenticate,
+  validateType,
+  upload.array('media', 5),
   checkSchema(validator.record),
   validateRequest,
-  validateType,
-  authenticate,
 ], RecordsController.create);
 
 /* Update the location of a specific red-flag/intervention record */

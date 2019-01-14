@@ -67,11 +67,13 @@ export default class RedFlagsController {
 
     const images = [];
     const videos = [];
-    files.forEach(({ originalname, filename }) => {
-      if (originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-        images.push(filename);
-      }
-    });
+    if (files) {
+      files.forEach(({ originalname, filename }) => {
+        if (originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+          images.push(filename);
+        }
+      });
+    }
 
     try {
       const { id } = await Record.create({

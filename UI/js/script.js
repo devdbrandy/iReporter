@@ -175,6 +175,7 @@ class UI {
   }
 
   static addRecordToList(record) {
+    /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
 
@@ -284,7 +285,7 @@ class UI {
    *
    * @memberOf UI
    */
-  static listMedaiUpload(e) {
+  static listMediaUpload(e) {
     const mediaList = document.querySelector('.media-list');
     /* HTMLInputElement  */
     const { files } = e.target;
@@ -308,7 +309,6 @@ class UI {
 
   static snackbar(text, ms = 3000) {
     const snackbar = UI.createSnackbar(text);
-
     document.body.appendChild(snackbar);
     setTimeout(() => {
       snackbar.classList.remove('show');
@@ -342,5 +342,5 @@ if (btnBack) {
 /* Listing Uploaded Files */
 const mediaFiles = document.getElementById('media-files');
 if (mediaFiles) {
-  mediaFiles.addEventListener('change', UI.listMedaiUpload);
+  mediaFiles.addEventListener('change', UI.listMediaUpload);
 }

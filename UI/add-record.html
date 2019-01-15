@@ -118,14 +118,14 @@
                 <div class="col-10">
                   <div class="upload-btn-wrapper">
                     <label>
-                      <button>
+                      <button id="upload_widget" class="cloudinary-button" type="button">
                         <i class="fas fa-paperclip"></i>
                       </button>
-                      <input type="file" name="media" multiple id="media-files">
+                      <input type="hidden" name="media" id="media">
                       <small>Upload media files</small>
                     </label>
                   </div>
-                  <div class="media-list"></div>
+                  <ul class="media-list"></ul>
                 </div>
               </div>
               <div class="form-control">
@@ -160,6 +160,9 @@
     </div>
   </footer>
 
+  <!-- <script src="js/cloudinary/cloudinary-core.js"></script> -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js">
+  </script>
   <script src="js/script.js"></script>
   <script src="js/geoautocomplete.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"

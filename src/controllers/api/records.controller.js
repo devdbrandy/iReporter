@@ -109,7 +109,7 @@ export default class RedFlagsController {
     const {
       user,
       type,
-      body: recordData,
+      body,
       route,
     } = request;
     const { path } = route;
@@ -123,6 +123,13 @@ export default class RedFlagsController {
 
       isAuthorized(user, record);
 
+      const recordData = {
+        type: body.type,
+        location: body.location,
+        title: body.title,
+        comment: body.comment,
+        status: body.status,
+      };
       await record.update(recordData);
       const data = [{
         id,

@@ -43,12 +43,22 @@ export default class Record extends Model {
    * @memberOf Record
    */
   async update(data) {
-    const [field, param] = Object.entries(data)[0];
-    const queryString = `UPDATE ${Record.tableName} SET ${field}=$1
-      WHERE id=$2 RETURNING *`;
+    const fields = [];
+    const values = [];
+    let fieldKey = 0;
+    Object.entries(data).forEach((item) => {
+      if (item[1]) {
+        fieldKey += 1;
+        fields.push(`${item[0]}=$${fieldKey}`);
+        values.push(item[1]);
+      }
+    });
 
-    const values = [param, this.id];
-    const { rows } = await db.query(queryString, values);
+    const queryString = `UPDATE ${Record.tableName} SET ${fields}
+      WHERE id=$${fields.length + 1} RETURNING *`;
+
+    const params = [...values, this.id];
+    const { rows } = await db.query(queryString, params);
     const [record] = rows;
     return record;
   }

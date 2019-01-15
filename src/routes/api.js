@@ -1,6 +1,5 @@
 import express from 'express';
 import { check, checkSchema } from 'express-validator/check';
-import { upload } from '../config/storage';
 
 /* Controllers */
 import {
@@ -51,7 +50,6 @@ router.get('/:type/:id', [
 router.post('/:type', [
   authenticate,
   validateType,
-  upload.array('media', 5),
   checkSchema(validator.record),
   validateRequest,
 ], RecordsController.create);

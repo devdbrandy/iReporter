@@ -1,4 +1,5 @@
 import createError from 'http-errors';
+import path from 'path';
 import { Record } from '../../models';
 import { isAuthorized, responseHandler } from '../../utils/helpers';
 
@@ -62,15 +63,16 @@ export default class RedFlagsController {
       user,
       type,
       body,
-      files,
     } = request;
 
     const images = [];
     const videos = [];
-    if (files) {
-      files.forEach(({ originalname, filename }) => {
-        if (originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-          images.push(filename);
+    const { media } = body;
+    if (media) {
+      JSON.parse(media).forEach((url) => {
+        const extension = path.extname(url).toString();
+        if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
+          images.push(url);
         }
       });
     }

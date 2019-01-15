@@ -137,12 +137,14 @@ class RecordAPI {
     const { token } = auth();
     const headers = {
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     };
-    const { type } = objectify(data);
+    const record = objectify(data);
+    const { type } = record;
     const res = await fetch(`${RecordAPI.uri}/${type}s`, {
       method: 'post',
       headers,
-      body: data,
+      body: JSON.stringify(record),
     });
     return res;
   }
@@ -261,7 +263,8 @@ class UI {
    * @memberOf UI
    */
   static clearFields() {
-    document.querySelector('.media-list ul').remove();
+    /* HTMLElement */
+    document.querySelectorAll('.media-list li').forEach(item => item.remove());
     document.getElementById('title').value = '';
     document.getElementById('comment').value = '';
     document.getElementById('geoautocomplete').value = '';
@@ -281,30 +284,40 @@ class UI {
    * Create a list of media files uploaded
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Object} media Media information
    *
    * @memberOf UI
    */
-  static listMediaUpload(e) {
-    const mediaList = document.querySelector('.media-list');
-    /* HTMLInputElement  */
-    const { files } = e.target;
+  static listMediaUpload(media) {
     /* HTMLElement */
-    const ul = document.createElement('ul');
+    const filename = `${media.original_filename}.${media.format}`;
+    const mediaList = document.querySelector('.media-list');
+    const li = document.createElement('li');
+    const text = document.createTextNode(filename);
+    const span = document.createElement('span');
+    const iTag = document.createElement('i');
+    iTag.className = 'fas fa-check';
+    span.appendChild(iTag);
 
-    for (let i = 0; i < files.length; i += 1) {
-      const li = document.createElement('li');
-      const fileDetails = document.createTextNode(files[i].name);
-      const span = document.createElement('span');
-      const iTag = document.createElement('i');
-      iTag.className = 'fas fa-check';
-      span.appendChild(iTag);
+    li.appendChild(text);
+    li.appendChild(span);
+    mediaList.appendChild(li);
+  }
 
-      li.appendChild(fileDetails);
-      li.appendChild(span);
-      ul.appendChild(li);
+  static mediaUpload(error, result) {
+    if (result && result.event === 'success') {
+      const { info } = result;
+      UI.listMediaUpload(info);
+      /* HTMLInputElement */
+      let values = [];
+      const inputField = document.getElementById('media');
+      const { value } = inputField;
+      if (value && Array.isArray(JSON.parse(value))) {
+        values = JSON.parse(value);
+      }
+      values.push(info.secure_url);
+      inputField.value = JSON.stringify(values);
     }
-    mediaList.appendChild(ul);
   }
 
   static snackbar(text, ms = 3000) {
@@ -333,14 +346,21 @@ if (createRecordForm) {
   createRecordForm.addEventListener('submit', UI.handleCreateRecord);
 }
 
+/* Cloudinary upload widget */
+const myWidget = cloudinary.createUploadWidget({
+  cloudName: 'devdb',
+  uploadPreset: 'z48lneqb',
+  maxFiles: 4,
+  maxFileSize: 1500000, // 1.5MB
+  folder: 'ireporter',
+  tags: ['incidents'],
+  clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
+}, UI.mediaUpload);
+document.getElementById('upload_widget')
+  .addEventListener('click', () => myWidget.open(), false);
+
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');
 if (btnBack) {
   btnBack.addEventListener('click', UI.goBack);
-}
-
-/* Listing Uploaded Files */
-const mediaFiles = document.getElementById('media-files');
-if (mediaFiles) {
-  mediaFiles.addEventListener('change', UI.listMediaUpload);
 }

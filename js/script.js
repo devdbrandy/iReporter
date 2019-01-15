@@ -149,7 +149,27 @@ class RecordAPI {
     return res;
   }
 
-  static deleteRecord(type, id) {}
+  /**
+   * Make a DELETE request to destroy a given record type
+   *
+   * @static
+   * @param {String} type record type
+   * @param {Number} id record identification number
+   * @returns {Response} response to request
+   *
+   * @memberOf RecordAPI
+   */
+  static async destroy(type, id) {
+    const { token } = auth();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
+      method: 'delete',
+      headers,
+    });
+    return res;
+  }
 }
 
 /* UI class */
@@ -272,8 +292,29 @@ class UI {
     document.getElementById('media').value = '';
   }
 
-  static removeRecord(el) {
-    console.log('REMOVE RECORD');
+  /**
+   * Handle record removal
+   *
+   * @static
+   * @param {HTMLElement} el Item list
+   *
+   * @memberOf UI
+   */
+  static async removeRecord(el) {
+    const { id, type } = JSON.parse(el.getAttribute('data-record'));
+
+    try {
+      // Make api call
+      const { status } = await RecordAPI.destroy(type, id);
+      if (status === 200) {
+        // Remove list item
+        el.remove();
+        // Show notification message
+        UI.snackbar(`Record #${id} - Successfully removed`);
+      }
+    } catch (e) {
+      // TODO: handle error preview
+    }
   }
 
   static goBack() {
@@ -347,17 +388,19 @@ if (createRecordForm) {
 }
 
 /* Cloudinary upload widget */
-const myWidget = cloudinary.createUploadWidget({
-  cloudName: 'devdb',
-  uploadPreset: 'z48lneqb',
-  maxFiles: 4,
-  maxFileSize: 1500000, // 1.5MB
-  folder: 'ireporter',
-  tags: ['incidents'],
-  clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
-}, UI.mediaUpload);
-document.getElementById('upload_widget')
-  .addEventListener('click', () => myWidget.open(), false);
+const uploadWidget = document.getElementById('upload_widget');
+if (uploadWidget) {
+  const myWidget = cloudinary.createUploadWidget({
+    cloudName: 'devdb',
+    uploadPreset: 'z48lneqb',
+    maxFiles: 4,
+    maxFileSize: 1500000, // 1.5MB
+    folder: 'ireporter',
+    tags: ['incidents'],
+    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
+  }, UI.mediaUpload);
+  uploadWidget.addEventListener('click', () => myWidget.open(), false);
+}
 
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');

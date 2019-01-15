@@ -54,6 +54,14 @@ router.post('/:type', [
   validateRequest,
 ], RecordsController.create);
 
+/* Update a specific red-flag/intervention record */
+router.put('/:type/:id', [
+  authenticate,
+  validateIdParam(),
+  validateRequest,
+  validateType,
+], RecordsController.update);
+
 /* Update the location of a specific red-flag/intervention record */
 router.patch('/:type/:id/location', [
   validateIdParam(),

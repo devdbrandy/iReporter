@@ -4,7 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Edit Record - iReporter</title>
+  <title>Update Record - iReporter</title>
+
+  <script>
+    // Validate user authentication
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    if (!credentials) {
+      window.location = 'signin.html';
+    }
+
+    // Validation active record
+    const record = JSON.parse(localStorage.getItem('record'));
+    if (!record) {
+      window.location = 'dashboard.html';
+    }
+  </script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -56,7 +71,7 @@
         <div class="panel">
           <div class="panel--heading">
             <div class="row">
-              <h3>Edit Record</h3>
+              <h3>Update Record</h3>
               <div class="column">
                 <div class="row end">
                   <button class="btn btn-back"><i class="fas fa-reply"></i></button>
@@ -65,17 +80,17 @@
             </div>
           </div>
           <div class="panel--body">
-            <form action="dashboard.html">
+            <form id="update-record-form">
               <div class="form-control">
                 <div class="col-2">
                   <label>Record Type</label>
                 </div>
                 <div class="col-10">
                   <label>
-                    <input type="radio" name="type" value="redflag"> Red Flag
+                    <input type="radio" name="type" value="red-flag"> Red Flag
                   </label>
                   <label>
-                    <input type="radio" name="type" checked value="intervention"> Intervention
+                    <input type="radio" name="type" value="intervention"> Intervention
                   </label>
                 </div>
               </div>
@@ -84,8 +99,7 @@
                   <label for="title">Title</label>
                 </div>
                 <div class="col-10">
-                  <input type="text" name="title" id="title" placeholder="Enter record title"
-                    value="Robbery Attack">
+                  <input type="text" name="title" placeholder="Enter record title" id="title">
                 </div>
               </div>
               <div class="form-control">
@@ -93,31 +107,17 @@
                   <label for="comment">Comment</label>
                 </div>
                 <div class="col-10">
-                  <textarea name="record_comment" id="comment" placeholder="Enter record comment">Some comment here...</textarea>
+                  <textarea name="comment" placeholder="Enter record comment" id="comment"></textarea>
                 </div>
               </div>
               <div class="form-control">
                 <div class="col-2">
-                  <label for="location">Location</label>
+                  <label for="geoautocomplete">Location</label>
                 </div>
                 <div class="col-10">
-                  <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter event location" value="253 Ikorodu Road, Ikorodu, Nigeria">
+                  <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter event location">
                   <input type="hidden" name="location" id="location">
-                </div>
-              </div>
-              <div class="form-control">
-                <div class="col-2"></div>
-                <div class="col-10">
-                  <div class="upload-btn-wrapper">
-                    <label>
-                      <button>
-                        <i class="fas fa-paperclip"></i>
-                      </button>
-                      <input type="file" id="mediaFiles" name="media" multiple>
-                      <small>Upload media files</small>
-                    </label>
-                  </div>
-                  <div class="media-list"></div>
+                  <input type="hidden" name="id" id="id">
                 </div>
               </div>
               <div class="form-control">
@@ -129,13 +129,13 @@
                     <input type="radio" name="status" value="draft" checked> Draft
                   </label>
                   <label>
-                    <input type="radio" name="status" value="publish"> Publish
+                    <input type="radio" name="status" value="published"> Publish
                   </label>
                 </div>
               </div>
 
               <div class="row end mt-60">
-                <button type="submit" class="btn btn-primary">Update record</button>
+                <button type="submit" class="btn btn-primary">Create record</button>
               </div>
             </form>
           </div>
@@ -152,9 +152,12 @@
     </div>
   </footer>
 
+  <!-- <script src="js/cloudinary/cloudinary-core.js"></script> -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js">
+  </script>
   <script src="js/script.js"></script>
+  <script src="js/geoautocomplete.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"
   async defer></script>
 </body>
 </html>
-

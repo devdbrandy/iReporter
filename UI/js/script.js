@@ -150,6 +150,28 @@ class RecordAPI {
   }
 
   /**
+   * Make a PUT request to update a record
+   *
+   * @param {Object} data record object parameters
+   * @returns {Response} response to request
+   */
+  static async update(data) {
+    const { token } = auth();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    const record = objectify(data);
+    const { id, type } = record;
+    const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
+      method: 'put',
+      headers,
+      body: JSON.stringify(record),
+    });
+    return res;
+  }
+
+  /**
    * Make a DELETE request to destroy a given record type
    *
    * @static
@@ -211,7 +233,7 @@ class UI {
           <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
             <span class="text">View</span>
           </button>
-          <a href="edit-record.html" class="btn btn-success action-btn edit">
+          <a href="#!" class="btn btn-success action-btn edit">
             <i class="far fa-edit"></i>
             <span class="text">Edit</span>
           </a>
@@ -225,6 +247,10 @@ class UI {
 
     row.querySelector('button.view').addEventListener('click', (e) => {
       UI.showRecord(row);
+    });
+
+    row.querySelector('a.edit').addEventListener('click', (e) => {
+      UI.editRecord(row);
     });
 
     row.querySelector('button.delete').addEventListener('click', (e) => {
@@ -290,6 +316,75 @@ class UI {
     document.getElementById('geoautocomplete').value = '';
     document.getElementById('location').value = '';
     document.getElementById('media').value = '';
+  }
+
+  /**
+   * Handle record update
+   *
+   * @static
+   * @param {HTMLElement} el Item list
+   *
+   * @memberOf UI
+   */
+  static async editRecord(el) {
+    const record = el.getAttribute('data-record');
+    const { id, type } = JSON.parse(record);
+    localStorage.setItem('record', record);
+    window.location = 'edit-record.html';
+  }
+
+  static async preloadData() {
+    const {
+      id,
+      type,
+      title,
+      comment,
+      location,
+    } = JSON.parse(localStorage.getItem('record'));
+
+    document.getElementById('id').value = id;
+    document.getElementById('title').value = title;
+    document.getElementById('comment').value = comment;
+    document.getElementById('location').value = location;
+
+    // Get location address
+    const { results } = await lookupAddress(location);
+    const [place] = results;
+    document.getElementById('geoautocomplete').value = place.formatted_address;
+
+    /* HTMLElement */
+    document.querySelectorAll('input[name=type]').forEach((element) => {
+      if (element.value === type) element.setAttribute('checked', true);
+    });
+  }
+
+  /**
+   * Handle update record form submit
+   *
+   * @static
+   * @param {Event} e Event object
+   *
+   * @memberOf UI
+   */
+  static async handleUpdateRecord(e) {
+    const form = e.target;
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await RecordAPI.update(formData);
+      const { status } = await res.json();
+      if (status === 200) {
+        // Show notification message
+        UI.snackbar('Record successfully updated.');
+        // redirect to dashboard
+        setTimeout(() => {
+          window.location = 'dashboard.html';
+        }, 3000);
+      }
+    } catch (error) {
+      // TODO: handle error preview
+    }
   }
 
   /**
@@ -385,6 +480,13 @@ document.addEventListener('DOMContentLoaded', UI.showRecords);
 const createRecordForm = document.getElementById('create-record-form');
 if (createRecordForm) {
   createRecordForm.addEventListener('submit', UI.handleCreateRecord);
+}
+
+/* Event: update record */
+const updateRecordForm = document.getElementById('update-record-form');
+if (updateRecordForm) {
+  UI.preloadData();
+  updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
 
 /* Cloudinary upload widget */

@@ -69,7 +69,7 @@ export default class RedFlagsController {
     const videos = [];
     const { media } = body;
     if (media) {
-      JSON.parse(media).forEach((url) => {
+      media.forEach((url) => {
         const extension = path.extname(url).toString();
         if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
           images.push(url);

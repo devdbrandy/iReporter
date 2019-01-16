@@ -94,6 +94,13 @@ export const validator = {
     },
     title: validateTextRule('Title', 5),
     comment: validateTextRule('Comment', 10),
+    media: {
+      errorMessage: 'Media collection is required',
+      exists: true,
+      isArray: {
+        errorMessage: 'Invalid media collection',
+      },
+    },
   },
 };
 

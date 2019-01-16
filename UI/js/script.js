@@ -140,6 +140,8 @@ class RecordAPI {
       'Content-Type': 'application/json',
     };
     const record = objectify(data);
+    const { media } = record;
+    record.media = JSON.parse(media); // convert media string to array
     const { type } = record;
     const res = await fetch(`${RecordAPI.uri}/${type}s`, {
       method: 'post',
@@ -315,7 +317,7 @@ class UI {
     document.getElementById('comment').value = '';
     document.getElementById('geoautocomplete').value = '';
     document.getElementById('location').value = '';
-    document.getElementById('media').value = '';
+    document.getElementById('media').value = '[]';
   }
 
   /**
@@ -328,7 +330,6 @@ class UI {
    */
   static async editRecord(el) {
     const record = el.getAttribute('data-record');
-    const { id, type } = JSON.parse(record);
     localStorage.setItem('record', record);
     window.location = 'edit-record.html';
   }

@@ -230,10 +230,10 @@ describe('API routes', () => {
       });
     });
 
-    context(`GET ${baseURI}/users/:id/red-flags`, () => {
-      it('should fetch all red-flag records by user id', (done) => {
+    context(`GET ${baseURI}/users/:id/records`, () => {
+      it('should fetch all records by user id', (done) => {
         request(app)
-          .get(`${baseURI}/users/2/red-flags`)
+          .get(`${baseURI}/users/2/records`)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${user1Token}`)
           .expect(200)

@@ -229,6 +229,22 @@ describe('API routes', () => {
           .catch(done);
       });
     });
+
+    context(`GET ${baseURI}/users/:id/red-flags`, () => {
+      it('should fetch all red-flag records by user id', (done) => {
+        request(app)
+          .get(`${baseURI}/users/2/red-flags`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200)
+          .then((res) => {
+            res.body.should.have.property('data')
+              .with.lengthOf(3);
+            done();
+          })
+          .catch(done);
+      });
+    });
   });
 
   describe('routes: /red-flags', () => {

@@ -112,15 +112,18 @@ class RecordAPI {
     return `${getEnv('API_URI')}/api/v1`;
   }
 
-  static async fetchRecords(type = '') {
+  static async fetchRecords(type = '', userId) {
     const { token } = auth();
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
+    let prefix;
+    if (userId) prefix = `users/${userId}/`;
+    const apiURI = `${RecordAPI.uri}/${prefix}${type}`;
 
-    const response = await fetch(`${RecordAPI.uri}/${type}`, options);
+    const response = await fetch(apiURI, options);
     const { data } = await response.json();
     return data;
   }
@@ -206,7 +209,26 @@ class UI {
     // TODO: show preloader
 
     try {
-      const records = await RecordAPI.fetchRecords('red-flags');
+      const { user: { id: userId } } = auth();
+      const records = await RecordAPI.fetchRecords('red-flags', userId);
+      // Get record overview count
+      const overview = {
+        draft: 0,
+        published: 0,
+        'under-investigation': 0,
+        resolved: 0,
+        rejected: 0,
+      };
+      records.forEach((record) => {
+        const { status } = record;
+        overview[status] += 1;
+      });
+      // Assign record overview count
+      document.getElementById('total-records').innerText = records.length;
+      document.getElementById('investigation-count').innerText = overview['under-investigation'];
+      document.getElementById('resolved-count').innerText = overview.resolved;
+      document.getElementById('rejected-count').innerText = overview.rejected;
+
       if (records) {
         // TODO: hide preloader
         return records.forEach(record => UI.addRecordToList(record));

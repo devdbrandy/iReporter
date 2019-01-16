@@ -229,6 +229,22 @@ describe('API routes', () => {
           .catch(done);
       });
     });
+
+    context(`GET ${baseURI}/users/:id/red-flags`, () => {
+      it('should fetch all red-flag records by user id', (done) => {
+        request(app)
+          .get(`${baseURI}/users/2/red-flags`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200)
+          .then((res) => {
+            res.body.should.have.property('data')
+              .with.lengthOf(3);
+            done();
+          })
+          .catch(done);
+      });
+    });
   });
 
   describe('routes: /red-flags', () => {
@@ -290,7 +306,7 @@ describe('API routes', () => {
         location: '-42.2078,138.0694',
         title: 'Record title',
         comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
-        media: '["https://via.placeholder.com/650x450.jpg", "https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"]',
+        media: ['https://via.placeholder.com/650x450.jpg', 'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv'],
         status: 'draft',
       };
 

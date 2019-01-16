@@ -18,7 +18,12 @@ export default class RedFlagsController {
     const { type } = request;
 
     try {
-      const records = await Record.where({ type });
+      let records;
+      if (request.params.id) {
+        const userId = parseInt(request.params.id, 10);
+        records = await Record.where({ user_id: userId, type });
+      }
+      records = await Record.where({ type });
       return responseHandler(response, records);
     } catch (error) {
       return next(error);
@@ -69,7 +74,7 @@ export default class RedFlagsController {
     const videos = [];
     const { media } = body;
     if (media) {
-      JSON.parse(media).forEach((url) => {
+      media.forEach((url) => {
         const extension = path.extname(url).toString();
         if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
           images.push(url);

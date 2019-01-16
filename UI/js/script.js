@@ -112,15 +112,18 @@ class RecordAPI {
     return `${getEnv('API_URI')}/api/v1`;
   }
 
-  static async fetchRecords(type = '') {
+  static async fetchRecords(type = '', userId) {
     const { token } = auth();
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
+    let prefix;
+    if (userId) prefix = `users/${userId}/`;
+    const apiURI = `${RecordAPI.uri}/${prefix}${type}`;
 
-    const response = await fetch(`${RecordAPI.uri}/${type}`, options);
+    const response = await fetch(apiURI, options);
     const { data } = await response.json();
     return data;
   }
@@ -140,6 +143,8 @@ class RecordAPI {
       'Content-Type': 'application/json',
     };
     const record = objectify(data);
+    const { media } = record;
+    record.media = JSON.parse(media); // convert media string to array
     const { type } = record;
     const res = await fetch(`${RecordAPI.uri}/${type}s`, {
       method: 'post',
@@ -204,7 +209,26 @@ class UI {
     // TODO: show preloader
 
     try {
-      const records = await RecordAPI.fetchRecords('red-flags');
+      const { user: { id: userId } } = auth();
+      const records = await RecordAPI.fetchRecords('red-flags', userId);
+      // Get record overview count
+      const overview = {
+        draft: 0,
+        published: 0,
+        'under-investigation': 0,
+        resolved: 0,
+        rejected: 0,
+      };
+      records.forEach((record) => {
+        const { status } = record;
+        overview[status] += 1;
+      });
+      // Assign record overview count
+      document.getElementById('total-records').innerText = records.length;
+      document.getElementById('investigation-count').innerText = overview['under-investigation'];
+      document.getElementById('resolved-count').innerText = overview.resolved;
+      document.getElementById('rejected-count').innerText = overview.rejected;
+
       if (records) {
         // TODO: hide preloader
         return records.forEach(record => UI.addRecordToList(record));
@@ -222,10 +246,10 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-
+    const { type } = record;
     row.innerHTML = `
       <td class="title">${record.title}</td>
-      <td><span class="tag tag-${record.type}">${record.type}</span></td>
+      <td><span class="tag tag-${type}">${type}</span></td>
       <td>${record.createdOn}</td>
       <td><span class="tag">${record.status}</span></td>
       <td>
@@ -315,7 +339,7 @@ class UI {
     document.getElementById('comment').value = '';
     document.getElementById('geoautocomplete').value = '';
     document.getElementById('location').value = '';
-    document.getElementById('media').value = '';
+    document.getElementById('media').value = '[]';
   }
 
   /**
@@ -328,7 +352,6 @@ class UI {
    */
   static async editRecord(el) {
     const record = el.getAttribute('data-record');
-    const { id, type } = JSON.parse(record);
     localStorage.setItem('record', record);
     window.location = 'edit-record.html';
   }

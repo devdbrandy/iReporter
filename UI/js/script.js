@@ -224,10 +224,10 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-
+    const { type } = record;
     row.innerHTML = `
       <td class="title">${record.title}</td>
-      <td><span class="tag tag-${record.type}">${record.type}</span></td>
+      <td><span class="tag tag-${type}">${type}</span></td>
       <td>${record.createdOn}</td>
       <td><span class="tag">${record.status}</span></td>
       <td>

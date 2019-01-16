@@ -21,9 +21,8 @@ export default class RedFlagsController {
       let records;
       if (request.params.id) {
         const userId = parseInt(request.params.id, 10);
-        records = await Record.where({ user_id: userId, type });
-      }
-      records = await Record.where({ type });
+        records = await Record.where({ user_id: userId });
+      } else records = await Record.where({ type });
       return responseHandler(response, records);
     } catch (error) {
       return next(error);

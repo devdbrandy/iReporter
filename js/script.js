@@ -112,16 +112,14 @@ class RecordAPI {
     return `${getEnv('API_URI')}/api/v1`;
   }
 
-  static async fetchRecords(type = '', userId) {
+  static async fetchRecords(userId) {
     const { token } = auth();
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    let prefix;
-    if (userId) prefix = `users/${userId}/`;
-    const apiURI = `${RecordAPI.uri}/${prefix}${type}`;
+    const apiURI = `${RecordAPI.uri}/users/${userId}/records`;
 
     const response = await fetch(apiURI, options);
     const { data } = await response.json();
@@ -210,7 +208,7 @@ class UI {
 
     try {
       const { user: { id: userId } } = auth();
-      const records = await RecordAPI.fetchRecords('red-flags', userId);
+      const records = await RecordAPI.fetchRecords(userId);
       // Get record overview count
       const overview = {
         draft: 0,

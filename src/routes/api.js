@@ -35,6 +35,14 @@ router.get('/users/:id', [
   authenticate,
 ], UsersController.show);
 
+/* Fetch all red-flag/intervention records by user */
+router.get('/users/:id/:type', [
+  validateIdParam(),
+  validateRequest,
+  validateType,
+  authenticate,
+], RecordsController.index);
+
 /* Fetch all red-flag/intervention records */
 router.get('/:type', [validateType, authenticate], RecordsController.index);
 

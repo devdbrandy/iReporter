@@ -290,7 +290,7 @@ describe('API routes', () => {
         location: '-42.2078,138.0694',
         title: 'Record title',
         comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
-        media: '["https://via.placeholder.com/650x450.jpg", "https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv"]',
+        media: ['https://via.placeholder.com/650x450.jpg', 'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv'],
         status: 'draft',
       };
 

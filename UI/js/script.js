@@ -645,3 +645,12 @@ const btnBack = document.querySelector('.btn-back');
 if (btnBack) {
   btnBack.addEventListener('click', UI.goBack);
 }
+
+/* User signout */
+const logoutBtn = document.getElementById('logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', (e) => {
+    localStorage.clear();
+    window.location = 'index.html';
+  });
+}

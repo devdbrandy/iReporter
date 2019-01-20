@@ -247,6 +247,24 @@ describe('API routes', () => {
     });
   });
 
+  describe('routes: /records', () => {
+    context(`GET ${baseURI}/records`, () => {
+      it('should fetch a list of all records', (done) => {
+        request(app)
+          .get(`${baseURI}/records`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200)
+          .then((res) => {
+            res.body.should.have.property('data')
+              .with.lengthOf(4);
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
+
   describe('routes: /red-flags', () => {
     context(`GET ${baseURI}/red-flags`, () => {
       it('should fetch all red-flag records', (done) => {

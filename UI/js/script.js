@@ -397,6 +397,7 @@ class UI {
     if (images.length < 1) {
       galleryTab.innerHTML = 'No media available';
     } else {
+      galleryTab.innerHTML = '';
       images.forEach((image) => {
         const column = document.createElement('div');
         const img = document.createElement('img');

@@ -158,7 +158,8 @@ class RecordAPI {
         Authorization: `Bearer ${token}`,
       },
     };
-    const apiURI = `${RecordAPI.uri}/users/${userId}/records`;
+    let apiURI = `${RecordAPI.uri}/records`;
+    if (userId) apiURI = `${RecordAPI.uri}/users/${userId}/records`;
 
     const response = await fetch(apiURI, options);
     const { data } = await response.json();
@@ -239,37 +240,47 @@ class RecordAPI {
 /* UI class */
 class UI {
   static async showRecords() {
-    if (getPath() !== 'dashboard.html') {
-      return false;
-    }
-
     // TODO: show preloader
 
     try {
       const { user: { id: userId } } = auth();
-      const records = await RecordAPI.fetchRecords(userId);
-      // Get record overview count
-      const overview = {
-        draft: 0,
-        published: 0,
-        'under-investigation': 0,
-        resolved: 0,
-        rejected: 0,
-      };
-      records.forEach((record) => {
-        const { status } = record;
-        overview[status] += 1;
-      });
-      // Assign record overview count
-      document.getElementById('total-records').innerText = records.length;
-      document.getElementById('investigation-count').innerText = overview['under-investigation'];
-      document.getElementById('resolved-count').innerText = overview.resolved;
-      document.getElementById('rejected-count').innerText = overview.rejected;
+      let records;
+      let overview;
 
-      if (records) {
-        // TODO: hide preloader
-        return records.forEach(record => UI.addRecordToList(record));
+      switch (getPath()) {
+        case 'dashboard.html':
+          records = await RecordAPI.fetchRecords(userId);
+          // Get record overview count
+          overview = {
+            draft: 0,
+            published: 0,
+            'under-investigation': 0,
+            resolved: 0,
+            rejected: 0,
+          };
+          records.forEach((record) => {
+            const { status } = record;
+            overview[status] += 1;
+          });
+          // Assign record overview count
+          document.getElementById('total-records').innerText = records.length;
+          document.getElementById('investigation-count').innerText = overview['under-investigation'];
+          document.getElementById('resolved-count').innerText = overview.resolved;
+          document.getElementById('rejected-count').innerText = overview.rejected;
+
+          if (records) {
+            // TODO: hide preloader
+            return records.forEach(record => UI.addRecordToList(record));
+          }
+          break;
+        case 'records.html':
+          records = await RecordAPI.fetchRecords();
+          records.forEach(record => UI.listRecordCards(record));
+          break;
+        default:
+          return false;
       }
+
       return true;
     } catch (err) {
       UI.snackbar('Unable to fetch data, retry in 10 secs...');
@@ -277,6 +288,44 @@ class UI {
         UI.showRecords();
       }, 10000);
     }
+  }
+
+  static async listRecordCards(record) {
+    /* HTMLElement */
+    const container = document.querySelector('.records-list .row');
+    const card = document.createElement('div');
+    let statusIcon = '';
+    const { type, location, status } = record;
+    if (status === 'resolved') {
+      statusIcon = '<i class="far fa-check-circle"></i>';
+    }
+
+    // Get location name
+    const place = await initMap(location);
+
+    card.innerHTML = `
+      <div class="record-cover">
+        <img src="img/img_nature.jpg">
+        <div class="overlay"></div>
+        <span class="author">By: <span class="name">${record['author.firstname']} ${record['author.lastname']}</span></span>
+        <span class="tag tag-${type}">${type}</span>
+      </div>
+      <div class="record-body">
+        <h4 class="record-title">${record.title}
+          ${statusIcon}
+        </h4>
+        <p>${record.comment} </p>
+        <span class="location"><i class="fas fa-map-marker-alt"></i> ${place}</span>
+      </div>
+      <div class="record-status">${status}</div>
+    `;
+    card.classList.add('card');
+    card.setAttribute('data-record', JSON.stringify(record));
+    container.appendChild(card);
+
+    card.addEventListener('click', (e) => {
+      UI.showRecord(card);
+    });
   }
 
   static addRecordToList(record) {
@@ -320,12 +369,13 @@ class UI {
   }
 
   static async showRecord(el) {
+    const record = JSON.parse(el.getAttribute('data-record'));
     const {
       title,
       comment,
       location,
       images,
-    } = JSON.parse(el.getAttribute('data-record'));
+    } = record;
 
     const modalBody = document.querySelector('.modal--body');
     modalBody.querySelector('.title h4').innerText = title;
@@ -333,6 +383,12 @@ class UI {
 
     const place = await initMap(location);
     modalBody.querySelector('.location .text').innerText = place;
+
+    const authorField = modalBody.querySelector('.author a');
+    if (authorField) {
+      authorField.href = `profile.html?user=${record.createdBy}`;
+      authorField.innerText = `${record['author.firstname']} ${record['author.lastname']}`;
+    }
 
     // Load media files
     /* HTMLElement */
@@ -361,8 +417,8 @@ class UI {
    * @memberOf UI
    */
   static async handleCreateRecord(e) {
-    const form = image;
     e.preventDefault();
+    const form = e.target;
     const formData = new FormData(form);
 
     try {

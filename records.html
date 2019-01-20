@@ -59,52 +59,7 @@
           </div>
           <div class="panel--body">
             <div class="records-list">
-              <div class="row">
-                <div class="card" data-record='{
-                  "id": 1,
-                  "createdBy": 2,
-                  "type": "intervention",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Lack of electricity"
-                }'>
-                  <div class="record-cover">
-                    <img src="img/cover-img.jpeg" alt="">
-                    <div class="overlay"></div>
-                    <span class="author">By: <span class="name">John Doe</span></span>
-                    <span class="tag tag-intervention">intervention</span>
-                  </div>
-                  <div class="record-body">
-                    <h4 class="record-title">Lack of electricity <i class="far fa-check-circle"></i></h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam omnis animi molestias officiis aspernatur, cumque. another </p>
-                    <span class="location"><i class="fas fa-map-marker-alt"></i> Surulere, Lagos</span>
-                  </div>
-                  <div class="record-status">Resolved</div>
-                </div>
-                <div class="card" data-record='{
-                  "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Bad Roads"
-                }'>
-                  <div class="record-cover">
-                    <img src="img/cover-img.jpeg" alt="">
-                    <div class="overlay"></div>
-                    <span class="tag tag-redflag">red-flag</span>
-                    <span class="author">By: <span class="name">John Doe</span></span>
-                  </div>
-                  <div class="record-body">
-                    <h4 class="record-title">Bad Roads</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam omnis animi molestias officiis aspernatur, cumque.</p>
-                    <span class="location"><i class="fas fa-map-marker-alt"></i> Surulere, Lagos</span>
-                  </div>
-                  <div class="record-status">Under-investigation</div>
-                </div>
-              </div>
+              <div class="row"></div>
             </div>
 
             <!-- Pagination -->
@@ -126,7 +81,7 @@
     <div class="modal--content modal-sm">
       <header class="modal--header">
         <h3>Record information</h3>
-        <span class="modal--close"><i class="fas fa-times"></i></span>
+        <span class="modal-close"><i class="fas fa-times"></i></span>
       </header>
       <div class="modal--body">
         <!-- Map -->
@@ -136,21 +91,18 @@
         <!-- Record title -->
         <div class="title">
           <h4></h4>
-          <span class="author">By: <a href="#" title="">John Doe</a></span>
+          <span class="author">By: <a href="#"></a></span>
         </div>
         <!-- Record comment -->
         <p class="comment mt-10"></p>
         <!-- Record media -->
         <div class="media">
           <h6>Media</h6>
-          <div class="row">
-            <div class="column">
-              <img src="img/cover-img.jpeg" alt="cover-image">
-              <img src="img/cover2.jpg" alt="cover-image">
-            </div>
-            <div class="column">
-              <img src="img/cover2.jpg" alt="cover-image">
-              <img src="img/cover-img.jpeg" alt="cover-image">
+          <div class="gallery">
+            <div class="row tabs"></div>
+            <div class="preview">
+              <span class="close-btn">&times;</span>
+              <img id="previewed-img">
             </div>
           </div>
         </div>
@@ -173,26 +125,6 @@
   </footer>
 
   <script src="js/script.js"></script>
-  <script>
-    const recordCards = document.querySelectorAll('.records-list .card');
-    recordCards.forEach((row) => {
-      row.addEventListener('click', function (e) {
-        const {
-          title,
-          comment,
-          location,
-        } = JSON.parse(this.getAttribute('data-record'));
-
-        const modalBody = document.querySelector('.modal--body');
-        modalBody.querySelector('.title h4').innerText = title;
-        modalBody.querySelector('.comment').innerText = comment;
-
-        const [latitude, longitude] = location.split(',');
-        initMap(parseFloat(latitude), parseFloat(longitude));
-        openModal();
-      });
-    });
-  </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA"
   async defer></script>
 </body>

@@ -94,5 +94,15 @@
   },
   "engines": {
     "node": "10.x"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*",
+      "UI/*",
+      "uploads/*",
+      "public/*",
+      "resources/*"
+    ]
   }
 }

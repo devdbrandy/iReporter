@@ -9,7 +9,8 @@
     "google": true,
     "UI": true,
     "getEnv": true,
-    "cloudinary": true
+    "cloudinary": true,
+    "requirejs": true
   },
   "rules": {
     "no-unused-vars": 0,

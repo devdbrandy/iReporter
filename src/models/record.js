@@ -79,9 +79,18 @@ export default class Record extends Model {
   }
 
   static get abstractFields() {
-    return `
-      id, user_id as "createdBy", type, location, images, videos, title,
-      comment, status, updated_at as "updatedOn", created_at as "createdOn"
-    `;
+    return [
+      'id',
+      'user_id as "createdBy"',
+      'type',
+      'location',
+      'images',
+      'videos',
+      'title',
+      'comment',
+      'status',
+      'updated_at as "updatedOn"',
+      'created_at as "createdOn"',
+    ];
   }
 }

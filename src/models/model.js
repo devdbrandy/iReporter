@@ -22,13 +22,14 @@ export default class Model {
    * Returns a list of resources
    *
    * @static
+   * @param {Object} options builder options
    * @returns {[Model]} a list of user resources
    *
    * @memberOf Record
    */
-  static async all() {
+  static async all(options) {
     this.showField = false;
-    const queryString = this.selectQuery();
+    const queryString = this.selectQuery(options);
     const { rows } = await db.query(queryString);
     return rows;
   }
@@ -93,15 +94,28 @@ export default class Model {
    * Build select query based on model abstract fields
    *
    * @static
+   * @param {Object} options builder options
    * @returns {string}
    *
    * @memberOf Model
    */
-  static selectQuery() {
-    return `
-      SELECT ${this.abstractFields}
-      FROM ${this.tableName}
-    `;
+  static selectQuery(options = {}) {
+    const table = this.tableName;
+    if (options.join) {
+      const { join: [builder] } = options;
+      const { ref, fkey, fields } = builder;
+      const joinFields = fields.map(field => (
+        `${ref}.${field} as "${builder.as}.${field}"`
+      ));
+
+      const abstractFields = this.abstractFields.map(field => (`${table}.${field}`));
+      return `
+        SELECT ${abstractFields}, ${joinFields}
+        FROM ${table}
+        INNER JOIN ${ref} ON ${ref}.id = ${table}.${fkey}
+      `;
+    }
+    return `SELECT ${this.abstractFields} FROM ${table}`;
   }
 
   static get showField() {

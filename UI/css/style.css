@@ -827,14 +827,34 @@ span.location {
   height: 40vh;
 }
 
-.modal--body .media img {
+.modal--body .gallery img {
   width: 100%;
-  margin-top: 8px;
+  padding: 5px;
 }
 
-.modal--body .media .column {
-  flex-basis: 100%;
+.modal--body .gallery .tabs img {
+  opacity: 0.8;
+  cursor: pointer;
 }
+
+.modal--body .gallery .tabs img:hover {
+  opacity: 1;
+}
+
+.modal--body .gallery .preview {
+  position: relative;
+  display: none;
+}
+
+.modal--body .gallery .preview .close-btn {
+  position: absolute;
+  top: 15;
+  right: 15px;
+  color: var(--white);
+  font-size: 35px;
+  cursor: pointer;
+}
+
 
 .modal--body h6 {
   font-weight: bold;

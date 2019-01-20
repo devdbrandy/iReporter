@@ -83,6 +83,39 @@ if (modal) {
 }
 /* End Modal trigger */
 
+/* Image Gallery */
+/* HTMLElement */
+const previewCloseBtn = document.querySelector('.gallery .close-btn');
+if (previewCloseBtn) {
+  previewCloseBtn.addEventListener('click', (e) => {
+    e.target.parentElement.style.display = 'none';
+  });
+}
+
+/**
+ * Handle image preview
+ *
+ * @param {Event} e Event object
+ */
+const previewImages = (e) => {
+  const imageSrc = e.target.src;
+  if (imageSrc) {
+    /* HTMLElement */
+    const previewedImage = document.getElementById('previewed-img');
+    const galleryImages = document.querySelectorAll('.tabs img');
+    for (let i = 0; i < galleryImages.length; i += 1) {
+      galleryImages[i].style.opacity = 0.8;
+    }
+
+    previewedImage.src = imageSrc;
+    previewedImage.parentElement.style.display = 'block';
+    e.target.style.opacity = 1;
+  }
+};
+
+document.querySelector('.gallery .tabs').addEventListener('click', previewImages);
+/* End Image Gallery */
+
 /* Initialize Map */
 async function lookupAddress(cordinates) {
   const token = 'AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA';
@@ -285,6 +318,7 @@ class UI {
       title,
       comment,
       location,
+      images,
     } = JSON.parse(el.getAttribute('data-record'));
 
     const modalBody = document.querySelector('.modal--body');
@@ -293,6 +327,22 @@ class UI {
 
     const place = await initMap(location);
     modalBody.querySelector('.location .text').innerText = place;
+
+    // Load media files
+    /* HTMLElement */
+    const galleryTab = document.querySelector('.gallery .tabs');
+
+    if (images.length < 1) {
+      galleryTab.innerHTML = 'No media available';
+    } else {
+      images.forEach((image) => {
+        const column = document.createElement('div');
+        const img = document.createElement('img');
+        img.src = image;
+        column.appendChild(img);
+        galleryTab.appendChild(column);
+      });
+    }
     openModal();
   }
 

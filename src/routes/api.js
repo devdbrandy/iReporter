@@ -42,6 +42,12 @@ router.get('/users/:id/records', [
   authenticate,
 ], RecordsController.index);
 
+/* Fetch a list of all records */
+router.get('/records', [
+  validateRequest,
+  authenticate,
+], RecordsController.index);
+
 /* Fetch all red-flag/intervention records */
 router.get('/:type', [validateType, authenticate], RecordsController.index);
 

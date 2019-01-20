@@ -22,6 +22,15 @@ export default class RedFlagsController {
       if (request.params.id) {
         const userId = parseInt(request.params.id, 10);
         records = await Record.where({ user_id: userId });
+      } else if (request.path === '/records') {
+        records = await Record.all({
+          join: [{
+            fkey: 'user_id',
+            ref: 'users',
+            as: 'author',
+            fields: ['firstname', 'lastname'],
+          }],
+        });
       } else records = await Record.where({ type });
       return responseHandler(response, records);
     } catch (error) {

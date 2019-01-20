@@ -205,7 +205,7 @@ class RecordAPI {
       'Content-Type': 'application/json',
     };
     const record = objectify(data);
-    const { id, type } = record;
+    const { id, type } = JSON.parse(localStorage.getItem('record'));
     const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
       method: 'put',
       headers,
@@ -243,12 +243,13 @@ class UI {
     // TODO: show preloader
 
     try {
-      const { user: { id: userId } } = auth();
       let records;
       let overview;
+      let userId;
 
       switch (getPath()) {
         case 'dashboard.html':
+          userId = auth().user.id;
           records = await RecordAPI.fetchRecords(userId);
           // Get record overview count
           overview = {
@@ -274,6 +275,7 @@ class UI {
           }
           break;
         case 'records.html':
+          console.log('got in 2')
           records = await RecordAPI.fetchRecords();
           records.forEach(record => UI.listRecordCards(record));
           break;

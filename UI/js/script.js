@@ -98,22 +98,28 @@ if (previewCloseBtn) {
  * @param {Event} e Event object
  */
 const previewImages = (e) => {
-  const imageSrc = e.target.src;
-  if (imageSrc) {
-    /* HTMLElement */
-    const previewedImage = document.getElementById('previewed-img');
-    const galleryImages = document.querySelectorAll('.tabs img');
-    for (let i = 0; i < galleryImages.length; i += 1) {
-      galleryImages[i].style.opacity = 0.8;
-    }
+  const image = e.target;
 
-    previewedImage.src = imageSrc;
-    previewedImage.parentElement.style.display = 'block';
-    e.target.style.opacity = 1;
+  if (image.src) {
+    if (image.parentElement.children.length > 1) {
+      /* HTMLElement */
+      const previewedImage = document.getElementById('previewed-img');
+      const galleryImages = document.querySelectorAll('.tabs img');
+      for (let i = 0; i < galleryImages.length; i += 1) {
+        galleryImages[i].style.opacity = 0.8;
+      }
+
+      previewedImage.src = image.src;
+      previewedImage.parentElement.style.display = 'block';
+    }
+    image.style.opacity = 1;
   }
 };
 
-document.querySelector('.gallery .tabs').addEventListener('click', previewImages);
+const galleryTab = document.querySelector('.gallery .tabs');
+if (galleryTab) {
+  galleryTab.addEventListener('click', previewImages);
+}
 /* End Image Gallery */
 
 /* Initialize Map */
@@ -355,7 +361,7 @@ class UI {
    * @memberOf UI
    */
   static async handleCreateRecord(e) {
-    const form = e.target;
+    const form = image;
     e.preventDefault();
     const formData = new FormData(form);
 

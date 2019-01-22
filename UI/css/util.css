@@ -17,6 +17,22 @@
   flex: 1;
 }
 
+.col-20 {
+  width: 20%;
+}
+
+.col-25 {
+  width: 25%;
+}
+
+.col-80 {
+  width: 80%;
+}
+
+.col-75 {
+  width: 75%;
+}
+
 /* ----- End Layout ----- */
 
 

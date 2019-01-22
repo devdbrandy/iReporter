@@ -673,15 +673,13 @@ td select {
   display: none;
 }
 
-.action--process .far,
-.action--process .fas {
+.action-sync {
   color: var(--green);
   font-size: 1.6rem;
-  margin: 0 0.5rem;
-  padding: 0.5rem;
+  font-weight: bold;
+  padding: 5px 10px;
   display: block;
   border: 0;
-  border-radius: 2px;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -843,7 +841,7 @@ span.location {
 
 .modal--body .gallery .preview {
   position: relative;
-  display: none;
+  /* display: none; */
 }
 
 .modal--body .gallery .preview .close-btn {

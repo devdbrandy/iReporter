@@ -58,6 +58,10 @@ function objectify(formData) {
   return result;
 }
 
+const getDashboard = user => (
+  user.isAdmin ? 'admin-dashboard.html' : 'dashboard.html'
+);
+
 // End Helper functions
 
 /* Toggle Modal */
@@ -99,9 +103,10 @@ if (previewCloseBtn) {
  */
 const previewImages = (e) => {
   const image = e.target;
+  const container = image.parentElement.parentElement.children;
 
   if (image.src) {
-    if (image.parentElement.children.length > 1) {
+    if (container.length > 1) {
       /* HTMLElement */
       const previewedImage = document.getElementById('previewed-img');
       const galleryImages = document.querySelectorAll('.tabs img');
@@ -121,6 +126,22 @@ if (galleryTab) {
   galleryTab.addEventListener('click', previewImages);
 }
 /* End Image Gallery */
+
+/* Status select options */
+const getStatusOptions = (recordStatus) => {
+  const statusOptions = [
+    'published',
+    'under-investigation',
+    'resolved',
+    'rejected',
+  ];
+  let statusSelectOpts = '';
+  statusOptions.forEach((status) => {
+    const selected = recordStatus === status ? 'selected' : '';
+    statusSelectOpts += `<option value="${status}" ${selected}>${status}</option>`;
+  });
+  return statusSelectOpts;
+};
 
 /* Initialize Map */
 async function lookupAddress(cordinates) {
@@ -243,22 +264,36 @@ class UI {
     // TODO: show preloader
 
     try {
+      const overview = {
+        draft: 0,
+        published: 0,
+        'under-investigation': 0,
+        resolved: 0,
+        rejected: 0,
+      };
       let records;
-      let overview;
       let userId;
 
       switch (getPath()) {
+        case 'admin-dashboard.html':
+          records = await RecordAPI.fetchRecords();
+          records.forEach((record) => {
+            const { status } = record;
+            overview[status] += 1;
+          });
+          // Assign record overview count
+          document.getElementById('total-records').innerText = records.length;
+          document.getElementById('investigation-count').innerText = overview['under-investigation'];
+          document.getElementById('resolved-count').innerText = overview.resolved;
+
+          if (records) {
+            // TODO: hide preloader
+            return records.forEach(record => UI.addRecordToList(record));
+          }
+          break;
         case 'dashboard.html':
           userId = auth().user.id;
           records = await RecordAPI.fetchRecords(userId);
-          // Get record overview count
-          overview = {
-            draft: 0,
-            published: 0,
-            'under-investigation': 0,
-            resolved: 0,
-            rejected: 0,
-          };
           records.forEach((record) => {
             const { status } = record;
             overview[status] += 1;
@@ -275,7 +310,6 @@ class UI {
           }
           break;
         case 'records.html':
-          console.log('got in 2')
           records = await RecordAPI.fetchRecords();
           records.forEach(record => UI.listRecordCards(record));
           break;
@@ -334,26 +368,56 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-    const { type } = record;
-    row.innerHTML = `
-      <td class="title">${record.title}</td>
-      <td><span class="tag tag-${type}">${type}</span></td>
-      <td>${record.createdOn}</td>
-      <td><span class="tag">${record.status}</span></td>
-      <td>
-        <div class="wrapper">
-          <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-            <span class="text">View</span>
-          </button>
-          <a href="#!" class="btn btn-success action-btn edit">
-            <i class="far fa-edit"></i>
-            <span class="text">Edit</span>
-          </a>
-          <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-            <span class="text">Delete</span>
-          </button>
-        </div>
-      </td>`;
+    const { type, status } = record;
+
+    if (getPath() === 'admin-dashboard.html') {
+      // generate for admin user
+      row.innerHTML = `
+        <td>${record.title}</td>
+        <td><span class="tag tag-${type}">${type}</span></td>
+        <td>${record['author.firstname']} ${record['author.lastname']}</td>
+        <td>
+          <div class="wrapper">
+            <select name="status">${getStatusOptions(status)}</select>
+            <a class="action-sync" title="sync update"><i class="fas fa-sync-alt"></i></a>
+          </div>
+        </td>
+        <td>
+          <div class="wrapper">
+            <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
+              <span class="text">View</span>
+            </button>
+            <a href="edit-record.html" class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
+              <span class="text">Edit</span>
+            </a>
+            <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
+              <span class="text">Delete</span>
+            </button>
+          </div>
+        </td>`;
+    } else {
+      // generate for regular user
+      row.innerHTML = `
+        <td class="title">${record.title}</td>
+        <td><span class="tag tag-${type}">${type}</span></td>
+        <td>${record.createdOn}</td>
+        <td><span class="tag">${record.status}</span></td>
+        <td>
+          <div class="wrapper">
+            <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
+              <span class="text">View</span>
+            </button>
+            <a href="#!" class="btn btn-success action-btn edit">
+              <i class="far fa-edit"></i>
+              <span class="text">Edit</span>
+            </a>
+            <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
+              <span class="text">Delete</span>
+            </button>
+          </div>
+        </td>`;
+    }
+
     row.setAttribute('data-record', JSON.stringify(record));
     list.appendChild(row);
 
@@ -399,7 +463,7 @@ class UI {
     if (images.length < 1) {
       galleryTab.innerHTML = 'No media available';
     } else {
-      galleryTab.innerHTML = '';
+      galleryTab.innerHTML = ''; // reset container
       images.forEach((image) => {
         const column = document.createElement('div');
         const img = document.createElement('img');
@@ -407,6 +471,9 @@ class UI {
         column.appendChild(img);
         galleryTab.appendChild(column);
       });
+
+      const [previewImage] = images;
+      document.getElementById('previewed-img').src = previewImage;
     }
     openModal();
   }
@@ -515,7 +582,7 @@ class UI {
         UI.snackbar('Record successfully updated.');
         // redirect to dashboard
         setTimeout(() => {
-          window.location = 'dashboard.html';
+          window.location = getDashboard();
         }, 3000);
       }
     } catch (error) {
@@ -609,6 +676,11 @@ class UI {
   }
 }
 
+/* User dashboard */
+const { user } = auth();
+const dashboardLink = document.getElementById('dashboard-link');
+dashboardLink.href = getDashboard(user);
+
 /* Event: Load list of records */
 document.addEventListener('DOMContentLoaded', UI.showRecords);
 
@@ -656,7 +728,7 @@ if (logoutBtn) {
 }
 
 /* Input formating */
-const cleave = new Cleave('#phonenumber', {
-  phone: true,
-  phoneRegionCode: 'NG',
-});
+// const cleave = new Cleave('#phonenumber', {
+//   phone: true,
+//   phoneRegionCode: 'NG',
+// });

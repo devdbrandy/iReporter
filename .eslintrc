@@ -9,6 +9,8 @@
     "google": true,
     "UI": true,
     "getEnv": true,
+    "objectify": true,
+    "getDashboard": true,
     "cloudinary": true,
     "requirejs": true,
     "Cleave": true

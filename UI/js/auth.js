@@ -61,8 +61,9 @@ class AuthUI {
         // Show notification message
         UI.snackbar('Signup was successful, loading dashboard...');
         // Redirect user to dashboard
+        const { user } = credentials;
         setTimeout(() => {
-          window.location = 'dashboard.html';
+          window.location = getDashboard(user);
         }, 3000);
       }
     } catch (error) {
@@ -92,8 +93,9 @@ class AuthUI {
         // Show notification message
         UI.snackbar('Login was successful, loading dashboard...');
         // Redirect user to dashboard
+        const { user } = credentials;
         setTimeout(() => {
-          window.location = 'dashboard.html';
+          window.location = getDashboard(user);
         }, 3000);
       }
     } catch (error) {

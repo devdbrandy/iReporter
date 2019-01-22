@@ -28,7 +28,7 @@
               <div class="dropdown">
                 <a href="#!" title="dashboard menu"><i class="fa fa-th"></i></a>
                 <div class="dropdown--menu">
-                  <a href="dashboard.html">
+                  <a href="#" id="dashboard-link">
                     <i class="fas fa-tachometer-alt"></i>Dashboard
                   </a>
                   <a href="profile.html">
@@ -51,7 +51,7 @@
   </nav>
 
   <div class="container">
-    <main class="column">
+    <main id="main" class="column">
       <div class="panel">
         <div class="panel--heading">
           <h3>Manage Records</h3>
@@ -60,15 +60,15 @@
           <div class="overview">
             <div class="row">
               <div class="card column">
-                <span class="count">15</span>
+                <span class="count" id="total-records">0</span>
                 <h5>Total Records</h5>
               </div>
               <div class="card column">
-                <span class="count">5</span>
+                <span class="count" id="resolved-count">0</span>
                 <h5>Resolved</h5>
               </div>
               <div class="card column">
-                <span class="count">10</span>
+                <span class="count" id="investigation-count">0</span>
                 <h5>Under Investigation</h5>
               </div>
             </div>
@@ -76,396 +76,21 @@
 
           <div class="responsive-table">
             <table>
-              <tr>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Created By</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                "createdBy": 2,
-                "type": "red-flag",
-                "location": "6.6200756,3.478314599999976",
-                "comment": "Some comment here...",
-                "status": "draft",
-                "title": "Robbery Attack"
-              }'>
-                <td>Bad Roads</td>
-                <td><span class="tag tag-redflag">Red Flag</span></td>
-                <td>John Doe</td>
-                <td>
-                  <div class="wrapper">
-                    <select name="status">
-                      <option value="under-investigation" selected>under investigation</option>
-                      <option value="rejected">rejected</option>
-                      <option value="resolved">resolved</option>
-                    </select>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button href="edit-record.html" class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Robbery Attack</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Joe Harts</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation" selected>under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved">resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Bad Water</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Kelvin Stone</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Lack of Transportation</td>
-                <td><span class="tag tag-redflag">red flag</span></td>
-                <td>Joe Wartson</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation" selected>under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" >resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Citizens Kidnapp</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Mimi Stanley</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Lorem ipsum dolor sit amet, consectetur</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Spike Johnny</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Lorem, ipsum dolor.</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Willy Pompie</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>ipsum dolor sit.</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Mary Tracy</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Education Sector</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>John Doe</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="record" data-record='{
-                "id": 1,
-                  "createdBy": 2,
-                  "type": "red-flag",
-                  "location": "6.6200756,3.478314599999976",
-                  "comment": "Some comment here...",
-                  "status": "draft",
-                  "title": "Robbery Attack"
-              }'>
-                <td>Molestiae, assumenda.</td>
-                <td><span class="tag tag-intervention">Intervention</span></td>
-                <td>Tim Godfrey</td>
-                <td>
-                  <div class="row admin--record--status">
-                    <div class="column">
-                      <select name="status">
-                        <option value="under-investigation">under investigation</option>
-                        <option value="rejected">rejected</option>
-                        <option value="resolved" selected>resolved</option>
-                      </select>
-                    </div>
-                    <a class="action--process"><i class="fas fa-check-circle"></i></a>
-                  </div>
-                </td>
-                <td>
-                  <div class="wrapper">
-                    <button class="btn btn-info action-btn view"><i class="far fa-eye"></i>
-                      <span class="text">View</span>
-                    </button>
-                    <button class="btn btn-success action-btn edit"><i class="far fa-edit"></i>
-                      <span class="text">Edit</span>
-                    </button>
-                    <button class="btn btn-danger action-btn delete"><i class="far fa-trash-alt"></i>
-                      <span class="text">Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Created By</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="record-list"></tbody>
             </table>
           </div>
 
           <!-- Pagination -->
-          <div class="row">
+          <!-- <div class="row">
             <div class="pagination">
               <a href="#">&laquo;</a>
               <a href="#">1</a>
@@ -476,7 +101,7 @@
               <a href="#">6</a>
               <a href="#">&raquo;</a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </main>
@@ -495,13 +120,13 @@
     <div class="modal--content modal-sm">
       <header class="modal--header">
         <h3>Record information</h3>
-        <span class="modal--close"><i class="fas fa-times"></i></span>
+        <span class="modal-close"><i class="fas fa-times"></i></span>
       </header>
       <div class="modal--body">
         <!-- Map -->
         <div id="map"></div>
         <!-- Record event location -->
-        <span class="location"><i class="fas fa-map-marker-alt"></i> <span class="text">Surulere, Lagos</span></span>
+        <span class="location"><i class="fas fa-map-marker-alt"></i> <span class="text"></span></span>
         <!-- Record title -->
         <div class="title">
           <h4></h4>
@@ -511,14 +136,11 @@
         <!-- Record media -->
         <div class="media">
           <h6>Media</h6>
-          <div class="row">
-            <div class="column">
-              <img src="img/cover-img.jpeg" alt="cover-image">
-              <img src="img/cover2.jpg" alt="cover-image">
-            </div>
-            <div class="column">
-              <img src="img/cover2.jpg" alt="cover-image">
-              <img src="img/cover-img.jpeg" alt="cover-image">
+          <div class="row gallery">
+            <div class="col-20 tabs"></div>
+            <div class="col-80 preview">
+              <span class="close-btn">&times;</span>
+              <img id="previewed-img">
             </div>
           </div>
         </div>
@@ -535,26 +157,6 @@
   </div>
 
   <script src="js/script.js"></script>
-  <script>
-    const recordRows = document.querySelectorAll('tr.record td:first-child');
-    recordRows.forEach((row) => {
-      row.addEventListener('click', function (e) {
-        const {
-          title,
-          comment,
-          location,
-        } = JSON.parse(this.parentNode.getAttribute('data-record'));
-
-        const modalBody = document.querySelector('.modal--body');
-        modalBody.querySelector('.title h4').innerText = title;
-        modalBody.querySelector('.comment').innerText = comment;
-
-        const [latitude, longitude] = location.split(',');
-        initMap(parseFloat(latitude), parseFloat(longitude));
-        openModal();
-      });
-    });
-  </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA"
   async defer></script>
 </body>

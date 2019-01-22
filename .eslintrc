@@ -10,7 +10,8 @@
     "UI": true,
     "getEnv": true,
     "cloudinary": true,
-    "requirejs": true
+    "requirejs": true,
+    "Cleave": true
   },
   "rules": {
     "no-unused-vars": 0,

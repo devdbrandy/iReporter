@@ -654,3 +654,9 @@ if (logoutBtn) {
     window.location = 'index.html';
   });
 }
+
+/* Input formating */
+const cleave = new Cleave('#phonenumber', {
+  phone: true,
+  phoneRegionCode: 'NG',
+});

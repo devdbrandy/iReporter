@@ -197,6 +197,18 @@ describe('API routes', () => {
     return user2Token;
   });
 
+  describe('routes: /me', () => {
+    context(`GET ${baseURI}/me`, () => {
+      it('should fetch authenticated user profile info', (done) => {
+        request(app)
+          .get(`${baseURI}/me`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200, done);
+      });
+    });
+  });
+
   describe('routes: /users', () => {
     context(`GET ${baseURI}/users`, () => {
       it('should fetch all users', (done) => {

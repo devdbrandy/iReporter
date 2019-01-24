@@ -1,12 +1,13 @@
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import { User } from '../../models';
-import { env } from '../../utils';
-import { isValidUser, responseHandler, alreadyTaken } from '../../utils/helpers';
-
-const handleConflictResponse = (param, next) => {
-  next(createError(409, `${param} already taken`));
-};
+import { User } from '../models';
+import { env } from '../utils';
+import {
+  isValidUser,
+  responseHandler,
+  alreadyTaken,
+  handleConflictResponse,
+} from '../utils/helpers';
 
 export default class AuthController {
   /**
@@ -17,7 +18,7 @@ export default class AuthController {
    * @param {Object} response Response object
    * @param {Function} next Call to next middleware
    *
-   * @memberOf UsersController
+   * @memberOf AuthController
    */
   static async signup(request, response, next) {
     const { body } = request;
@@ -31,15 +32,8 @@ export default class AuthController {
         return handleConflictResponse('Username', next);
       }
 
-      const user = await User.create({
-        firstname: body.firstname,
-        lastname: body.lastname,
-        othernames: body.othernames,
-        phoneNumber: body.phoneNumber,
-        email,
-        username,
-        password: body.password,
-      });
+      body.isAdmin = false; // default to regular user
+      const user = await User.create(body);
       const token = jwt.sign({ user }, env('APP_KEY'));
       return responseHandler(response, [{ token, user }], 201);
     } catch (error) {

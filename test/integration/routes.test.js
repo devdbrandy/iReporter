@@ -86,7 +86,7 @@ describe('routes: /auth', () => {
         .set('Accept', 'application/json')
         .expect(409, {
           status: 409,
-          error: 'Email address already taken',
+          error: 'Email address already taken. Try another.',
         }, done);
     });
 
@@ -99,7 +99,7 @@ describe('routes: /auth', () => {
         .set('Accept', 'application/json')
         .expect(409, {
           status: 409,
-          error: 'Username already taken',
+          error: 'Username already taken. Try another.',
         }, done);
     });
 
@@ -227,6 +227,25 @@ describe('API routes', () => {
             done();
           })
           .catch(done);
+      });
+    });
+
+    context(`PUT ${baseURI}/users/:id`, () => {
+      const data = {
+        firstname: 'John',
+        lastname: 'Doe',
+        othernames: 'Bravo',
+        phoneNumber: '6221329283',
+      };
+
+      it('should update a specific user profile', (done) => {
+        request(app)
+          .put(`${baseURI}/users/${user1.id}`)
+          .send(data)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200, done);
       });
     });
 
@@ -428,7 +447,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Failed authentication',
+            error: 'Authentication failure: Invalid access token',
           }, done);
       });
 
@@ -468,6 +487,61 @@ describe('API routes', () => {
       });
     });
 
+    context(`PATCH ${baseURI}/red-flags/:id/status`, () => {
+      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiSmFtZXMiLCJsYXN0bmFtZSI6IkJvbmQiLCJvdGhlcm5hbWVzIjoiQWRtaW5pc3RyYXRvciIsInBob25lTnVtYmVyIjoiNjIyLTEzMi05MjIzIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwicmVnaXN0ZXJlZCI6IjIwMTktMDEtMjRUMTI6MDQ6NTguNjg1WiIsImlzQWRtaW4iOnRydWV9.RkkzWbH4CTQ37z7DJeUDF6wELTBfAt4YpKrLKOxqXcI';
+
+      it('[ADMIN] should edit the status of a specific red-flag record', (done) => {
+        const data = {
+          status: 'under-investigation',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(200)
+          .then((res) => {
+            const { body: { data } } = res;
+            data[0].should.have.property('id');
+            done();
+          })
+          .catch(done);
+      });
+
+      specify('error for unauthorized user', (done) => {
+        const data = {
+          status: 'resolved',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${user1Token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(403, {
+            status: 403,
+            error: 'Your account is not authorized to access the requested resource',
+          }, done);
+      });
+
+      specify('error for status not allowed', (done) => {
+        const data = {
+          status: 'draft',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(400, done);
+      });
+    });
+
     context(`DELETE ${baseURI}/red-flags/:id`, () => {
       it('should delete a specific red-flag record', (done) => {
         request(app)
@@ -503,7 +577,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Failed authentication',
+            error: 'Authentication failure: Invalid access token',
           }, done);
       });
     });

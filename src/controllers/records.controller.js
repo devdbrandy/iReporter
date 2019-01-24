@@ -1,18 +1,19 @@
+import { Request, Response } from 'express';
 import createError from 'http-errors';
 import path from 'path';
-import { Record } from '../../models';
-import { isAuthorized, responseHandler } from '../../utils/helpers';
+import { Record } from '../models';
+import { isAuthorized, responseHandler } from '../utils/helpers';
 
-export default class RedFlagsController {
+export default class RecordsController {
   /**
-   * Fetch all red-flag records
+   * Fetch all red-flag/intervention records
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
+   * @param {Request} request Request object
+   * @param {Response} response Response object
    * @param {Function} next Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async index(request, response, next) {
     const { type } = request;
@@ -39,14 +40,14 @@ export default class RedFlagsController {
   }
 
   /**
-   * Fetch a specific red-flag record
+   * Fetch a specific red-flag/intervention record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
+   * @param {Request} request Request object
+   * @param {Response} response Response object
    * @param {Function} next Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async show(request, response, next) {
     const { type } = request;
@@ -62,14 +63,14 @@ export default class RedFlagsController {
   }
 
   /**
-   * Create a new red-flag record
+   * Create a new red-flag/intervention record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
+   * @param {Request} request Request object
+   * @param {Response} response Response object
    * @param {Function} next Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async create(request, response, next) {
     const {
@@ -99,7 +100,7 @@ export default class RedFlagsController {
         videos,
         title: body.title,
         comment: body.comment,
-        status: body.status,
+        status: body.status || 'draft',
       });
       const data = [{ id, message: `Created ${type} record` }];
       return responseHandler(response, data, 201);
@@ -109,14 +110,14 @@ export default class RedFlagsController {
   }
 
   /**
-   * Edit the comment of a specific red-flag record
+   * Update a specific record
    *
    * @static
-   * @param {object} request Request object
-   * @param {object} response Response object
-   * @param {function} next Call to next middleware
+   * @param {Request} request Request object
+   * @param {Response} response Response object
+   * @param {Function} next Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async update(request, response, next) {
     const {
@@ -136,14 +137,7 @@ export default class RedFlagsController {
 
       isAuthorized(user, record);
 
-      const recordData = {
-        type: body.type,
-        location: body.location,
-        title: body.title,
-        comment: body.comment,
-        status: body.status,
-      };
-      await record.update(recordData);
+      await record.update(body);
       const data = [{
         id,
         message: `Updated ${type} record's ${attribute}`,
@@ -155,14 +149,14 @@ export default class RedFlagsController {
   }
 
   /**
-   * Delete a specific red-flag record
+   * Delete a specific record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
+   * @param {Request} request Request object
+   * @param {Response} response Response object
    * @param {Function} next Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async destroy(request, response, next) {
     const { user, type } = request;

@@ -26,6 +26,12 @@ const validateCommentParam = () => (
     .withMessage('Comment should be atleast 10 chars long')
 );
 
+/* Authenticated user profile info */
+router.get('/me', authenticate, (request, response) => {
+  const { user } = request;
+  response.json({ user });
+});
+
 /* Fetch all users */
 router.get('/users', authenticate, UsersController.index);
 

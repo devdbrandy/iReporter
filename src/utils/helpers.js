@@ -1,7 +1,8 @@
+import { NextFunction } from 'express';
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
 import appConfig from '../config';
-import { User } from '../models';
+import { User, Record } from '../models';
 
 /**
  * Gets the value of a configuration variable
@@ -15,6 +16,13 @@ export function config(token, defValue) {
   return appConfig[key][value] || defValue;
 }
 
+/**
+ * Determines if the user can modify a given `record` resource
+ *
+ * @param {User} user User object
+ * @param {Record} record Record object
+ * @returns {Boolean|Error} returns true if authorized
+ */
 export const isAuthorized = (user, record) => {
   if (
     (!record.belongsTo(user) && !user.isAdmin)
@@ -30,8 +38,8 @@ export const isAuthorized = (user, record) => {
  * Determines if the user is valid
  *
  * @param {User} user User object
- * @param {string} password provided password to validate against
- * @returns {boolean} returns truthy based on validation
+ * @param {String} password provided password to validate against
+ * @returns {Boolean} returns truthy based on validation
  */
 export const isValidUser = (user, password) => bcrypt.compareSync(password, user.password);
 
@@ -73,4 +81,14 @@ export const extractParams = (fields) => {
 export const alreadyTaken = async (param) => {
   const user = await User.find(param);
   return user;
+};
+
+/**
+ * Handle conflict error response
+ *
+ * @param {String} param field parameter to respond with
+ * @param {NextFunction} next error response
+ */
+export const handleConflictResponse = (param, next) => {
+  next(createError(409, `${param} already taken. Try another.`));
 };

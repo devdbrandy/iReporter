@@ -36,30 +36,51 @@ export default class User extends Model {
     return privateProps.get(this).password;
   }
 
-  static get tableName() {
+  /**
+   * Get the model table name
+   *
+   * @static
+   * @returns {String} model table name
+   *
+   * @memberOf User
+   */
+  static table() {
     return 'users';
   }
 
-  static get fields() {
-    return [
-      'firstname',
-      'lastname',
-      'othernames',
-      'phone_number',
-      'email',
-      'username',
-      'password',
-    ];
+  /**
+   * Get model attributes with their custom name
+   *
+   * @readonly
+   * @static
+   *
+   * @memberOf User
+   */
+  static get attributes() {
+    return {
+      id: 'id',
+      firstname: 'firstname',
+      lastname: 'lastname',
+      othernames: 'othernames',
+      phoneNumber: 'phone_number',
+      email: 'email',
+      username: 'username',
+      password: 'password',
+      registered: 'created_at',
+      isAdmin: 'is_admin',
+    };
   }
 
-  static get hidden() {
+  /**
+  * Hidden attributes
+  *
+  * @static
+  * @returns {Array} A list of all hidden attributes
+  *
+  * @memberOf User
+  */
+  static hiddenAttributes() {
     return ['password'];
-  }
-
-  static get abstractFields() {
-    return `id, firstname, lastname, othernames,
-      phone_number as "phoneNumber", email, username,
-      created_at as "registered", is_admin as "isAdmin" ${this.addFields()}`;
   }
 
   /**

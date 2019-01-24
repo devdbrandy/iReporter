@@ -3,23 +3,54 @@ import { extractParams } from '../utils/helpers';
 
 export default class Model {
   /**
-   * Find resource by given id
+   * Update resource attributes
+   *
+   * @param {Object} data Attributes to modify
+   * @returns {Model} Model resource
+   *
+   * @memberOf Record
+   */
+  async update(data) {
+    const values = this.constructor.getValues(data);
+    const queryString = this.constructor.updateQuery(data);
+    const params = [...values, this.id];
+    const { rows } = await db.query(queryString, params);
+    const [record] = rows;
+    return record;
+  }
+
+  /**
+   * Delete a resource
+   *
+   * @returns {Object} Recently deleted resources
+   *
+   * @memberOf Model
+   */
+  async delete() {
+    const queryString = `DELETE FROM ${this.constructor.table()} WHERE id=$1 RETURNING *`;
+    const { rows } = await db.query(queryString, [this.id]);
+    const [row] = rows;
+    return row;
+  }
+
+  /**
+   * Fetch resource by given id
    *
    * @static
-   * @param {string} id resource id
+   * @param {String} id resource id
    * @returns {Model} a Model resource
    *
    * @memberOf Model
    */
   static async find(fields) {
-    this.showField = true;
+    this.populateHiddenFields = true;
     const [row] = await this.where(fields);
     if (!row) return null;
     return new this(row);
   }
 
   /**
-   * Returns a list of resources
+   * Fetch a list of resources
    *
    * @static
    * @param {Object} options builder options
@@ -28,7 +59,7 @@ export default class Model {
    * @memberOf Record
    */
   static async all(options) {
-    this.showField = false;
+    this.populateHiddenFields = false;
     const queryString = this.selectQuery(options);
     const { rows } = await db.query(queryString);
     return rows;
@@ -38,8 +69,8 @@ export default class Model {
    * Build a select WHERE query on provided fields
    *
    * @static
-   * @param {string} query select query
-   * @param {string} param values applied
+   * @param {String} query select query
+   * @param {String} param values applied
    * @returns {[Model]} a list of model resources
    *
    * @memberOf Model
@@ -63,31 +94,66 @@ export default class Model {
    * @memberOf Model
    */
   static async create(data) {
-    const queryString = this.insertQuery();
-    const values = Object.values(data);
+    const queryString = this.insertQuery(data);
+    const values = this.getValues(data);
     const { rows } = await db.query(queryString, values);
     const [row] = rows;
-    return new this(row);
+    const mutated = this.mutateData(row);
+    return new this(mutated);
   }
 
   /**
-   * Build insert query based on model fields
+   * Build insert query based on model attributes
    *
    * @static
-   * @returns {string}
+   * @param {Object} data the resource attributes
+   * @returns {String}
    *
    * @memberOf Model
    */
-  static insertQuery() {
+  static insertQuery(data) {
+    const { attributes } = this;
+    const fields = [];
     const params = [];
-    const { fields } = this;
+    let index = 0;
 
-    for (let index = 0; index < fields.length; index += 1) {
-      params.push(`$${index + 1}`);
-    }
+    Object.keys(data).forEach((key) => {
+      const attribute = attributes[key];
+      if (attribute) {
+        index += 1;
+        fields.push(attribute);
+        params.push(`$${index}`);
+      }
+    });
 
-    return `INSERT INTO ${this.tableName}(${fields})
+    return `INSERT INTO ${this.table()}(${fields})
       VALUES(${params}) RETURNING *`;
+  }
+
+  /**
+   * Build update query based on model attributes
+   *
+   * @static
+   * @param {Object} data the resource attributes
+   * @returns {String}
+   *
+   * @memberOf Model
+   */
+  static updateQuery(data) {
+    const { attributes } = this;
+    const fields = [];
+    let index = 1;
+
+    Object.keys(data).forEach((key) => {
+      const attribute = attributes[key];
+      if (attribute) {
+        fields.push(`${attribute}=$${index}`);
+        index += 1;
+      }
+    });
+
+    return `UPDATE ${this.table()} SET ${fields}
+      WHERE id=$${index} RETURNING *`;
   }
 
   /**
@@ -95,13 +161,13 @@ export default class Model {
    *
    * @static
    * @param {Object} options builder options
-   * @returns {string}
+   * @returns {String}
    *
    * @memberOf Model
    */
   static selectQuery(options = {}) {
-    const table = this.tableName;
-    if (options.join) {
+    const table = this.table();
+    if ('join' in options) {
       const { join: [builder] } = options;
       const { ref, fkey, fields } = builder;
       const joinFields = fields.map(field => (
@@ -118,26 +184,111 @@ export default class Model {
     return `SELECT ${this.abstractFields} FROM ${table}`;
   }
 
-  static get showField() {
-    return this.show;
+  /**
+   * Abstract attributes fields from model attributes
+   *
+   * @readonly
+   * @static
+   *
+   * @memberOf Model
+   */
+  static get abstractFields() {
+    const abstract = [];
+    const { attributes } = this;
+    Object.entries(attributes).forEach((pairs) => {
+      const [key, value] = pairs;
+      if (!this.hiddenAttributes().includes(key)) {
+        abstract.push(`${value} as "${key}"`);
+      }
+    });
+    return [...abstract, ...this.additionalFields()];
   }
 
-  static set showField(value) {
-    this.show = value;
+  /**
+   * Holds all hidden attributes
+   *
+   * @static
+   * @returns {Array} A list of all hidden attributes
+   *
+   * @memberOf Model
+   */
+  static hiddenAttributes() {
+    return [];
   }
 
-  static addFields() {
-    let fields = '';
+  /**
+   * Get populating state for hidden fields
+   *
+   * @readonly
+   * @static
+   *
+   * @memberOf Model
+   */
+  static get populateHiddenFields() {
+    return this.populateHidden;
+  }
 
-    if (this.showField) {
-      const hiddenFields = this.hidden;
-      hiddenFields.forEach((value, key) => {
-        if (key === 0 || hiddenFields.length !== (key + 1)) {
-          fields += ',';
-        }
-        fields += value;
-      });
+  /**
+   * Switch populating state for hidden fields
+   *
+   * @static
+   *
+   * @memberOf Model
+   */
+  static set populateHiddenFields(value) {
+    this.populateHidden = value;
+  }
+
+  /**
+   * Populate additional attributes [hidden] to model fields
+   *
+   * @static
+   * @returns {Array} List of hidden fields
+   *
+   * @memberOf Model
+   */
+  static additionalFields() {
+    if (this.populateHiddenFields) {
+      return this.hiddenAttributes();
     }
-    return fields;
+    return [];
+  }
+
+  /**
+   * Extract valid values from data provided
+   *
+   * @static
+   * @param {Object} data Resource data
+   * @returns {Array} List of attibute values
+   *
+   * @memberOf Model
+   */
+  static getValues(data) {
+    const values = [];
+    Object.entries(data).forEach((pairs) => {
+      const { attributes } = this;
+      const [key, value] = pairs;
+      if (attributes[key]) values.push(value);
+    });
+    return values;
+  }
+
+  /**
+   * Mutate data to match model.attributes
+   *
+   * @static
+   * @param {Object} data Data from database
+   * @returns {Object} Mutated data
+   *
+   * @memberOf Model
+   */
+  static mutateData(data) {
+    const { attributes } = this;
+    const mutated = {};
+    Object.entries(attributes).forEach((pairs) => {
+      const [key, param] = pairs;
+      mutated[key] = data[param];
+    });
+    return mutated;
   }
 }

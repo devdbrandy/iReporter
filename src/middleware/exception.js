@@ -1,10 +1,12 @@
+import { Request, Response, NextFunction } from 'express';
+
 /**
  * Render an exception into an HTTP response
  *
- * @param {object} err Error object
- * @param {object} req Request object
- * @param {object} res Response object
- * @param {function} next call to the middleware
+ * @param {Error} err Error object
+ * @param {Request} req Request object
+ * @param {Response} res Response object
+ * @param {NextFunction} next call to the middleware
  */
 const exceptionHandler = (err, req, res, next) => {
   // set locals, only providing error in development

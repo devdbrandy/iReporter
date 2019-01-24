@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { validationResult } from 'express-validator/check';
 
@@ -27,7 +28,7 @@ const validateNameRule = param => (
 );
 
 export const validator = {
-  auth: {
+  login: {
     username: {
       isAlphanumeric: {
         errorMessage: 'Username is invalid',
@@ -44,7 +45,7 @@ export const validator = {
       },
     },
   },
-  user: {
+  signup: {
     firstname: validateNameRule('First name'),
     lastname: validateNameRule('Last name'),
     username: {
@@ -74,22 +75,36 @@ export const validator = {
     },
     password: {
       isLength: {
-        errorMessage: 'Password should be at least 7 chars long',
+        errorMessage: 'Password should be at least 6 chars long',
         options: { min: 6 },
       },
       custom: {
-        options: (value, { req }) => {
+        options: (value, { req, param }) => {
           if (value !== req.body.passwordConfirmation) {
-            throw new Error('Passwords do not match');
+            throw new Error("Passwords do not match: 'passwordConfirmation'");
           }
           return value;
         },
       },
     },
   },
+  user: {
+    firstname: validateNameRule('First name'),
+    lastname: validateNameRule('Last name'),
+    othernames: {
+      ltrim: { options: [[' ', '']] },
+      rtrim: { options: [[' ', '']] },
+    },
+    phoneNumber: {
+      isMobilePhone: {
+        errorMessage: 'Phone number is invalid',
+      },
+      rtrim: { options: [[' ', '-']] },
+    },
+  },
   record: {
     location: {
-      errorMessage: 'Invalid coordinates',
+      errorMessage: 'Invalid coordinates value',
       isLatLong: true,
     },
     title: validateTextRule('Title', 5),
@@ -101,15 +116,40 @@ export const validator = {
         errorMessage: 'Invalid media collection',
       },
     },
+    status: {
+      custom: {
+        options: (value) => {
+          const status = ['draft', 'published'];
+          if (!status.includes(value)) {
+            throw new Error(`Invalid string value: '${value}'. Allowed values: ${status}`);
+          }
+          return value;
+        },
+      },
+    },
+  },
+  recordStatus: {
+    status: {
+      custom: {
+        options: (value) => {
+          const status = ['under-investigation', 'resolved', 'rejected'];
+          if (!status.includes(value)) {
+            throw new Error(`Invalid string value: '${value}'. Allowed values: ${status}`);
+          }
+          return value;
+        },
+      },
+    },
   },
 };
 
 /**
 * Validates request
 *
-* @param {object} req Request object
-* @param {Function} next call to next middleware
-* @returns {Boolean} returns true successful validation
+* @param {Request} req Request object
+* @param {Response} res Response object
+* @param {NextFunction} next call to next middleware
+* @returns {Boolean} returns true or false on successful validation
 *
 */
 export function validateRequest(req, res, next) {
@@ -121,11 +161,20 @@ export function validateRequest(req, res, next) {
   return next();
 }
 
+/**
+* Validates request type param
+*
+* @param {Request} req Request object
+* @param {Response} res Response object
+* @param {NextFunction} next call to next middleware
+* @returns {NextFunction} returns next()
+*
+*/
 export function validateType(req, res, next) {
-  const recordTypes = ['red-flags', 'interventions'];
+  const allowedTypes = ['red-flags', 'interventions'];
   let { params: { type } } = req;
 
-  if (recordTypes.indexOf(type) === -1) {
+  if (!allowedTypes.includes(type)) {
     return next(createError(404, 'Provided route is invalid'));
   }
 
@@ -133,3 +182,20 @@ export function validateType(req, res, next) {
   req.type = type;
   return next();
 }
+
+/**
+* Validates admin access
+*
+* @param {Request} req Request object
+* @param {Response} res Response object
+* @param {NextFunction} next call to next middleware
+* @returns {NextFunction} returns next()
+*
+*/
+export const isAdmin = (req, res, next) => {
+  if (!req.user.isAdmin) {
+    const message = 'Your account is not authorized to access the requested resource';
+    return next(createError(403, message));
+  }
+  return next();
+};

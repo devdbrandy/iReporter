@@ -2,7 +2,7 @@ import express from 'express';
 import { checkSchema } from 'express-validator/check';
 
 /* Controllers */
-import { AuthController } from '../controllers/api';
+import { AuthController } from '../controllers';
 
 /* Middleware */
 import {
@@ -14,13 +14,13 @@ const router = express.Router();
 
 /* Create new user */
 router.post('/signup', [
-  checkSchema(validator.user),
+  checkSchema(validator.signup),
   validateRequest,
 ], AuthController.signup);
 
 /* Authenticate user */
 router.post('/login', [
-  checkSchema(validator.auth),
+  checkSchema(validator.login),
   validateRequest,
 ], AuthController.login);
 

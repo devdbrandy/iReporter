@@ -64,4 +64,5 @@ typings/
 # Others
 .vscode
 dist
+build
 uploads

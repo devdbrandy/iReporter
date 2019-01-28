@@ -227,6 +227,7 @@ main.signin {
   position: relative;
   flex: 1;
   height: 100vh;
+  overflow: hidden;
 }
 
 .showcase {
@@ -249,7 +250,7 @@ main.signin {
 
 .signin--header h2 {
   font-size: 4.8em;
-  margin-top: 3rem;
+  margin-top: 4rem;
   margin-bottom: 0;
   transition: all 0.5s;
 }
@@ -321,7 +322,7 @@ button[type=submit] {
   display: block;
   color: var(--white);
   text-decoration: none;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1rem;
   font-family: inherit;
   font-size: 1.5rem;
   text-align: center;
@@ -351,13 +352,13 @@ button[type=submit] {
 .signin--footer {
   color: var(--gray80);
   text-align: center;
-  max-width: 80%;
-  padding-top: 3rem;
+  padding: 3rem 0 1rem;
+  /* margin-top: auto; */
 }
 
 .signin--footer p {
   font-size: 1.28rem;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
 .signin--footer a {

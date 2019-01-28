@@ -73,16 +73,20 @@
   margin-top: 2rem;
 }
 
-.mt-10 {
-  margin-top: 1rem;
-}
-
 .ml-20 {
   margin-left: 2rem;
 }
 
 .mr-20 {
   margin-right: 2rem;
+}
+
+.mt-10 {
+  margin-top: 1rem;
+}
+
+.mb-10 {
+  margin-bottom: 1rem;
 }
 
 .pl-10 {

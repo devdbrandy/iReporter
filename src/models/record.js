@@ -1,5 +1,4 @@
-import db from '../config/database';
-import Model from './model';
+import { Model, User } from './index';
 
 export default class Record extends Model {
   /**
@@ -25,8 +24,8 @@ export default class Record extends Model {
   /**
    * Checks if the resource belongs to the provided user
    *
-   * @param {Object} user User object
-   * @returns {Boolean}
+   * @param {User} user - User object
+   * @returns {Boolean} True or False upon validation
    *
    * @memberOf Record
    */
@@ -65,6 +64,7 @@ export default class Record extends Model {
       title: 'title',
       comment: 'comment',
       status: 'status',
+      createdOn: 'created_at',
     };
   }
 }

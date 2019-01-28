@@ -1,12 +1,19 @@
 import bcrypt from 'bcryptjs';
-import Model from './model';
+import { Model } from './index';
 
 const privateProps = new WeakMap();
 
+/**
+ * Class representing user model
+ *
+ * @export
+ * @class User
+ * @extends {Model}
+ */
 export default class User extends Model {
   /**
    * Creates an instance of User.
-   * @param {object} attributes user attributes
+   * @param {Object} attributes - User attributes
    *
    * @memberOf User
    */
@@ -21,6 +28,9 @@ export default class User extends Model {
     this.username = attributes.username;
     this.registered = attributes.registered;
     this.isAdmin = attributes.isAdmin;
+    this.gender = attributes.gender;
+    this.avatar = attributes.avatar;
+    this.bio = attributes.bio;
     privateProps.set(this, {
       password: attributes.password,
     });
@@ -40,7 +50,7 @@ export default class User extends Model {
    * Get the model table name
    *
    * @static
-   * @returns {String} model table name
+   * @returns {String} Model table name
    *
    * @memberOf User
    */
@@ -68,6 +78,9 @@ export default class User extends Model {
       password: 'password',
       registered: 'created_at',
       isAdmin: 'is_admin',
+      gender: 'gender',
+      avatar: 'avatar',
+      bio: 'bio',
     };
   }
 
@@ -75,7 +88,7 @@ export default class User extends Model {
   * Hidden attributes
   *
   * @static
-  * @returns {Array} A list of all hidden attributes
+  * @returns {Array} List of all hidden attributes
   *
   * @memberOf User
   */
@@ -87,8 +100,9 @@ export default class User extends Model {
    * Create and persist a new resource
    *
    * @static
-   * @param {Object} data the resource attributes
-   * @returns {Model} a User resource
+   * @async
+   * @param {Object} data - The resource attributes
+   * @returns {User} User resource
    *
    * @memberOf User
    */

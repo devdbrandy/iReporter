@@ -1,33 +1,44 @@
 import db from '../config/database';
 import { extractParams } from '../utils/helpers';
 
+/**
+ * Class representing a model
+ *
+ * @export
+ * @class Model
+ */
 export default class Model {
   /**
    * Update resource attributes
    *
-   * @param {Object} data Attributes to modify
+   * @async
+   * @param {Object} data - Attributes to modify
    * @returns {Model} Model resource
    *
    * @memberOf Record
    */
   async update(data) {
-    const values = this.constructor.getValues(data);
-    const queryString = this.constructor.updateQuery(data);
+    const Model = this.constructor;
+    const values = Model.extractValues(data);
+    const queryString = Model.updateQuery(data);
     const params = [...values, this.id];
     const { rows } = await db.query(queryString, params);
-    const [record] = rows;
-    return record;
+    const [row] = rows;
+    const attributes = Model.mutateData(row);
+    return new Model(attributes);
   }
 
   /**
    * Delete a resource
    *
+   * @async
    * @returns {Object} Recently deleted resources
    *
    * @memberOf Model
    */
   async delete() {
-    const queryString = `DELETE FROM ${this.constructor.table()} WHERE id=$1 RETURNING *`;
+    const Model = this.constructor;
+    const queryString = `DELETE FROM ${Model.table()} WHERE id=$1 RETURNING *`;
     const { rows } = await db.query(queryString, [this.id]);
     const [row] = rows;
     return row;
@@ -37,49 +48,55 @@ export default class Model {
    * Fetch resource by given id
    *
    * @static
-   * @param {String} id resource id
-   * @returns {Model} a Model resource
+   * @async
+   * @param {Object} columns - Resource column(s) to filter
+   * @returns {Model} Model resource
    *
    * @memberOf Model
    */
-  static async find(fields) {
-    this.populateHiddenFields = true;
-    const [row] = await this.where(fields);
+  static async find(columns) {
+    const Model = this;
+    Model.populateHiddenFields = true;
+    const [row] = await this.where(columns);
     if (!row) return null;
-    return new this(row);
+    return new Model(row);
   }
 
   /**
    * Fetch a list of resources
    *
    * @static
-   * @param {Object} options builder options
-   * @returns {[Model]} a list of user resources
+   * @async
+   * @param {Object} options - Query builder options
+   * @returns {Array} A list of user resources
    *
-   * @memberOf Record
+   * @memberOf Model
    */
   static async all(options) {
-    this.populateHiddenFields = false;
+    const Model = this;
+    Model.populateHiddenFields = false;
     const queryString = this.selectQuery(options);
     const { rows } = await db.query(queryString);
     return rows;
   }
 
   /**
-   * Build a select WHERE query on provided fields
+   * Build a select WHERE query with provided columns
    *
    * @static
-   * @param {String} query select query
-   * @param {String} param values applied
-   * @returns {[Model]} a list of model resources
+   * @async
+   * @param {String} columns - Columns to filter
+   * @param {String} order - Controls the direction of the sort `asc` or `desc`
+   * @returns {Array} A list of model resources
    *
    * @memberOf Model
    */
-  static async where(fields) {
-    const params = extractParams(fields);
-    const values = Object.values(fields);
-
-    const queryString = `${this.selectQuery()} WHERE ${params}`;
+  static async where(columns, order = 'asc') {
+    const Model = this;
+    const params = extractParams(columns);
+    const values = Object.values(columns);
+    const queryString = `${Model.selectQuery()} WHERE ${params}
+      ORDER BY created_at ${order}`;
     const { rows } = await db.query(queryString, values);
     return rows;
   }
@@ -88,71 +105,75 @@ export default class Model {
    * Create and persist a new resource
    *
    * @static
-   * @param {Object} data the resource attributes
-   * @returns {Model} a Model resource
+   * @async
+   * @param {Object} data - The resource attributes
+   * @returns {Model} Model resource
    *
    * @memberOf Model
    */
   static async create(data) {
-    const queryString = this.insertQuery(data);
-    const values = this.getValues(data);
+    const Model = this;
+    const queryString = Model.insertQuery(data);
+    const values = Model.extractValues(data);
     const { rows } = await db.query(queryString, values);
     const [row] = rows;
-    const mutated = this.mutateData(row);
-    return new this(mutated);
+    const mutated = Model.mutateData(row);
+    return new Model(mutated);
   }
 
   /**
    * Build insert query based on model attributes
    *
    * @static
-   * @param {Object} data the resource attributes
-   * @returns {String}
+   * @param {Object} data - The resource attributes
+   * @returns {String} Insert query string
    *
    * @memberOf Model
    */
   static insertQuery(data) {
-    const { attributes } = this;
-    const fields = [];
-    const params = [];
+    const Model = this;
+    const { attributes } = Model;
+    const columns = [];
+    const values = [];
     let index = 0;
 
     Object.keys(data).forEach((key) => {
       const attribute = attributes[key];
       if (attribute) {
         index += 1;
-        fields.push(attribute);
-        params.push(`$${index}`);
+        columns.push(attribute);
+        values.push(`$${index}`);
       }
     });
 
-    return `INSERT INTO ${this.table()}(${fields})
-      VALUES(${params}) RETURNING *`;
+    return `INSERT INTO ${Model.table()}(${columns})
+      VALUES(${values}) RETURNING *`;
   }
 
   /**
    * Build update query based on model attributes
    *
    * @static
-   * @param {Object} data the resource attributes
-   * @returns {String}
+   * @param {Object} data - The resource attributes
+   * @returns {String} Update query string
    *
    * @memberOf Model
    */
   static updateQuery(data) {
-    const { attributes } = this;
-    const fields = [];
+    const Model = this;
+    const { attributes } = Model;
+    const columns = [];
     let index = 1;
 
     Object.keys(data).forEach((key) => {
       const attribute = attributes[key];
       if (attribute) {
-        fields.push(`${attribute}=$${index}`);
+        columns.push(`${attribute}=$${index}`);
         index += 1;
       }
     });
 
-    return `UPDATE ${this.table()} SET ${fields}
+    return `UPDATE ${Model.table()} SET ${columns}
       WHERE id=$${index} RETURNING *`;
   }
 
@@ -160,28 +181,50 @@ export default class Model {
    * Build select query based on model abstract fields
    *
    * @static
-   * @param {Object} options builder options
-   * @returns {String}
+   * @param {Object} options - Query builder options
+   * @returns {String} Select query string
    *
    * @memberOf Model
    */
   static selectQuery(options = {}) {
-    const table = this.table();
-    if ('join' in options) {
+    const Model = this;
+    const table = Model.table();
+    let select = `SELECT ${Model.abstractFields}`;
+    let from = ` FROM ${table}`;
+    let query = '';
+
+    // Build query for JOIN clause
+    const { join } = options;
+    if (join && join.length > 0) {
       const { join: [builder] } = options;
       const { ref, fkey, fields } = builder;
       const joinFields = fields.map(field => (
         `${ref}.${field} as "${builder.as}.${field}"`
       ));
 
-      const abstractFields = this.abstractFields.map(field => (`${table}.${field}`));
-      return `
-        SELECT ${abstractFields}, ${joinFields}
-        FROM ${table}
-        INNER JOIN ${ref} ON ${ref}.id = ${table}.${fkey}
-      `;
+      const abstractFields = Model.abstractFields.map(field => (`${table}.${field}`));
+      select = `SELECT ${abstractFields}, ${joinFields}`;
+      from += ` INNER JOIN ${ref} ON ${ref}.id = ${table}.${fkey}`;
     }
-    return `SELECT ${this.abstractFields} FROM ${table}`;
+
+    // Build query for WHERE clause
+    const { where } = options;
+    if (where && where.length > 2) {
+      const { where: [lOperand, operator, rOperand] } = options;
+      from += ` WHERE ${lOperand} ${operator} '${rOperand}'`;
+    }
+
+    // Build query for ORDER BY clause
+    const { orderBy } = options;
+    if (orderBy && orderBy.length > 1) {
+      const { orderBy: [column, direction] } = options;
+      from += ` ORDER BY ${table}.${column} ${direction}`;
+    }
+
+    // Build final query
+    query += select;
+    query += from;
+    return query;
   }
 
   /**
@@ -193,22 +236,23 @@ export default class Model {
    * @memberOf Model
    */
   static get abstractFields() {
+    const Model = this;
+    const { attributes } = Model;
     const abstract = [];
-    const { attributes } = this;
     Object.entries(attributes).forEach((pairs) => {
       const [key, value] = pairs;
       if (!this.hiddenAttributes().includes(key)) {
         abstract.push(`${value} as "${key}"`);
       }
     });
-    return [...abstract, ...this.additionalFields()];
+    return [...abstract, ...(Model.additionalFields())];
   }
 
   /**
    * Holds all hidden attributes
    *
    * @static
-   * @returns {Array} A list of all hidden attributes
+   * @returns {Array} List of all hidden attributes
    *
    * @memberOf Model
    */
@@ -217,7 +261,7 @@ export default class Model {
   }
 
   /**
-   * Get populating state for hidden fields
+   * Get populating state value
    *
    * @readonly
    * @static
@@ -258,15 +302,16 @@ export default class Model {
    * Extract valid values from data provided
    *
    * @static
-   * @param {Object} data Resource data
+   * @param {Object} data - Resource data
    * @returns {Array} List of attibute values
    *
    * @memberOf Model
    */
-  static getValues(data) {
+  static extractValues(data) {
+    const Model = this;
+    const { attributes } = Model;
     const values = [];
     Object.entries(data).forEach((pairs) => {
-      const { attributes } = this;
       const [key, value] = pairs;
       if (attributes[key]) values.push(value);
     });
@@ -277,13 +322,14 @@ export default class Model {
    * Mutate data to match model.attributes
    *
    * @static
-   * @param {Object} data Data from database
+   * @param {Object} data - Data to mutate
    * @returns {Object} Mutated data
    *
    * @memberOf Model
    */
   static mutateData(data) {
-    const { attributes } = this;
+    const Model = this;
+    const { attributes } = Model;
     const mutated = {};
     Object.entries(attributes).forEach((pairs) => {
       const [key, param] = pairs;

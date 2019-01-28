@@ -19,10 +19,10 @@ function authenticate(req, res, next) {
   if (!bearer) return next(createError(401, 'You are unauthorized to access the requested resource. Please log in.'));
 
   const token = bearer.split(' ')[1];
-  if (!token) return next(createError(401, 'Authentication required: Please provide a valid token'));
+  if (!token) return next(createError(401, 'Authentication required: Please provide a valid token.'));
 
   return jwt.verify(token, env('APP_KEY'), async (err, decoded) => {
-    if (err || !decoded) return next(createError(401, 'Authentication failure: Invalid access token'));
+    if (err || !decoded) return next(createError(401, 'Authentication failure: Invalid access token.'));
 
     const { user } = decoded;
     req.user = user || decoded;

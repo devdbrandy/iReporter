@@ -98,11 +98,11 @@ export default class UsersController {
 
     try {
       const user = await User.find({ id });
-      if (!user) throw createError(404, 'Resource not found');
+      if (!user) throw createError(404, 'Resource not found.');
 
       // Validate user authorization
       if (auth.id !== user.id && !auth.isAdmin) {
-        throw createError(403, 'Operation is forbidden');
+        throw createError(403, 'Operation is forbidden.');
       }
 
       const updatedUser = await user.update({
@@ -117,7 +117,7 @@ export default class UsersController {
       const token = jwt.sign({ user }, env('APP_KEY'));
       const payload = { token, user: updatedUser };
       const data = [{
-        message: 'User profile successfully updated',
+        message: 'User profile successfully updated.',
         payload,
       }];
       return responseHandler(response, data);

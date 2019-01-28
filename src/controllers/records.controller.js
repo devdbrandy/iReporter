@@ -71,7 +71,7 @@ export default class RecordsController {
 
     try {
       const record = await Record.where({ id, type });
-      if (record.length === 0) throw createError(404, 'Resource not found');
+      if (record.length === 0) throw createError(404, 'Resource not found.');
       return responseHandler(response, record);
     } catch (error) {
       return next(error);
@@ -118,7 +118,7 @@ export default class RecordsController {
         comment: body.comment,
         status: body.status || 'draft',
       });
-      const data = [{ id, message: `Created ${type} record` }];
+      const data = [{ id, message: `Created ${type} record.` }];
       return responseHandler(response, data, 201);
     } catch (error) {
       return next(error);
@@ -150,14 +150,14 @@ export default class RecordsController {
 
     try {
       const record = await Record.find({ id, type });
-      if (!record) throw createError(404, 'Resource not found');
+      if (!record) throw createError(404, 'Resource not found.');
 
       isAuthorized(user, record);
 
       await record.update(body);
       const data = [{
         id,
-        message: `Updated ${type} record's ${attribute}`,
+        message: `Updated ${type} record's ${attribute || 'details.'}`,
       }];
       return responseHandler(response, data);
     } catch (error) {
@@ -182,14 +182,14 @@ export default class RecordsController {
 
     try {
       const record = await Record.find({ id, type });
-      if (!record) throw createError(404, 'Resource not found');
+      if (!record) throw createError(404, 'Resource not found.');
 
       isAuthorized(user, record);
 
       await record.delete();
       const data = [{
         id,
-        message: `${type} record has been deleted`,
+        message: `${type} record has been deleted.`,
       }];
       return responseHandler(response, data);
     } catch (error) {

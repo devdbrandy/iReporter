@@ -1,16 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import { responseHandler, alreadyTaken, handleConflictResponse } from '../utils/helpers';
+import { env } from '../utils';
 
+/**
+ * Class representing users controller
+ *
+ * @export
+ * @class UsersController
+ */
 export default class UsersController {
   /**
    * Fetch all users
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {NextFunction} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf UsersController
    */
@@ -27,9 +35,9 @@ export default class UsersController {
    * Fetch a specific user
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {NextFunction} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf UsersController
    */
@@ -49,9 +57,9 @@ export default class UsersController {
    * Create new user
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {NextFunction} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf UsersController
    */
@@ -78,9 +86,9 @@ export default class UsersController {
    * Update user resource
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {NextFunction} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf UsersController
    */
@@ -97,15 +105,20 @@ export default class UsersController {
         throw createError(403, 'Operation is forbidden');
       }
 
-      await user.update({
+      const updatedUser = await user.update({
         firstname: body.firstname || user.firstname,
         lastname: body.lastname || user.lastname,
         othernames: body.othernames || user.othernames,
         phoneNumber: body.phoneNumber || user.phoneNumber,
+        gender: body.gender || user.gender,
+        avatar: body.avatar || user.avatar,
+        bio: body.bio || user.bio,
       });
+      const token = jwt.sign({ user }, env('APP_KEY'));
+      const payload = { token, user: updatedUser };
       const data = [{
-        id,
         message: 'User profile successfully updated',
+        payload,
       }];
       return responseHandler(response, data);
     } catch (error) {

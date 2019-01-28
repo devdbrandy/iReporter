@@ -1,30 +1,45 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import path from 'path';
 import { Record } from '../models';
 import { isAuthorized, responseHandler } from '../utils/helpers';
 
+/**
+ * Class representing records controller
+ *
+ * @export
+ * @class RecordsController
+ */
 export default class RecordsController {
   /**
    * Fetch all red-flag/intervention records
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf RecordsController
    */
   static async index(request, response, next) {
-    const { type } = request;
+    const { type, query } = request;
+    const { order, published } = query;
+    let where = [];
+    let orderBy = [];
+
+    if (published) where = ['status', '!=', 'draft'];
+    if (order) orderBy = ['created_at', order];
 
     try {
       let records;
       if (request.params.id) {
         const userId = parseInt(request.params.id, 10);
-        records = await Record.where({ user_id: userId });
+        records = await Record.where({ user_id: userId }, order);
       } else if (request.path === '/records') {
         records = await Record.all({
+          where,
+          orderBy,
           join: [{
             fkey: 'user_id',
             ref: 'users',
@@ -32,7 +47,7 @@ export default class RecordsController {
             fields: ['firstname', 'lastname'],
           }],
         });
-      } else records = await Record.where({ type });
+      } else records = await Record.where({ type }, order);
       return responseHandler(response, records);
     } catch (error) {
       return next(error);
@@ -43,9 +58,10 @@ export default class RecordsController {
    * Fetch a specific red-flag/intervention record
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf RecordsController
    */
@@ -66,9 +82,9 @@ export default class RecordsController {
    * Create a new red-flag/intervention record
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {Function} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf RecordsController
    */
@@ -113,9 +129,10 @@ export default class RecordsController {
    * Update a specific record
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
    * @memberOf RecordsController
    */
@@ -152,9 +169,10 @@ export default class RecordsController {
    * Delete a specific record
    *
    * @static
-   * @param {Request} request Request object
-   * @param {Response} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {MextFunction} next - Call to next middleware
    *
    * @memberOf RecordsController
    */

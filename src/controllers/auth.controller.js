@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
@@ -9,14 +10,20 @@ import {
   handleConflictResponse,
 } from '../utils/helpers';
 
+/**
+ * Class representing auth controller
+ *
+ * @export
+ * @class AuthController
+ */
 export default class AuthController {
   /**
    * Create new user account
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next call to next middleware
    *
    * @memberOf AuthController
    */
@@ -41,6 +48,17 @@ export default class AuthController {
     }
   }
 
+  /**
+   * Login to user account
+   *
+   * @static
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next call to next middleware
+   *
+   * @memberOf AuthController
+   */
   static async login(request, response, next) {
     const { body: { username, password } } = request;
 

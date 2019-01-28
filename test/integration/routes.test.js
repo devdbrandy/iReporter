@@ -294,6 +294,22 @@ describe('API routes', () => {
           .catch(done);
       });
     });
+
+    context(`GET ${baseURI}/records`, () => {
+      it('should fetch a list of all records (published and ordered)', (done) => {
+        request(app)
+          .get(`${baseURI}/records?published=true&order=desc`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200)
+          .then((res) => {
+            res.body.should.have.property('data')
+              .with.lengthOf(2);
+            done();
+          })
+          .catch(done);
+      });
+    });
   });
 
   describe('routes: /red-flags', () => {

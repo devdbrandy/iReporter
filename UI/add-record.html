@@ -6,13 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Add Record - iReporter</title>
 
-  <script>
-    // Validate user authentication
-    const credentials = JSON.parse(localStorage.getItem('credentials'));
-    if (!credentials) {
-      window.location = 'signin.html';
-    }
-  </script>
+  <script src="js/helpers/utils.js"></script>
+  <script>if (!auth()) window.location = 'signin.html';</script>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
@@ -118,7 +113,7 @@
                 <div class="col-10">
                   <div class="upload-btn-wrapper">
                     <label>
-                      <button id="upload_widget" class="cloudinary-button" type="button">
+                      <button id="upload-widget" class="cloudinary-button" type="button">
                         <i class="fas fa-paperclip"></i>
                       </button>
                       <input type="hidden" name="media" id="media" value="[]">
@@ -160,10 +155,9 @@
     </div>
   </footer>
 
-  <!-- <script src="js/cloudinary/cloudinary-core.js"></script> -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js">
   </script>
-  <script src="js/script.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/geoautocomplete.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"
   async defer></script>

@@ -6,18 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Update Record - iReporter</title>
 
+  <script src="js/helpers/utils.js"></script>
+  <script>if (!auth()) window.location = 'signin.html';</script>
   <script>
     // Validate user authentication
-    const credentials = JSON.parse(localStorage.getItem('credentials'));
-    if (!credentials) {
-      window.location = 'signin.html';
-    }
+    if (!auth()) window.location = 'signin.html';
 
     // Validation active record
     const record = JSON.parse(localStorage.getItem('record'));
-    if (!record) {
-      window.location = 'dashboard.html';
-    }
+    if (!record) window.location = getDashboard(auth().user);
   </script>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
@@ -115,7 +112,7 @@
                   <label for="geoautocomplete">Location</label>
                 </div>
                 <div class="col-10">
-                  <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter event location">
+                  <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter incident location">
                   <input type="hidden" name="location" id="location">
                   <input type="hidden" name="id" id="id">
                 </div>
@@ -124,12 +121,12 @@
                 <div class="col-2">
                   <label for="status">Status</label>
                 </div>
-                <div class="col-10">
+                <div class="col-10" id="status-container">
                   <label>
-                    <input type="radio" name="status" value="draft" checked> Draft
+                    <input type="radio" name="status" value="draft"> Draft
                   </label>
                   <label>
-                    <input type="radio" name="status" value="published"> Publish
+                    <input type="radio" name="status" value="published" checked> Publish
                   </label>
                 </div>
               </div>
@@ -155,7 +152,7 @@
   <!-- <script src="js/cloudinary/cloudinary-core.js"></script> -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js">
   </script>
-  <script src="js/script.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/geoautocomplete.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA&libraries=places&callback=initAutocomplete"
   async defer></script>

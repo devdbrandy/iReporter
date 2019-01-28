@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Profile - iReporter</title>
+
+  <script src="js/helpers/utils.js"></script>
+  <script>if (!auth()) window.location = 'signin.html';</script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -63,17 +67,18 @@
                 <img src="img/avatar.jpg" alt="avatar">
               </div>
               <div class="user--detail column center">
-                <h3>John Doe</h3>
-                <a href="settings.html" class="btn btn-primary">Edit Profile</a>
+                <h3></h3>
+                <a href="settings.html" class="btn btn-primary edit">Edit Profile</a>
                 <hr class="dash">
-                <p class="user--bio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro sapiente labore perspiciatis provident illum minus. Minus nihil exercitationem laboriosam totam modi explicabo, obcaecati cupiditate earum. Magnam aliquam libero magni minus!</p>
+                <p class="user--bio">No bio provided.</p>
               </div>
-              <div class="user--stat column center">
+              <div class="user--stat column center text-center">
                 <div class="wrapper">
-                  <span>Joined: Dec 3, 2018</span>
+                  <span>Joined: <i class="user--registered">Dec 3, 2018</i></span>
                   <hr class="dash">
-                  <span>0 Records Published</span>
-                  <span>0 Comments Written</span>
+                  <span><i class="incident-total">0</i> Incidents Published</span>
+                  <span><i class="incident-resolved">0</i> Incidents Resolved</span>
+                  <span><i class="incident-rejected">0</i> Incidents Rejected</span>
                 </div>
               </div>
             </div>
@@ -91,6 +96,6 @@
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

@@ -61,9 +61,8 @@ class AuthUI {
         // Show notification message
         UI.snackbar('Signup was successful, loading dashboard...');
         // Redirect user to dashboard
-        const { user } = credentials;
         setTimeout(() => {
-          window.location = getDashboard(user);
+          window.location = getDashboard();
         }, 3000);
       }
     } catch (error) {
@@ -90,12 +89,12 @@ class AuthUI {
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
+
         // Show notification message
         UI.snackbar('Login was successful, loading dashboard...');
         // Redirect user to dashboard
-        const { user } = credentials;
         setTimeout(() => {
-          window.location = getDashboard(user);
+          window.location = getDashboard();
         }, 3000);
       }
     } catch (error) {

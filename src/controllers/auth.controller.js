@@ -65,7 +65,7 @@ export default class AuthController {
     try {
       const user = await User.find({ username });
       if (!user || !isValidUser(user, password)) {
-        throw createError(401, 'Invalid credentials');
+        throw createError(401, 'Invalid credentials.');
       }
 
       const payload = JSON.stringify(user);

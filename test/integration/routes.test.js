@@ -44,7 +44,7 @@ describe('/404', () => {
       .get('/404')
       .expect(404, {
         status: 404,
-        error: 'Provided route is invalid',
+        error: 'Provided route is invalid.',
       }, done);
   });
 });
@@ -144,7 +144,7 @@ describe('routes: /auth', () => {
         })
         .expect(401, {
           status: 401,
-          error: 'Invalid credentials',
+          error: 'Invalid credentials.',
         }, done);
     });
   });
@@ -351,7 +351,7 @@ describe('API routes', () => {
           .set('Authorization', `Bearer ${user1Token}`)
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -405,8 +405,7 @@ describe('API routes', () => {
           .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
-          .expect(400)
-          .end(done);
+          .expect(400, done);
       });
 
       specify('error for unauthenticated user', (done) => {
@@ -460,7 +459,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -475,7 +474,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Authentication failure: Invalid access token',
+            error: 'Authentication failure: Invalid access token.',
           }, done);
       });
 
@@ -551,7 +550,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(403, {
             status: 403,
-            error: 'Your account is not authorized to access the requested resource',
+            error: 'Your account is not authorized to access the requested resource.',
           }, done);
       });
 
@@ -592,7 +591,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -605,7 +604,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Authentication failure: Invalid access token',
+            error: 'Authentication failure: Invalid access token.',
           }, done);
       });
     });
@@ -617,7 +616,7 @@ describe('API routes', () => {
         .get(`${baseURI}/undefined`)
         .expect(404, {
           status: 404,
-          error: 'Provided route is invalid',
+          error: 'Provided route is invalid.',
         }, done);
     });
   });

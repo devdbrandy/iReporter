@@ -7,9 +7,9 @@ import { User, Record } from '../models';
 /**
  * Gets the value of a configuration variable
  *
- * @param {string} token the key:value to return
- * @param {any} defValue a default value
- * @returns {any} the value of the configuration var
+ * @param {String} token the key:value to return
+ * @param {(String|Number|Boolean)} defValue a default value
+ * @returns {(String|Number|Boolean)} the value of the configuration var
  */
 export function config(token, defValue) {
   const [key, value] = token.split(':', 2);
@@ -21,12 +21,12 @@ export function config(token, defValue) {
  *
  * @param {User} user User object
  * @param {Record} record Record object
- * @returns {Boolean|Error} returns true if authorized
+ * @returns {(Boolean|Error)} returns true if authorized
  */
 export const isAuthorized = (user, record) => {
   if (
     (!record.belongsTo(user) && !user.isAdmin)
-    || (!user.isAdmin && record.status !== 'draft')
+    || (!user.isAdmin && record.status !== 'draft' && record.status !== 'published')
   ) {
     throw createError(403, 'Forbidden');
   }

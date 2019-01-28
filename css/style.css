@@ -289,6 +289,10 @@ main.signin {
   transition: all 0.5s;
 }
 
+button[type=submit] {
+  margin-top: 5px;
+}
+
 .signin--form input:hover,
 .signup--form input:hover,
 .home--signup--form input:hover {
@@ -494,6 +498,10 @@ hr.dash {
 /* ----- END RECORD ----- */
 
 /* ----- USER PROFILE ----- */
+.user-profile {
+  padding: 1rem;
+}
+
 .user--avatar img {
   width: 25rem;
   height: 25rem;
@@ -502,7 +510,7 @@ hr.dash {
   object-fit: cover;
 }
 
-.profile--image img {
+.profile-image img {
   width: 5rem;
   height: 5rem;
   border: 1px solid var(--gray80);
@@ -512,8 +520,10 @@ hr.dash {
 
 .user--detail h3 {
   font-weight: bold;
-  font-size: 6.1rem;
-  margin-bottom: 0;
+  font-size: 5.5rem;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 2rem;
 }
 
 .user--detail .btn-primary {
@@ -753,6 +763,7 @@ td select {
 
 .records-list .record-title i {
   color: var(--green);
+  font-size: 1.8rem;
 }
 
 .records-list .record-body p {
@@ -983,5 +994,9 @@ span.location {
 
   .records-list .card {
     max-width: calc(25% - 6px);
+  }
+
+  .user--detail h3 {
+    font-size: 6rem;
   }
 }

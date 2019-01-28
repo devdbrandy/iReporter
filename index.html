@@ -6,13 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Home - iReporter</title>
 
-  <script>
-    // Validate user authentication
-    const credentials = JSON.parse(localStorage.getItem('credentials'));
-    if (credentials) {
-      window.location = 'dashboard.html';
-    }
-  </script>
+  <script src="js/helpers/utils.js"></script>
+  <script>if (auth()) window.location = getDashboard(auth().user);</script>
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/main.css">
@@ -88,7 +83,7 @@
 
   <script src="js/addons/cleave.min.js"></script>
   <script src="js/addons/cleave-phone.ng.js"></script>
-  <script src="js/script.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>

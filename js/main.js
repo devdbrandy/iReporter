@@ -145,6 +145,15 @@ class UserAPI extends ApiBase {
 
 /* RecordAPI class */
 class RecordAPI extends ApiBase {
+  /**
+   * Make a GET request to fecth all records
+   *
+   * @static
+   * @param {String} url - The request url
+   * @returns {Promise<Response>} Response object
+   *
+   * @memberOf RecordAPI
+   */
   static async fetchRecords(url) {
     const { token } = auth();
     const options = {
@@ -160,8 +169,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a POST request to create a new record
    *
-   * @param {Object} data user object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async create(data) {
     const { token } = auth();
@@ -184,8 +193,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a PUT request to update a record
    *
-   * @param {Object} data record object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async update(data) {
     const { token } = auth();
@@ -206,8 +215,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a PUT request to update a record
    *
-   * @param {Object} data record object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async updateStatus(record, status) {
     const { token } = auth();
@@ -228,9 +237,9 @@ class RecordAPI extends ApiBase {
    * Make a DELETE request to destroy a given record type
    *
    * @static
-   * @param {String} type record type
-   * @param {Number} id record identification number
-   * @returns {Response} response to request
+   * @param {String} type - The record type
+   * @param {Number} id - The record identification number
+   * @returns {Promise<Response>} Response object
    *
    * @memberOf RecordAPI
    */
@@ -275,7 +284,7 @@ class UI {
           break;
         case 'dashboard.html':
           userId = auth().user.id;
-          url = `${baseUrl}/users/${userId}/records?order=desc`;
+          url = `${baseUrl}/records?user=${userId}&order=desc`;
           records = await RecordAPI.fetchRecords(url);
           overview = generateOverview(records);
           // Assign record overview count
@@ -312,7 +321,12 @@ class UI {
     const container = document.querySelector('.records-list .row');
     const card = document.createElement('div');
     let statusIcon = '';
-    const { type, location, status } = record;
+    const {
+      type,
+      location,
+      status,
+      author,
+    } = record;
     if (status === 'resolved') {
       statusIcon = '<i class="fas fa-check-circle"></i>';
     }
@@ -324,7 +338,7 @@ class UI {
       <div class="record-cover">
         <img src="img/img_nature.jpg">
         <div class="overlay"></div>
-        <span class="author">By: <span class="name">${record['author.firstname']} ${record['author.lastname']}</span></span>
+        <span class="author">By: <span class="name">${getFullname(author)}</span></span>
         <span class="tag tag-${type}">${type}</span>
       </div>
       <div class="record-body">
@@ -349,14 +363,20 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-    const { type, status } = record;
+    const {
+      type,
+      status,
+      createdOn,
+      author,
+    } = record;
+    const dateCreated = moment(createdOn).format('D-MM-YYYY');
 
     if (getPath() === 'admin-dashboard.html') {
       // generate for admin user
       row.innerHTML = `
         <td>${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record['author.firstname']} ${record['author.lastname']}</td>
+        <td>${getFullname(author)}</td>
         <td>
           <div class="wrapper">
             <select name="status" class="record-status">${getStatusOptions(status)}</select>
@@ -381,7 +401,7 @@ class UI {
       row.innerHTML = `
         <td class="title">${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record.createdOn}</td>
+        <td>${dateCreated}</td>
         <td><span class="tag">${record.status}</span></td>
         <td>
           <div class="wrapper">
@@ -440,6 +460,7 @@ class UI {
       comment,
       location,
       images,
+      author,
     } = record;
 
     const modalBody = document.querySelector('.modal--body');
@@ -452,7 +473,7 @@ class UI {
     const authorField = modalBody.querySelector('.author a');
     if (authorField) {
       authorField.href = `profile.html?user=${record.createdBy}`;
-      authorField.innerText = `${record['author.firstname']} ${record['author.lastname']}`;
+      authorField.innerText = `${getFullname(author)}`;
     }
 
     // Load media files
@@ -481,7 +502,7 @@ class UI {
    * Handle create record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
    *
    * @memberOf UI
    */
@@ -525,7 +546,8 @@ class UI {
    * Handle record update
    *
    * @static
-   * @param {HTMLElement} el Item list
+   * @param {HTMLElement} el - Item list
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -596,7 +618,8 @@ class UI {
    * Handle update record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -768,6 +791,26 @@ if (updateRecordForm) {
   updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
 
+/* Go Back History */
+const btnBack = document.querySelector('.btn-back');
+if (btnBack) {
+  btnBack.addEventListener('click', UI.goBack);
+}
+
+/* User signout */
+const logoutBtn = document.getElementById('logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', (e) => {
+    localStorage.clear();
+    window.location = 'index.html';
+  });
+}
+
+/* Footer copyright year pre-filling */
+const date = new Date();
+const copyrightYear = document.getElementById('copyright-year');
+if (copyrightYear) copyrightYear.innerText = date.getFullYear();
+
 /* Cloudinary upload widget */
 const uploadWidget = document.getElementById('upload-widget');
 if (uploadWidget) {
@@ -782,21 +825,6 @@ if (uploadWidget) {
     theme: 'purple',
   }, UI.mediaUpload);
   uploadWidget.addEventListener('click', () => myWidget.open(), false);
-}
-
-/* Go Back History */
-const btnBack = document.querySelector('.btn-back');
-if (btnBack) {
-  btnBack.addEventListener('click', UI.goBack);
-}
-
-/* User signout */
-const logoutBtn = document.getElementById('logout');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', (e) => {
-    localStorage.clear();
-    window.location = 'index.html';
-  });
 }
 
 /* Input formating */
@@ -817,7 +845,8 @@ const renderProfile = (user, overview) => {
   const bio = !user.bio ? 'Bio not provided.' : user.bio;
   document.querySelector('.user--detail h3').innerText = getFullname(user);
   document.querySelector('.user--bio').innerText = bio;
-  document.querySelector('.user--registered').innerText = user.registered;
+  const registered = moment(user.registered).format('MMM Do, YYYY');
+  document.querySelector('.user--registered').innerText = registered;
   document.querySelector('.user--avatar img').src = user.avatar;
 
   document.querySelector('.incident-total').innerText = overview.total;
@@ -841,7 +870,7 @@ async function profilePage() {
       const [user] = await UserAPI.fetchUser(id);
       // Fetch user records
       const baseUrl = RecordAPI.uri;
-      const url = `${baseUrl}/users/${id}/records`;
+      const url = `${baseUrl}/records?user=${id}`;
       const records = await RecordAPI.fetchRecords(url);
       overview = generateOverview(records);
       renderProfile(user, overview);
@@ -857,7 +886,7 @@ profilePage();
 /* User settings page */
 if (getPath() === 'settings.html') {
   const { user } = auth();
-  document.getElementById('username').value = user.username;
+  document.getElementById('username').value = `@${user.username}`;
   document.getElementById('email').value = user.email;
   document.getElementById('firstname').value = user.firstname;
   document.getElementById('lastname').value = user.lastname;

@@ -1,20 +1,19 @@
 # Fetch all red-flag records
 
-API endpoint that represents a list of red-flag records
+API endpoint that represents a list of all records
 
-- **URL Endpoint:** `/api/v1/red-flags`
+- **URL Endpoint:** `/api/v1/records`
 - **Method:** `GET`
-- **URL Params:** `None`
-- **URL Query (Optional):**
+- **URL Params:**
   
-  | Name        | Type      | Description                     | Query                     |
-  |-------------|-----------|---------------------------------|---------------------------|
-  | `user`      | `integer` | Filter by user id               | `/red-flags?user=1`         |
-  | `published` | `boolean` | Filter published records        | `/red-flags?published=true` |
-  | `order`     | `string`  | Order result by `ASC` or `DESC` | `/red-flags?order=DESC`     |
+| Name        | Type      | Description                     | Query                     |
+|-------------|-----------|---------------------------------|---------------------------|
+| `user`      | `integer` | Filter by user id               | `/records?user=1`         |
+| `published` | `boolean` | Filter published records        | `/records?published=true` |
+| `order`     | `string`  | Order result by `ASC` or `DESC` | `/records?order=DESC`     |
 
-  Sample query (combined): `/red-flags?user=1&published=true&order=DESC`
-  
+Sample query (combined): `/records?user=1&published=true&order=DESC`
+
 - **Header Options:**
   - Authorization: Bearer `access_token`
 - **Request Body:** `None`
@@ -50,7 +49,7 @@ API endpoint that represents a list of red-flag records
 - **Usage Sample:**
 
   ```http
-  GET https://irepot.herokuapp.com/api/v1/red-flags
+  GET https://irepot.herokuapp.com/api/v1/records
   HTTP/1.1
   Accept: application/json
   Authorization: Bearer {access_token}
@@ -64,7 +63,7 @@ API endpoint that represents a list of red-flag records
       {
         "id": 1,
         "createdBy": 2,
-        "type": "red-flag",
+        "type": "intervention",
         "location": "-42.2078,98.33",
         "images": [
           "https://via.placeholder.com/650x450",

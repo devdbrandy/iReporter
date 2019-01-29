@@ -23,19 +23,18 @@ API endpoint that represents a single red-flag record
       "data": [
         {
           "id": 1,
-          "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
+          "createdBy": 2,
           "type": "red-flag",
-          "location": "-42.7871,138.0694",
-          "title": "Red-flag title",
-          "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
+          "location": "-42.2078,98.33",
           "images": [
             "https://via.placeholder.com/650x450",
             "https://via.placeholder.com/650x450"
           ],
-          "videos": [
-            "https://via.placeholder.com/sample-video.mp4",
-          ],
-          "status": "draft"
+          "videos": ["https://via.placeholder.com/sample-video.mp4"],
+          "title": "Record 1 title",
+          "comment": "Bad roads",
+          "status": "resolved",
+          "createdOn": "2019-01-27T19:48:36.098Z"
         }
       ]
     }
@@ -67,16 +66,18 @@ API endpoint that represents a single red-flag record
     "data": [
       {
         "id": 1,
-        "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
+        "createdBy": 2,
         "type": "red-flag",
-        "location": "-42.7871,138.0694",
-        "title": "Red-flag title",
-        "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
+        "location": "-42.2078,98.33",
         "images": [
           "https://via.placeholder.com/650x450",
           "https://via.placeholder.com/650x450"
         ],
-        "status": "draft"
+        "videos": ["https://via.placeholder.com/sample-video.mp4"],
+        "title": "Record 1 title",
+        "comment": "Bad roads",
+        "status": "resolved",
+        "createdOn": "2019-01-27T19:48:36.098Z"
       }
     ]
   }

@@ -145,6 +145,15 @@ class UserAPI extends ApiBase {
 
 /* RecordAPI class */
 class RecordAPI extends ApiBase {
+  /**
+   * Make a GET request to fecth all records
+   *
+   * @static
+   * @param {String} url - The request url
+   * @returns {Promise<Response>} Response object
+   *
+   * @memberOf RecordAPI
+   */
   static async fetchRecords(url) {
     const { token } = auth();
     const options = {
@@ -160,8 +169,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a POST request to create a new record
    *
-   * @param {Object} data user object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async create(data) {
     const { token } = auth();
@@ -184,8 +193,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a PUT request to update a record
    *
-   * @param {Object} data record object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async update(data) {
     const { token } = auth();
@@ -206,8 +215,8 @@ class RecordAPI extends ApiBase {
   /**
    * Make a PUT request to update a record
    *
-   * @param {Object} data record object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async updateStatus(record, status) {
     const { token } = auth();
@@ -228,9 +237,9 @@ class RecordAPI extends ApiBase {
    * Make a DELETE request to destroy a given record type
    *
    * @static
-   * @param {String} type record type
-   * @param {Number} id record identification number
-   * @returns {Response} response to request
+   * @param {String} type - The record type
+   * @param {Number} id - The record identification number
+   * @returns {Promise<Response>} Response object
    *
    * @memberOf RecordAPI
    */
@@ -481,7 +490,7 @@ class UI {
    * Handle create record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
    *
    * @memberOf UI
    */
@@ -525,7 +534,8 @@ class UI {
    * Handle record update
    *
    * @static
-   * @param {HTMLElement} el Item list
+   * @param {HTMLElement} el - Item list
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -596,7 +606,8 @@ class UI {
    * Handle update record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -768,6 +779,26 @@ if (updateRecordForm) {
   updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
 
+/* Go Back History */
+const btnBack = document.querySelector('.btn-back');
+if (btnBack) {
+  btnBack.addEventListener('click', UI.goBack);
+}
+
+/* User signout */
+const logoutBtn = document.getElementById('logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', (e) => {
+    localStorage.clear();
+    window.location = 'index.html';
+  });
+}
+
+/* Footer copyright year pre-filling */
+const date = new Date();
+const copyrightYear = document.getElementById('copyright-year');
+if (copyrightYear) copyrightYear.innerText = date.getFullYear();
+
 /* Cloudinary upload widget */
 const uploadWidget = document.getElementById('upload-widget');
 if (uploadWidget) {
@@ -782,21 +813,6 @@ if (uploadWidget) {
     theme: 'purple',
   }, UI.mediaUpload);
   uploadWidget.addEventListener('click', () => myWidget.open(), false);
-}
-
-/* Go Back History */
-const btnBack = document.querySelector('.btn-back');
-if (btnBack) {
-  btnBack.addEventListener('click', UI.goBack);
-}
-
-/* User signout */
-const logoutBtn = document.getElementById('logout');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', (e) => {
-    localStorage.clear();
-    window.location = 'index.html';
-  });
 }
 
 /* Input formating */
@@ -857,7 +873,7 @@ profilePage();
 /* User settings page */
 if (getPath() === 'settings.html') {
   const { user } = auth();
-  document.getElementById('username').value = user.username;
+  document.getElementById('username').value = `@${user.username}`;
   document.getElementById('email').value = user.email;
   document.getElementById('firstname').value = user.firstname;
   document.getElementById('lastname').value = user.lastname;

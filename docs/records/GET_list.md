@@ -4,7 +4,8 @@ API endpoint that represents a list of all records
 
 - **URL Endpoint:** `/api/v1/records`
 - **Method:** `GET`
-- **URL Params:**
+- **URL Params:** `None`
+- **URL Query (Optional):**
   
 | Name        | Type      | Description                     | Query                     |
 |-------------|-----------|---------------------------------|---------------------------|

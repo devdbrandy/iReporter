@@ -1,24 +1,32 @@
+import { NextFunction } from 'express';
 import createError from 'http-errors';
 import bcrypt from 'bcryptjs';
 import appConfig from '../config';
-import { User } from '../models';
+import { User, Record } from '../models';
 
 /**
  * Gets the value of a configuration variable
  *
- * @param {string} token the key:value to return
- * @param {any} defValue a default value
- * @returns {any} the value of the configuration var
+ * @param {String} token the key:value to return
+ * @param {(String|Number|Boolean)} defValue a default value
+ * @returns {(String|Number|Boolean)} the value of the configuration var
  */
 export function config(token, defValue) {
   const [key, value] = token.split(':', 2);
   return appConfig[key][value] || defValue;
 }
 
+/**
+ * Determines if the user can modify a given `record` resource
+ *
+ * @param {User} user User object
+ * @param {Record} record Record object
+ * @returns {(Boolean|Error)} returns true if authorized
+ */
 export const isAuthorized = (user, record) => {
   if (
     (!record.belongsTo(user) && !user.isAdmin)
-    || (!user.isAdmin && record.status !== 'draft')
+    || (!user.isAdmin && record.status !== 'draft' && record.status !== 'published')
   ) {
     throw createError(403, 'Forbidden');
   }
@@ -30,8 +38,8 @@ export const isAuthorized = (user, record) => {
  * Determines if the user is valid
  *
  * @param {User} user User object
- * @param {string} password provided password to validate against
- * @returns {boolean} returns truthy based on validation
+ * @param {String} password provided password to validate against
+ * @returns {Boolean} returns truthy based on validation
  */
 export const isValidUser = (user, password) => bcrypt.compareSync(password, user.password);
 
@@ -73,4 +81,14 @@ export const extractParams = (fields) => {
 export const alreadyTaken = async (param) => {
   const user = await User.find(param);
   return user;
+};
+
+/**
+ * Handle conflict error response
+ *
+ * @param {String} param field parameter to respond with
+ * @param {NextFunction} next error response
+ */
+export const handleConflictResponse = (param, next) => {
+  next(createError(409, `${param} already taken. Try another.`));
 };

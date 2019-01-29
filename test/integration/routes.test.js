@@ -44,7 +44,7 @@ describe('/404', () => {
       .get('/404')
       .expect(404, {
         status: 404,
-        error: 'Provided route is invalid',
+        error: 'Provided route is invalid.',
       }, done);
   });
 });
@@ -86,7 +86,7 @@ describe('routes: /auth', () => {
         .set('Accept', 'application/json')
         .expect(409, {
           status: 409,
-          error: 'Email address already taken',
+          error: 'Email address already taken. Try another.',
         }, done);
     });
 
@@ -99,7 +99,7 @@ describe('routes: /auth', () => {
         .set('Accept', 'application/json')
         .expect(409, {
           status: 409,
-          error: 'Username already taken',
+          error: 'Username already taken. Try another.',
         }, done);
     });
 
@@ -144,7 +144,7 @@ describe('routes: /auth', () => {
         })
         .expect(401, {
           status: 401,
-          error: 'Invalid credentials',
+          error: 'Invalid credentials.',
         }, done);
     });
   });
@@ -197,6 +197,18 @@ describe('API routes', () => {
     return user2Token;
   });
 
+  describe('routes: /me', () => {
+    context(`GET ${baseURI}/me`, () => {
+      it('should fetch authenticated user profile info', (done) => {
+        request(app)
+          .get(`${baseURI}/me`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200, done);
+      });
+    });
+  });
+
   describe('routes: /users', () => {
     context(`GET ${baseURI}/users`, () => {
       it('should fetch all users', (done) => {
@@ -230,19 +242,22 @@ describe('API routes', () => {
       });
     });
 
-    context(`GET ${baseURI}/users/:id/records`, () => {
-      it('should fetch all records by user id', (done) => {
+    context(`PUT ${baseURI}/users/:id`, () => {
+      const data = {
+        firstname: 'John',
+        lastname: 'Doe',
+        othernames: 'Bravo',
+        phoneNumber: '6221329283',
+      };
+
+      it('should update a specific user profile', (done) => {
         request(app)
-          .get(`${baseURI}/users/2/records`)
+          .put(`${baseURI}/users/${user1.id}`)
+          .send(data)
           .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
           .set('Authorization', `Bearer ${user1Token}`)
-          .expect(200)
-          .then((res) => {
-            res.body.should.have.property('data')
-              .with.lengthOf(3);
-            done();
-          })
-          .catch(done);
+          .expect(200, done);
       });
     });
   });
@@ -258,6 +273,38 @@ describe('API routes', () => {
           .then((res) => {
             res.body.should.have.property('data')
               .with.lengthOf(4);
+            done();
+          })
+          .catch(done);
+      });
+
+      context(`GET ${baseURI}/records?user={id}`, () => {
+        it('should fetch all records by user id', (done) => {
+          request(app)
+            .get(`${baseURI}/records?user=2`)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${user1Token}`)
+            .expect(200)
+            .then((res) => {
+              res.body.should.have.property('data')
+                .with.lengthOf(3);
+              done();
+            })
+            .catch(done);
+        });
+      });
+    });
+
+    context(`GET ${baseURI}/records`, () => {
+      it('should fetch a list of all records (published and ordered)', (done) => {
+        request(app)
+          .get(`${baseURI}/records?published=true&order=desc`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${user1Token}`)
+          .expect(200)
+          .then((res) => {
+            res.body.should.have.property('data')
+              .with.lengthOf(2);
             done();
           })
           .catch(done);
@@ -304,7 +351,7 @@ describe('API routes', () => {
           .set('Authorization', `Bearer ${user1Token}`)
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -358,8 +405,7 @@ describe('API routes', () => {
           .set('Authorization', `Bearer ${user1Token}`)
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
-          .expect(400)
-          .end(done);
+          .expect(400, done);
       });
 
       specify('error for unauthenticated user', (done) => {
@@ -413,7 +459,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -428,7 +474,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Failed authentication',
+            error: 'Authentication failure: Invalid access token.',
           }, done);
       });
 
@@ -468,6 +514,61 @@ describe('API routes', () => {
       });
     });
 
+    context(`PATCH ${baseURI}/red-flags/:id/status`, () => {
+      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiSmFtZXMiLCJsYXN0bmFtZSI6IkJvbmQiLCJvdGhlcm5hbWVzIjoiQWRtaW5pc3RyYXRvciIsInBob25lTnVtYmVyIjoiNjIyLTEzMi05MjIzIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwicmVnaXN0ZXJlZCI6IjIwMTktMDEtMjRUMTI6MDQ6NTguNjg1WiIsImlzQWRtaW4iOnRydWV9.RkkzWbH4CTQ37z7DJeUDF6wELTBfAt4YpKrLKOxqXcI';
+
+      it('[ADMIN] should edit the status of a specific red-flag record', (done) => {
+        const data = {
+          status: 'under-investigation',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(200)
+          .then((res) => {
+            const { body: { data } } = res;
+            data[0].should.have.property('id');
+            done();
+          })
+          .catch(done);
+      });
+
+      specify('error for unauthorized user', (done) => {
+        const data = {
+          status: 'resolved',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${user1Token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(403, {
+            status: 403,
+            error: 'Your account is not authorized to access the requested resource.',
+          }, done);
+      });
+
+      specify('error for status not allowed', (done) => {
+        const data = {
+          status: 'draft',
+        };
+
+        request(app)
+          .patch(`${baseURI}/red-flags/1/status`)
+          .send(data)
+          .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(400, done);
+      });
+    });
+
     context(`DELETE ${baseURI}/red-flags/:id`, () => {
       it('should delete a specific red-flag record', (done) => {
         request(app)
@@ -490,7 +591,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(404, {
             status: 404,
-            error: 'Resource not found',
+            error: 'Resource not found.',
           }, done);
       });
 
@@ -503,7 +604,7 @@ describe('API routes', () => {
           .set('Accept', 'application/json')
           .expect(401, {
             status: 401,
-            error: 'Failed authentication',
+            error: 'Authentication failure: Invalid access token.',
           }, done);
       });
     });
@@ -515,7 +616,7 @@ describe('API routes', () => {
         .get(`${baseURI}/undefined`)
         .expect(404, {
           status: 404,
-          error: 'Provided route is invalid',
+          error: 'Provided route is invalid.',
         }, done);
     });
   });

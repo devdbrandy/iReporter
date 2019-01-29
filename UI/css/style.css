@@ -227,6 +227,7 @@ main.signin {
   position: relative;
   flex: 1;
   height: 100vh;
+  overflow: hidden;
 }
 
 .showcase {
@@ -249,7 +250,7 @@ main.signin {
 
 .signin--header h2 {
   font-size: 4.8em;
-  margin-top: 3rem;
+  margin-top: 4rem;
   margin-bottom: 0;
   transition: all 0.5s;
 }
@@ -289,6 +290,10 @@ main.signin {
   transition: all 0.5s;
 }
 
+button[type=submit] {
+  margin-top: 5px;
+}
+
 .signin--form input:hover,
 .signup--form input:hover,
 .home--signup--form input:hover {
@@ -317,7 +322,7 @@ main.signin {
   display: block;
   color: var(--white);
   text-decoration: none;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1rem;
   font-family: inherit;
   font-size: 1.5rem;
   text-align: center;
@@ -347,13 +352,13 @@ main.signin {
 .signin--footer {
   color: var(--gray80);
   text-align: center;
-  max-width: 80%;
-  padding-top: 3rem;
+  padding: 3rem 0 1.5rem;
+  /* margin-top: auto; */
 }
 
 .signin--footer p {
   font-size: 1.28rem;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
 .signin--footer a {
@@ -494,6 +499,10 @@ hr.dash {
 /* ----- END RECORD ----- */
 
 /* ----- USER PROFILE ----- */
+.user-profile {
+  padding: 1rem;
+}
+
 .user--avatar img {
   width: 25rem;
   height: 25rem;
@@ -502,7 +511,7 @@ hr.dash {
   object-fit: cover;
 }
 
-.profile--image img {
+.profile-image img {
   width: 5rem;
   height: 5rem;
   border: 1px solid var(--gray80);
@@ -512,8 +521,10 @@ hr.dash {
 
 .user--detail h3 {
   font-weight: bold;
-  font-size: 6.1rem;
-  margin-bottom: 0;
+  font-size: 5rem;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 2rem;
 }
 
 .user--detail .btn-primary {
@@ -753,6 +764,7 @@ td select {
 
 .records-list .record-title i {
   color: var(--green);
+  font-size: 1.8rem;
 }
 
 .records-list .record-body p {
@@ -983,5 +995,9 @@ span.location {
 
   .records-list .card {
     max-width: calc(25% - 6px);
+  }
+
+  .user--detail h3 {
+    font-size: 5.5rem;
   }
 }

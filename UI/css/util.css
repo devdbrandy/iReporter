@@ -17,6 +17,10 @@
   flex: 1;
 }
 
+.col-2 {
+  flex: 2;
+}
+
 .col-20 {
   width: 20%;
 }
@@ -50,6 +54,9 @@
   justify-content: flex-end;
 }
 
+.text-center {
+  text-align: center;
+}
 /* ----- End Alignment ----- */
 
 
@@ -66,16 +73,20 @@
   margin-top: 2rem;
 }
 
-.mt-10 {
-  margin-top: 1rem;
-}
-
 .ml-20 {
   margin-left: 2rem;
 }
 
 .mr-20 {
   margin-right: 2rem;
+}
+
+.mt-10 {
+  margin-top: 1rem;
+}
+
+.mb-10 {
+  margin-bottom: 1rem;
 }
 
 .pl-10 {
@@ -90,6 +101,12 @@
   padding-right: 4px;
 }
 /* ----- End Margin/Padding -----*/
+
+/* MISC. */
+.hide {
+  display: none;
+}
+/* End MISC */
 
 /* ----- Buttons, Inputs ----- */
 .primary {
@@ -132,6 +149,11 @@ a, button {
   transition: all 0.5s;
 }
 
+.btn-sm {
+  padding: 5px 8px;
+  font-size: 1.2rem;
+}
+
 .btn-block {
   display: block;
 }
@@ -148,11 +170,11 @@ a, button {
 .btn-primary {
   border: 1px solid var(--primary-color);
   background: var(--primary-color);
+  opacity: 0.9;
 }
 
 .btn-primary:hover {
-  border-color: var(--secondary-color);
-  background: var(--secondary-color);
+  opacity: 1;
 }
 
 .btn-secondary {

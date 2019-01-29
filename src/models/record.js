@@ -1,5 +1,4 @@
-import db from '../config/database';
-import Model from './model';
+import { Model, User } from './index';
 
 export default class Record extends Model {
   /**
@@ -25,8 +24,8 @@ export default class Record extends Model {
   /**
    * Checks if the resource belongs to the provided user
    *
-   * @param {Object} user User object
-   * @returns {Boolean}
+   * @param {User} user - User object
+   * @returns {Boolean} True or False upon validation
    *
    * @memberOf Record
    */
@@ -35,62 +34,80 @@ export default class Record extends Model {
   }
 
   /**
-   * Update resource attributes
-   *
-   * @param {object} data attributes to modify
-   * @returns {Model} model recource
-   *
-   * @memberOf Record
-   */
-  async update(data) {
-    const fields = [];
-    const values = [];
-    let fieldKey = 0;
-    Object.entries(data).forEach((item) => {
-      if (item[1]) {
-        fieldKey += 1;
-        fields.push(`${item[0]}=$${fieldKey}`);
-        values.push(item[1]);
-      }
-    });
-
-    const queryString = `UPDATE ${Record.tableName} SET ${fields}
-      WHERE id=$${fields.length + 1} RETURNING *`;
-
-    const params = [...values, this.id];
-    const { rows } = await db.query(queryString, params);
-    const [record] = rows;
-    return record;
-  }
-
-  async delete() {
-    const queryString = `DELETE FROM ${Record.tableName} WHERE id=$1 RETURNING *`;
-    const { rows } = await db.query(queryString, [this.id]);
-    const [row] = rows;
-    return row;
-  }
-
-  static get tableName() {
+  * Get table name for the model
+  *
+  * @static
+  * @returns {String} Model table name
+  *
+  * @memberOf Record
+  */
+  static table() {
     return 'records';
   }
 
-  static get fields() {
-    return ['user_id', 'type', 'location', 'images', 'videos', 'title', 'comment', 'status'];
+  /**
+  * Get model attributes with their custom name
+  *
+  * @readonly
+  * @static
+  *
+  * @memberOf Record
+  */
+  static get attributes() {
+    return {
+      id: 'id',
+      createdBy: 'user_id',
+      type: 'type',
+      location: 'location',
+      images: 'images',
+      videos: 'videos',
+      title: 'title',
+      comment: 'comment',
+      status: 'status',
+      createdOn: 'created_at',
+    };
   }
 
-  static get abstractFields() {
-    return [
-      'id',
-      'user_id as "createdBy"',
-      'type',
-      'location',
-      'images',
-      'videos',
-      'title',
-      'comment',
-      'status',
-      'updated_at as "updatedOn"',
-      'created_at as "createdOn"',
-    ];
+  /**
+   * Fetch a list of record resources
+   *
+   * @static
+   * @override
+   * @param {Object} options - Query builder options
+   * @returns {Record[]} A list of user resources
+   *
+   * @memberOf Model
+   */
+  static async all(options) {
+    const rows = await super.all(options);
+    const records = this.collect(rows);
+    return records;
+  }
+
+  /**
+   * Deeply collect and organize data key:value pair
+   *
+   * @static
+   * @param {Array} rows - List of records
+   * @returns {Record[]} The newly collected data
+   *
+   * @memberOf Record
+   */
+  static collect(rows) {
+    const records = rows.map((row) => {
+      const record = {};
+      const deepValues = {};
+
+      Object.entries(row).forEach((pairs) => {
+        const [key, value] = pairs;
+        if (key.includes('.')) {
+          const [outerKey, innerKey] = key.split('.');
+          deepValues[innerKey] = value;
+          record[outerKey] = deepValues;
+        } else record[key] = value;
+      });
+      return record;
+    });
+    return records;
   }
 }

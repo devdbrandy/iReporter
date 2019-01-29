@@ -4,37 +4,46 @@ class AuthAPI {
   }
 
   /**
-   * Make a POST request to signup user
+   * Make a POST request to `auth` endpoint
    *
-   * @param {Object} data user object parameters
-   * @returns {Response} response to request
+   * @static
+   * @param {String} path - The path params
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>}
+   *
+   * @memberOf AuthAPI
    */
-  static async signup(data) {
-    const res = await fetch(`${AuthAPI.uri}/signup`, {
+  static async request(path, data) {
+    const response = await fetch(`${AuthAPI.uri}${path}`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-    return res;
+    return response;
   }
 
   /**
-   * Make a POST request to signup user
+   * Make request to signup user
    *
-   * @param {Object} data user object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
+   */
+  static async signup(data) {
+    const response = AuthAPI.request('/signup', data);
+    return response;
+  }
+
+  /**
+   * Make request to signup user
+   *
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async login(data) {
-    const res = await fetch(`${AuthAPI.uri}/login`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    return res;
+    const response = await AuthAPI.request('/login', data);
+    return response;
   }
 }
 
@@ -42,8 +51,8 @@ class AuthUI {
   /**
    * Handle signup form submit
    *
-   * @param {Event} e Event object
-   * @returns {Response} response to request
+   * @param {Event} e - Event object
+   * @returns {void}
    */
   static async handleSignup(e) {
     e.preventDefault();
@@ -61,9 +70,8 @@ class AuthUI {
         // Show notification message
         UI.snackbar('Signup was successful, loading dashboard...');
         // Redirect user to dashboard
-        const { user } = credentials;
         setTimeout(() => {
-          window.location = getDashboard(user);
+          window.location = getDashboard();
         }, 3000);
       }
     } catch (error) {
@@ -74,8 +82,8 @@ class AuthUI {
   /**
    * Handle signin form submit
    *
-   * @param {Event} e Event object
-   * @returns {Response} response to request
+   * @param {Event} e - Event object
+   * @returns {void}
    */
   static async handleLogin(e) {
     e.preventDefault();
@@ -90,12 +98,12 @@ class AuthUI {
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
+
         // Show notification message
         UI.snackbar('Login was successful, loading dashboard...');
         // Redirect user to dashboard
-        const { user } = credentials;
         setTimeout(() => {
-          window.location = getDashboard(user);
+          window.location = getDashboard();
         }, 3000);
       }
     } catch (error) {

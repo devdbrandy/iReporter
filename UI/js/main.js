@@ -1,69 +1,3 @@
-// Set environment configuration
-window.env = {
-  APP_ENV: 'prod',
-  API_URI: 'https://irepot.herokuapp.com',
-};
-
-if (
-  window.location.hostname === 'localhost'
-  || window.location.protocol === 'file:'
-) {
-  window.env.APP_ENV = 'develop';
-  window.env.API_URI = 'http://localhost:3000';
-}
-
-// Helper functions
-
-/**
- * Get environment config value
- *
- * @param {String} key env config key
- * @returns {String} env config value
- */
-function getEnv(key) {
-  return window.env[key];
-}
-
-/**
- * Validate user authentication
- *
- * @returns {Boolean}
- */
-function auth() {
-  return JSON.parse(localStorage.getItem('credentials'));
-}
-
-/**
- * Get the current URI path
- *
- * @returns {String} uri path
- */
-function getPath() {
-  const paths = window.location.pathname.split('/');
-  return paths[paths.length - 1];
-}
-
-/**
- * Convert a FormData to Object literal type
- *
- * @param {FormData} formData formdata object
- * @returns {Object} key value pairs
- */
-function objectify(formData) {
-  const result = {};
-  for (const pairs of formData.entries()) {
-    const [key, value] = pairs;
-    result[key] = value;
-  }
-  return result;
-}
-
-const getDashboard = user => (
-  user.isAdmin ? 'admin-dashboard.html' : 'dashboard.html'
-);
-
-// End Helper functions
-
 /* Toggle Modal */
 const modal = document.getElementById('modal');
 const modalBtn = document.getElementById('modal-open');
@@ -138,7 +72,8 @@ const getStatusOptions = (recordStatus) => {
   let statusSelectOpts = '';
   statusOptions.forEach((status) => {
     const selected = recordStatus === status ? 'selected' : '';
-    statusSelectOpts += `<option value="${status}" ${selected}>${status}</option>`;
+    const disabled = status === 'published' ? 'disabled' : '';
+    statusSelectOpts += `<option value="${status}" ${selected} ${disabled}>${status}</option>`;
   });
   return statusSelectOpts;
 };
@@ -166,34 +101,76 @@ async function initMap(cordinates) {
 }
 /* End Initialize Map */
 
-/* RecordAPI class */
-class RecordAPI {
+class ApiBase {
   static get uri() {
     return `${getEnv('API_URI')}/api/v1`;
   }
+}
 
-  static async fetchRecords(userId) {
+class UserAPI extends ApiBase {
+  static async fetchUser(id) {
     const { token } = auth();
     const options = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    let apiURI = `${RecordAPI.uri}/records`;
-    if (userId) apiURI = `${RecordAPI.uri}/users/${userId}/records`;
-
-    const response = await fetch(apiURI, options);
+    const url = `${UserAPI.uri}/users/${id}`;
+    const response = await fetch(url, options);
     const { data } = await response.json();
     return data;
   }
 
-  static fetchRecord(type, id) {}
+  /**
+   * Make a PUT request to update a record
+   *
+   * @param {Object} data record object parameters
+   * @returns {Response} response to request
+   */
+  static async update(data) {
+    const { token, user: { id } } = auth();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    const userData = objectify(data);
+    const res = await fetch(`${UserAPI.uri}/users/${id}`, {
+      method: 'put',
+      headers,
+      body: JSON.stringify(userData),
+    });
+    return res;
+  }
+}
+
+/* RecordAPI class */
+class RecordAPI extends ApiBase {
+  /**
+   * Make a GET request to fecth all records
+   *
+   * @static
+   * @param {String} url - The request url
+   * @returns {Promise<Response>} Response object
+   *
+   * @memberOf RecordAPI
+   */
+  static async fetchRecords(url) {
+    const { token } = auth();
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await fetch(url, options);
+    const { data } = await response.json();
+    return data;
+  }
 
   /**
    * Make a POST request to create a new record
    *
-   * @param {Object} data user object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async create(data) {
     const { token } = auth();
@@ -206,7 +183,7 @@ class RecordAPI {
     record.media = JSON.parse(media); // convert media string to array
     const { type } = record;
     const res = await fetch(`${RecordAPI.uri}/${type}s`, {
-      method: 'post',
+      method: 'POST',
       headers,
       body: JSON.stringify(record),
     });
@@ -216,8 +193,8 @@ class RecordAPI {
   /**
    * Make a PUT request to update a record
    *
-   * @param {Object} data record object parameters
-   * @returns {Response} response to request
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
    */
   static async update(data) {
     const { token } = auth();
@@ -228,9 +205,30 @@ class RecordAPI {
     const record = objectify(data);
     const { id, type } = JSON.parse(localStorage.getItem('record'));
     const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
-      method: 'put',
+      method: 'PUT',
       headers,
       body: JSON.stringify(record),
+    });
+    return res;
+  }
+
+  /**
+   * Make a PUT request to update a record
+   *
+   * @param {Object} data - The data payload
+   * @returns {Promise<Response>} Response object
+   */
+  static async updateStatus(record, status) {
+    const { token } = auth();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    const { id, type } = record;
+    const res = await fetch(`${RecordAPI.uri}/${type}s/${id}/status`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ status }),
     });
     return res;
   }
@@ -239,9 +237,9 @@ class RecordAPI {
    * Make a DELETE request to destroy a given record type
    *
    * @static
-   * @param {String} type record type
-   * @param {Number} id record identification number
-   * @returns {Response} response to request
+   * @param {String} type - The record type
+   * @param {Number} id - The record identification number
+   * @returns {Promise<Response>} Response object
    *
    * @memberOf RecordAPI
    */
@@ -251,7 +249,7 @@ class RecordAPI {
       Authorization: `Bearer ${token}`,
     };
     const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
-      method: 'delete',
+      method: 'DELETE',
       headers,
     });
     return res;
@@ -264,25 +262,18 @@ class UI {
     // TODO: show preloader
 
     try {
-      const overview = {
-        draft: 0,
-        published: 0,
-        'under-investigation': 0,
-        resolved: 0,
-        rejected: 0,
-      };
+      let overview;
       let records;
       let userId;
+      let url;
+      const baseUrl = RecordAPI.uri;
 
       switch (getPath()) {
         case 'admin-dashboard.html':
-          records = await RecordAPI.fetchRecords();
-          records.forEach((record) => {
-            const { status } = record;
-            overview[status] += 1;
-          });
-          // Assign record overview count
-          document.getElementById('total-records').innerText = records.length;
+          url = `${baseUrl}/records?published=true&order=desc`;
+          records = await RecordAPI.fetchRecords(url);
+          overview = generateOverview(records);
+          document.getElementById('total-records').innerText = overview.total;
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
           document.getElementById('resolved-count').innerText = overview.resolved;
 
@@ -293,13 +284,11 @@ class UI {
           break;
         case 'dashboard.html':
           userId = auth().user.id;
-          records = await RecordAPI.fetchRecords(userId);
-          records.forEach((record) => {
-            const { status } = record;
-            overview[status] += 1;
-          });
+          url = `${baseUrl}/records?user=${userId}&order=desc`;
+          records = await RecordAPI.fetchRecords(url);
+          overview = generateOverview(records);
           // Assign record overview count
-          document.getElementById('total-records').innerText = records.length;
+          document.getElementById('total-records').innerText = overview.total;
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
           document.getElementById('resolved-count').innerText = overview.resolved;
           document.getElementById('rejected-count').innerText = overview.rejected;
@@ -310,7 +299,8 @@ class UI {
           }
           break;
         case 'records.html':
-          records = await RecordAPI.fetchRecords();
+          url = `${baseUrl}/records?published=true&order=desc`;
+          records = await RecordAPI.fetchRecords(url);
           records.forEach(record => UI.listRecordCards(record));
           break;
         default:
@@ -331,9 +321,14 @@ class UI {
     const container = document.querySelector('.records-list .row');
     const card = document.createElement('div');
     let statusIcon = '';
-    const { type, location, status } = record;
+    const {
+      type,
+      location,
+      status,
+      author,
+    } = record;
     if (status === 'resolved') {
-      statusIcon = '<i class="far fa-check-circle"></i>';
+      statusIcon = '<i class="fas fa-check-circle"></i>';
     }
 
     // Get location name
@@ -343,7 +338,7 @@ class UI {
       <div class="record-cover">
         <img src="img/img_nature.jpg">
         <div class="overlay"></div>
-        <span class="author">By: <span class="name">${record['author.firstname']} ${record['author.lastname']}</span></span>
+        <span class="author">By: <span class="name">${getFullname(author)}</span></span>
         <span class="tag tag-${type}">${type}</span>
       </div>
       <div class="record-body">
@@ -368,17 +363,23 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-    const { type, status } = record;
+    const {
+      type,
+      status,
+      createdOn,
+      author,
+    } = record;
+    const dateCreated = moment(createdOn).format('D-MM-YYYY');
 
     if (getPath() === 'admin-dashboard.html') {
       // generate for admin user
       row.innerHTML = `
         <td>${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record['author.firstname']} ${record['author.lastname']}</td>
+        <td>${getFullname(author)}</td>
         <td>
           <div class="wrapper">
-            <select name="status">${getStatusOptions(status)}</select>
+            <select name="status" class="record-status">${getStatusOptions(status)}</select>
             <a class="action-sync" title="sync update"><i class="fas fa-sync-alt"></i></a>
           </div>
         </td>
@@ -400,7 +401,7 @@ class UI {
       row.innerHTML = `
         <td class="title">${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record.createdOn}</td>
+        <td>${dateCreated}</td>
         <td><span class="tag">${record.status}</span></td>
         <td>
           <div class="wrapper">
@@ -432,6 +433,24 @@ class UI {
     row.querySelector('button.delete').addEventListener('click', (e) => {
       UI.removeRecord(row);
     });
+
+    const asyncButton = row.querySelector('.action-sync');
+    if (asyncButton) {
+      row.querySelector('.action-sync').addEventListener('click', async (e) => {
+        const { value } = row.querySelector('select[name=status]');
+
+        try {
+          const res = await RecordAPI.updateStatus(record, value);
+          const { status } = await res.json();
+          if (status === 200) {
+            // Show notification message
+            UI.snackbar('Record successfully updated.');
+          }
+        } catch (error) {
+          // TODO: handle error preview
+        }
+      });
+    }
   }
 
   static async showRecord(el) {
@@ -441,6 +460,7 @@ class UI {
       comment,
       location,
       images,
+      author,
     } = record;
 
     const modalBody = document.querySelector('.modal--body');
@@ -453,7 +473,7 @@ class UI {
     const authorField = modalBody.querySelector('.author a');
     if (authorField) {
       authorField.href = `profile.html?user=${record.createdBy}`;
-      authorField.innerText = `${record['author.firstname']} ${record['author.lastname']}`;
+      authorField.innerText = `${getFullname(author)}`;
     }
 
     // Load media files
@@ -482,7 +502,7 @@ class UI {
    * Handle create record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
    *
    * @memberOf UI
    */
@@ -526,7 +546,8 @@ class UI {
    * Handle record update
    *
    * @static
-   * @param {HTMLElement} el Item list
+   * @param {HTMLElement} el - Item list
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -543,6 +564,7 @@ class UI {
       title,
       comment,
       location,
+      status,
     } = JSON.parse(localStorage.getItem('record'));
 
     document.getElementById('id').value = id;
@@ -550,22 +572,54 @@ class UI {
     document.getElementById('comment').value = comment;
     document.getElementById('location').value = location;
 
-    // Get location address
-    const { results } = await lookupAddress(location);
-    const [place] = results;
-    document.getElementById('geoautocomplete').value = place.formatted_address;
-
     /* HTMLElement */
     document.querySelectorAll('input[name=type]').forEach((element) => {
       if (element.value === type) element.setAttribute('checked', true);
     });
+
+    /* HTMLElement */
+    document.querySelectorAll('input[name=status]').forEach((element) => {
+      if (element.value === status) element.setAttribute('checked', true);
+      if (status !== 'draft' || status !== 'published') {
+        element.setAttribute('disabled', true);
+      }
+    });
+
+    if (auth().user.isAdmin) {
+      if (status !== 'draft' || status !== 'published') {
+        const statusOptions = [
+          'published',
+          'under-investigation',
+          'resolved',
+          'rejected',
+        ];
+        let radioTags = '';
+        statusOptions.forEach((statusOpt) => {
+          const checked = statusOpt === status ? 'checked' : '';
+          let disabled = '';
+          if (status === 'published' && statusOpt === 'published') {
+            disabled = 'disabled';
+          }
+          radioTags += `
+            <label><input type="radio" name="status"
+              value="${statusOpt}" ${checked} ${disabled}> ${statusOpt}</label>`;
+        });
+        document.getElementById('status-container').innerHTML = radioTags;
+      }
+    }
+
+    // Get location address
+    const { results } = await lookupAddress(location);
+    const [place] = results;
+    document.getElementById('geoautocomplete').value = place.formatted_address;
   }
 
   /**
    * Handle update record form submit
    *
    * @static
-   * @param {Event} e Event object
+   * @param {Event} e - Event object
+   * @returns {void}
    *
    * @memberOf UI
    */
@@ -659,6 +713,14 @@ class UI {
     }
   }
 
+  static avatarUpload(error, result) {
+    if (result && result.event === 'success') {
+      const { info } = result;
+      document.querySelector('.profile-image img').src = info.secure_url;
+      document.getElementById('avatar').value = info.secure_url;
+    }
+  }
+
   static snackbar(text, ms = 3000) {
     const snackbar = UI.createSnackbar(text);
     document.body.appendChild(snackbar);
@@ -674,12 +736,44 @@ class UI {
     div.classList.add('show');
     return div;
   }
+
+  /**
+   * Handle settings form submit
+   *
+   * @static
+   * @param {Event} e Event object
+   *
+   * @memberOf UI
+   */
+  static async handleSettingsUpdate(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+      const res = await UserAPI.update(formData);
+      const { status, data: [row] } = await res.json();
+      if (status === 200) {
+        const { payload } = row;
+        localStorage.setItem('credentials', JSON.stringify(payload));
+        // Show notification message
+        UI.snackbar('Settings successfully updated.');
+        // redirect to dashboard
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      }
+    } catch (error) {
+      // TODO: handle error preview
+    }
+  }
 }
 
 /* User dashboard */
-const { user } = auth();
-const dashboardLink = document.getElementById('dashboard-link');
-dashboardLink.href = getDashboard(user);
+if (auth()) {
+  const dashboardLink = document.getElementById('dashboard-link');
+  dashboardLink.href = getDashboard();
+}
 
 /* Event: Load list of records */
 document.addEventListener('DOMContentLoaded', UI.showRecords);
@@ -697,21 +791,6 @@ if (updateRecordForm) {
   updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
 
-/* Cloudinary upload widget */
-const uploadWidget = document.getElementById('upload_widget');
-if (uploadWidget) {
-  const myWidget = cloudinary.createUploadWidget({
-    cloudName: 'devdb',
-    uploadPreset: 'z48lneqb',
-    maxFiles: 4,
-    maxFileSize: 1500000, // 1.5MB
-    folder: 'ireporter',
-    tags: ['incidents'],
-    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
-  }, UI.mediaUpload);
-  uploadWidget.addEventListener('click', () => myWidget.open(), false);
-}
-
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');
 if (btnBack) {
@@ -727,8 +806,119 @@ if (logoutBtn) {
   });
 }
 
+/* Footer copyright year pre-filling */
+const date = new Date();
+const copyrightYear = document.getElementById('copyright-year');
+if (copyrightYear) copyrightYear.innerText = date.getFullYear();
+
+/* Cloudinary upload widget */
+const uploadWidget = document.getElementById('upload-widget');
+if (uploadWidget) {
+  const myWidget = cloudinary.createUploadWidget({
+    cloudName: 'devdb',
+    uploadPreset: 'z48lneqb',
+    maxFiles: 4,
+    maxFileSize: 1500000, // 1.5MB
+    folder: 'ireporter',
+    tags: ['incidents'],
+    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
+    theme: 'purple',
+  }, UI.mediaUpload);
+  uploadWidget.addEventListener('click', () => myWidget.open(), false);
+}
+
 /* Input formating */
-// const cleave = new Cleave('#phonenumber', {
-//   phone: true,
-//   phoneRegionCode: 'NG',
-// });
+if (document.getElementById('phonenumber')) {
+  const cleave = new Cleave('#phonenumber', {
+    phone: true,
+    phoneRegionCode: 'NG',
+  });
+}
+
+/**
+ * Render user profile with an overview
+ *
+ * @param {Object} user - User object
+ * @param {Object} overview Overview object
+ */
+const renderProfile = (user, overview) => {
+  const bio = !user.bio ? 'Bio not provided.' : user.bio;
+  document.querySelector('.user--detail h3').innerText = getFullname(user);
+  document.querySelector('.user--bio').innerText = bio;
+  const registered = moment(user.registered).format('MMM Do, YYYY');
+  document.querySelector('.user--registered').innerText = registered;
+  document.querySelector('.user--avatar img').src = user.avatar;
+
+  document.querySelector('.incident-total').innerText = overview.total;
+  document.querySelector('.incident-resolved').innerText = overview.resolved;
+  document.querySelector('.incident-rejected').innerText = overview.rejected;
+};
+
+/**
+ * Handle user profile page operations
+ */
+async function profilePage() {
+  if (getPath() === 'profile.html') {
+    const params = new URLSearchParams(document.location.search.substring(1));
+    let overview;
+    if (params.has('user')) {
+      // Hide edit button
+      document.querySelector('a.edit').classList.add('hide');
+
+      // Fetch user profile
+      const id = params.get('user');
+      const [user] = await UserAPI.fetchUser(id);
+      // Fetch user records
+      const baseUrl = RecordAPI.uri;
+      const url = `${baseUrl}/records?user=${id}`;
+      const records = await RecordAPI.fetchRecords(url);
+      overview = generateOverview(records);
+      renderProfile(user, overview);
+    } else {
+      const { user } = auth();
+      overview = getOverview();
+      renderProfile(user, overview);
+    }
+  }
+}
+profilePage();
+
+/* User settings page */
+if (getPath() === 'settings.html') {
+  const { user } = auth();
+  document.getElementById('username').value = `@${user.username}`;
+  document.getElementById('email').value = user.email;
+  document.getElementById('firstname').value = user.firstname;
+  document.getElementById('lastname').value = user.lastname;
+  document.getElementById('othernames').value = user.othernames;
+  document.getElementById('phonenumber').value = user.phoneNumber;
+  document.getElementById('bio').value = user.bio;
+  document.getElementById('avatar').value = user.avatar;
+  document.querySelector('.profile-image img').src = user.avatar;
+  document.querySelectorAll('input[name=gender]').forEach((el) => {
+    if (el.value === user.gender) el.setAttribute('checked', true);
+  });
+
+  const uploadWidget = document.getElementById('upload-avatar');
+  const myWidget = cloudinary.createUploadWidget({
+    cloudName: 'devdb',
+    uploadPreset: 'z48lneqb',
+    cropping: true,
+    croppingAspectRatio: 1,
+    multiple: false,
+    maxFileSize: 1500000, // 1.5MB
+    folder: 'avatar',
+    tags: ['avatar', 'user'],
+    resourceType: 'image',
+    theme: 'purple',
+  }, UI.avatarUpload);
+  uploadWidget.addEventListener('click', () => myWidget.open(), false);
+
+  /* Event: update settings */
+  document.getElementById('settings-form')
+    .addEventListener('submit', UI.handleSettingsUpdate);
+}
+
+if (getPath() === 'edit-record.html' && auth().user.isAdmin) {
+  document.getElementById('status-container').classList.add('hide');
+}

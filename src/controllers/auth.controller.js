@@ -1,23 +1,31 @@
+import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import { User } from '../../models';
-import { env } from '../../utils';
-import { isValidUser, responseHandler, alreadyTaken } from '../../utils/helpers';
+import { User } from '../models';
+import { env } from '../utils';
+import {
+  isValidUser,
+  responseHandler,
+  alreadyTaken,
+  handleConflictResponse,
+} from '../utils/helpers';
 
-const handleConflictResponse = (param, next) => {
-  next(createError(409, `${param} already taken`));
-};
-
+/**
+ * Class representing auth controller
+ *
+ * @export
+ * @class AuthController
+ */
 export default class AuthController {
   /**
    * Create new user account
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next call to next middleware
    *
-   * @memberOf UsersController
+   * @memberOf AuthController
    */
   static async signup(request, response, next) {
     const { body } = request;
@@ -31,15 +39,8 @@ export default class AuthController {
         return handleConflictResponse('Username', next);
       }
 
-      const user = await User.create({
-        firstname: body.firstname,
-        lastname: body.lastname,
-        othernames: body.othernames,
-        phoneNumber: body.phoneNumber,
-        email,
-        username,
-        password: body.password,
-      });
+      body.isAdmin = false; // default to regular user
+      const user = await User.create(body);
       const token = jwt.sign({ user }, env('APP_KEY'));
       return responseHandler(response, [{ token, user }], 201);
     } catch (error) {
@@ -47,13 +48,24 @@ export default class AuthController {
     }
   }
 
+  /**
+   * Login to user account
+   *
+   * @static
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next call to next middleware
+   *
+   * @memberOf AuthController
+   */
   static async login(request, response, next) {
     const { body: { username, password } } = request;
 
     try {
       const user = await User.find({ username });
       if (!user || !isValidUser(user, password)) {
-        throw createError(401, 'Invalid credentials');
+        throw createError(401, 'Invalid credentials.');
       }
 
       const payload = JSON.stringify(user);

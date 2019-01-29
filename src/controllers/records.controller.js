@@ -1,29 +1,45 @@
+import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import path from 'path';
-import { Record } from '../../models';
-import { isAuthorized, responseHandler } from '../../utils/helpers';
+import { Record } from '../models';
+import { isAuthorized, responseHandler } from '../utils/helpers';
 
-export default class RedFlagsController {
+/**
+ * Class representing records controller
+ *
+ * @export
+ * @class RecordsController
+ */
+export default class RecordsController {
   /**
-   * Fetch all red-flag records
+   * Fetch all red-flag/intervention records
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async index(request, response, next) {
-    const { type } = request;
+    const { type, query } = request;
+    const { order, published, user } = query;
+    let where = [];
+    let orderBy = [];
+
+    if (published) where = ['status', '!=', 'draft'];
+    if (order) orderBy = ['created_at', order];
 
     try {
       let records;
-      if (request.params.id) {
-        const userId = parseInt(request.params.id, 10);
-        records = await Record.where({ user_id: userId });
+      if (user) {
+        const userId = parseInt(user, 10);
+        records = await Record.where({ user_id: userId }, order);
       } else if (request.path === '/records') {
         records = await Record.all({
+          where,
+          orderBy,
           join: [{
             fkey: 'user_id',
             ref: 'users',
@@ -31,7 +47,7 @@ export default class RedFlagsController {
             fields: ['firstname', 'lastname'],
           }],
         });
-      } else records = await Record.where({ type });
+      } else records = await Record.where({ type }, order);
       return responseHandler(response, records);
     } catch (error) {
       return next(error);
@@ -39,14 +55,15 @@ export default class RedFlagsController {
   }
 
   /**
-   * Fetch a specific red-flag record
+   * Fetch a specific red-flag/intervention record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async show(request, response, next) {
     const { type } = request;
@@ -54,7 +71,7 @@ export default class RedFlagsController {
 
     try {
       const record = await Record.where({ id, type });
-      if (record.length === 0) throw createError(404, 'Resource not found');
+      if (record.length === 0) throw createError(404, 'Resource not found.');
       return responseHandler(response, record);
     } catch (error) {
       return next(error);
@@ -62,14 +79,14 @@ export default class RedFlagsController {
   }
 
   /**
-   * Create a new red-flag record
+   * Create a new red-flag/intervention record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async create(request, response, next) {
     const {
@@ -99,9 +116,9 @@ export default class RedFlagsController {
         videos,
         title: body.title,
         comment: body.comment,
-        status: body.status,
+        status: body.status || 'draft',
       });
-      const data = [{ id, message: `Created ${type} record` }];
+      const data = [{ id, message: `Created ${type} record.` }];
       return responseHandler(response, data, 201);
     } catch (error) {
       return next(error);
@@ -109,14 +126,15 @@ export default class RedFlagsController {
   }
 
   /**
-   * Edit the comment of a specific red-flag record
+   * Update a specific record
    *
    * @static
-   * @param {object} request Request object
-   * @param {object} response Response object
-   * @param {function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {NextFunction} next - Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async update(request, response, next) {
     const {
@@ -132,21 +150,14 @@ export default class RedFlagsController {
 
     try {
       const record = await Record.find({ id, type });
-      if (!record) throw createError(404, 'Resource not found');
+      if (!record) throw createError(404, 'Resource not found.');
 
       isAuthorized(user, record);
 
-      const recordData = {
-        type: body.type,
-        location: body.location,
-        title: body.title,
-        comment: body.comment,
-        status: body.status,
-      };
-      await record.update(recordData);
+      await record.update(body);
       const data = [{
         id,
-        message: `Updated ${type} record's ${attribute}`,
+        message: `Updated ${type} record's ${attribute || 'details.'}`,
       }];
       return responseHandler(response, data);
     } catch (error) {
@@ -155,14 +166,15 @@ export default class RedFlagsController {
   }
 
   /**
-   * Delete a specific red-flag record
+   * Delete a specific record
    *
    * @static
-   * @param {Object} request Request object
-   * @param {Object} response Response object
-   * @param {Function} next Call to next middleware
+   * @async
+   * @param {Request} request - Request object
+   * @param {Response} response - Response object
+   * @param {MextFunction} next - Call to next middleware
    *
-   * @memberOf RedFlagsController
+   * @memberOf RecordsController
    */
   static async destroy(request, response, next) {
     const { user, type } = request;
@@ -170,14 +182,14 @@ export default class RedFlagsController {
 
     try {
       const record = await Record.find({ id, type });
-      if (!record) throw createError(404, 'Resource not found');
+      if (!record) throw createError(404, 'Resource not found.');
 
       isAuthorized(user, record);
 
       await record.delete();
       const data = [{
         id,
-        message: `${type} record has been deleted`,
+        message: `${type} record has been deleted.`,
       }];
       return responseHandler(response, data);
     } catch (error) {

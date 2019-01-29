@@ -6,13 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Sign In - iReporter</title>
 
-  <script>
-    // Validate user authentication
-    const credentials = JSON.parse(localStorage.getItem('credentials'));
-    if (credentials) {
-      window.location = 'dashboard.html';
-    }
-  </script>
+  <script src="js/helpers/utils.js"></script>
+  <script>if (auth()) window.location = getDashboard(auth().user);</script>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
@@ -51,7 +46,7 @@
                   <span>or</span>
                 </div>
               </div>
-              <button class="btn btn-secondary open">Create account</button>
+              <button type="button" class="btn btn-secondary open">Create account</button>
             </div>
           </div>
 
@@ -86,7 +81,7 @@
                 <div>
                   <input type="password" name="passwordConfirmation" placeholder="Repeat Password">
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary mb-10">Register</button>
               </form>
               <div class="row center">
                 <div class="row signin--or">
@@ -94,14 +89,14 @@
                   <span>or</span>
                   <hr class="bar">
                 </div>
+                <button type="button" class="btn btn-secondary close">Sign In</button>
               </div>
-              <button class="btn btn-secondary close">Sign In</button>
             </div>
           </div>
         </div>
         <footer class="signin--footer">
           <p class="credit">Made with <span><i class="fas fa-heart"></i></span> by <a href="https://github.com/devdbrandy">Dbrandy</a></p>
-          <p>Copyright &copy; 2018 iReporter. All Rights Reserved.</p>
+          <p>Copyright &copy; <span id="copyright-year">2018</span> iReporter. All Rights Reserved.</p>
         </footer>
       </section>
       <!-- SHOWCASE -->
@@ -124,7 +119,7 @@
     const openForm = () => {
       signupPopup.style.display = 'block';
       signinView.style.display = 'none';
-      headerLogo.style.fontSize = '3em';
+      headerLogo.style.fontSize = '2.6em';
     };
 
     const closeForm = () => {
@@ -136,7 +131,9 @@
     openButton.addEventListener('click', openForm);
     closeButton.addEventListener('click', closeForm);
   </script>
-  <script src="js/script.js"></script>
+  <script src="js/addons/cleave.min.js"></script>
+  <script src="js/addons/cleave-phone.ng.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>

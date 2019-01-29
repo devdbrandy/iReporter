@@ -58,13 +58,6 @@ router.put('/users/:id', [
   validateRequest,
 ], UsersController.update);
 
-/* Fetch all red-flag/intervention records by user */
-router.get('/users/:id/records', [
-  authenticate,
-  validateIdParam(),
-  validateRequest,
-], RecordsController.index);
-
 /* Fetch a list of all records */
 router.get('/records', [
   authenticate,

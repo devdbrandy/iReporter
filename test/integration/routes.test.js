@@ -260,22 +260,6 @@ describe('API routes', () => {
           .expect(200, done);
       });
     });
-
-    context(`GET ${baseURI}/users/:id/records`, () => {
-      it('should fetch all records by user id', (done) => {
-        request(app)
-          .get(`${baseURI}/users/2/records`)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${user1Token}`)
-          .expect(200)
-          .then((res) => {
-            res.body.should.have.property('data')
-              .with.lengthOf(3);
-            done();
-          })
-          .catch(done);
-      });
-    });
   });
 
   describe('routes: /records', () => {
@@ -292,6 +276,22 @@ describe('API routes', () => {
             done();
           })
           .catch(done);
+      });
+
+      context(`GET ${baseURI}/records?user={id}`, () => {
+        it('should fetch all records by user id', (done) => {
+          request(app)
+            .get(`${baseURI}/records?user=2`)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${user1Token}`)
+            .expect(200)
+            .then((res) => {
+              res.body.should.have.property('data')
+                .with.lengthOf(3);
+              done();
+            })
+            .catch(done);
+        });
       });
     });
 

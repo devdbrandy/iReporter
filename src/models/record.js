@@ -67,4 +67,47 @@ export default class Record extends Model {
       createdOn: 'created_at',
     };
   }
+
+  /**
+   * Fetch a list of record resources
+   *
+   * @static
+   * @override
+   * @param {Object} options - Query builder options
+   * @returns {Record[]} A list of user resources
+   *
+   * @memberOf Model
+   */
+  static async all(options) {
+    const rows = await super.all(options);
+    const records = this.collect(rows);
+    return records;
+  }
+
+  /**
+   * Deeply collect and organize data key:value pair
+   *
+   * @static
+   * @param {Array} rows - List of records
+   * @returns {Record[]} The newly collected data
+   *
+   * @memberOf Record
+   */
+  static collect(rows) {
+    const records = rows.map((row) => {
+      const record = {};
+      const deepValues = {};
+
+      Object.entries(row).forEach((pairs) => {
+        const [key, value] = pairs;
+        if (key.includes('.')) {
+          const [outerKey, innerKey] = key.split('.');
+          deepValues[innerKey] = value;
+          record[outerKey] = deepValues;
+        } else record[key] = value;
+      });
+      return record;
+    });
+    return records;
+  }
 }

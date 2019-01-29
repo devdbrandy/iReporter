@@ -284,7 +284,7 @@ class UI {
           break;
         case 'dashboard.html':
           userId = auth().user.id;
-          url = `${baseUrl}/users/${userId}/records?order=desc`;
+          url = `${baseUrl}/records?user=${userId}&order=desc`;
           records = await RecordAPI.fetchRecords(url);
           overview = generateOverview(records);
           // Assign record overview count
@@ -857,7 +857,7 @@ async function profilePage() {
       const [user] = await UserAPI.fetchUser(id);
       // Fetch user records
       const baseUrl = RecordAPI.uri;
-      const url = `${baseUrl}/users/${id}/records`;
+      const url = `${baseUrl}/records?user=${id}`;
       const records = await RecordAPI.fetchRecords(url);
       overview = generateOverview(records);
       renderProfile(user, overview);

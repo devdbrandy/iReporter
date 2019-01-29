@@ -24,7 +24,7 @@ export default class RecordsController {
    */
   static async index(request, response, next) {
     const { type, query } = request;
-    const { order, published } = query;
+    const { order, published, user } = query;
     let where = [];
     let orderBy = [];
 
@@ -33,8 +33,8 @@ export default class RecordsController {
 
     try {
       let records;
-      if (request.params.id) {
-        const userId = parseInt(request.params.id, 10);
+      if (user) {
+        const userId = parseInt(user, 10);
         records = await Record.where({ user_id: userId }, order);
       } else if (request.path === '/records') {
         records = await Record.all({

@@ -18,10 +18,11 @@ iReporter app enables users (citizen) to bring any form of corruption to the not
 <!-- TOC depthFrom:2 -->
 
 - [1. :rocket: Getting Started](#1-rocket-getting-started)
-  - [1.1. Run locally](#11-run-locally)
-  - [1.2. Building](#12-building)
-  - [1.3. Test Locally](#13-test-locally)
-  - [1.4. Running Test](#14-running-test)
+  - [1.1 Prerequisites](#11-prerequisites)
+  - [1.2. Run locally](#12-run-locally)
+  - [1.3. Building](#13-building)
+  - [1.4. Test Locally](#14-test-locally)
+  - [1.5. Running Test](#15-running-test)
 - [2. :lock: Authentication](#2-lock-authentication)
 - [3. API Versioning](#3-api-versioning)
 - [4. HTTP Requests](#4-http-requests)
@@ -35,7 +36,13 @@ iReporter app enables users (citizen) to bring any form of corruption to the not
 
 ## 1. :rocket: Getting Started
 
-### 1.1. Run locally
+### 1.1 Prerequisites
+
+NodeJS: [https://nodejs.org](https://nodejs.org)
+
+PostgreSQL: [https://www.postgresql.org](https://www.postgresql.org/docs/10/static/installation.html)
+
+### 1.2. Run locally
 
 - To run app locally, make sure you have `nodejs`, `postgres` installed.
 - Clone repository or clone your own fork
@@ -60,15 +67,15 @@ iReporter app enables users (citizen) to bring any form of corruption to the not
   - `npm run dev` spin up the server without watching for any file changes
   - `npm run watch` watches for any file changes and reloads the server
 
-### 1.2. Building
+### 1.3. Building
 
 `npm run build`
 
-### 1.3. Test Locally
+### 1.4. Test Locally
 
 To test or consume api locally, you can make use of [*Postman*](https://www.getpostman.com) or [*Insomnia*](https://insomnia.rest/download/)
 
-### 1.4. Running Test
+### 1.5. Running Test
 
 Test specs are implemented using [*mocha*](https://mochajs.org) + [*chai*](https://chiajs.com) + [*sinon*](https://sinonjs.org).
 
@@ -148,6 +155,10 @@ Each response will be returned with one of the following HTTP status codes:
 
   | URI | HTTP Method | Description |
   |-----|:-----------:|-------------|
+  | [<code>**/api/v1/users**</code>](/docs/users/GET_list.md)                           | `GET`       | Fetch all users |
+  | [<code>**/api/v1/users/{id}**</code>](/docs/users/GET_id.md)                        | `GET`       | Fetch a specific user resource |
+  | [<code>**/api/v1/users/{id}**</code>](/docs/users/PUT_id.md)                        | `PUT`       | Update a specific user resource |
+  | [<code>**/api/v1/records**</code>](/docs/records/GET_list.md)                           | `GET`       | Fetch a list of all records |
   | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/GET_list.md)                           | `GET`       | Fetch all red-flag records |
   | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/GET_id.md)                        | `GET`       | Fetch a specific red-flag record |
   | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/POST_create.md)                        | `POST`      | Create a red-flag record |

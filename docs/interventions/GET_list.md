@@ -5,6 +5,16 @@ API endpoint that represents a list of intervention records
 - **URL Endpoint:** `/api/v1/interventions`
 - **Method:** `GET`
 - **URL Params:** `None`
+- **URL Query (Optional):**
+  
+  | Name        | Type      | Description                     | Query                     |
+  |-------------|-----------|---------------------------------|---------------------------|
+  | `user`      | `integer` | Filter by user id               | `/interventions?user=1`         |
+  | `published` | `boolean` | Filter published records        | `/interventions?published=true` |
+  | `order`     | `string`  | Order result by `ASC` or `DESC` | `/interventions?order=DESC`     |
+
+  Sample query (combined): `/interventions?user=1&published=true&order=DESC`
+  
 - **Header Options:**
   - Authorization: Bearer `access_token`
 - **Request Body:** `None`
@@ -19,16 +29,18 @@ API endpoint that represents a list of intervention records
         "data": [
           {
             "id": 1,
-            "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
+            "createdBy": 2,
             "type": "intervention",
-            "title": "Intervention title",
-            "location": "-42.7871,138.0694",
-            "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
+            "location": "-42.2078,98.33",
             "images": [
               "https://via.placeholder.com/650x450",
               "https://via.placeholder.com/650x450"
             ],
-            "status": "draft"
+            "videos": ["https://via.placeholder.com/sample-video.mp4"],
+            "title": "Record 1 title",
+            "comment": "Bad roads",
+            "status": "resolved",
+            "createdOn": "2019-01-27T19:48:36.098Z"
           }
         ]
       }
@@ -51,19 +63,30 @@ API endpoint that represents a list of intervention records
     "data": [
       {
         "id": 1,
-        "creadedOn": "Fri Nov 30 2018 11:15:34 GMT+0100 (West Africa Standard Time)",
+        "createdBy": 2,
         "type": "intervention",
-        "location": "-42.7871,138.0694",
-        "title": "Intervention title",
-        "comment": "Temporibus dolores nobis nisi sapiente modi qui corrupti cum fuga. Est omnis nostrum in. Quis quo corrupti.",
+        "location": "-42.2078,98.33",
         "images": [
           "https://via.placeholder.com/650x450",
           "https://via.placeholder.com/650x450"
         ],
-        "videos": [
-          "https://via.placeholder.com/sample-video.mp4",
-        ],
-        "status": "draft"
+        "videos": ["https://via.placeholder.com/sample-video.mp4"],
+        "title": "Record 1 title",
+        "comment": "Bad roads",
+        "status": "resolved",
+        "createdOn": "2019-01-27T19:48:36.098Z"
+      },
+      {
+        "id": 2,
+        "createdBy": 2,
+        "type": "intervention",
+        "location": "-42.2078,121.213",
+        "images": ["https://via.placeholder.com/650x450"],
+        "videos": ["https://via.placeholder.com/sample-video.mp4"],
+        "title": "Bridge constuction",
+        "comment": "Newly created red-flag record",
+        "status": "draft",
+        "createdOn": "2019-01-27T19:49:36.098Z"
       }
     ]
   }

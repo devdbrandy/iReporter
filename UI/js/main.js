@@ -321,7 +321,12 @@ class UI {
     const container = document.querySelector('.records-list .row');
     const card = document.createElement('div');
     let statusIcon = '';
-    const { type, location, status } = record;
+    const {
+      type,
+      location,
+      status,
+      author,
+    } = record;
     if (status === 'resolved') {
       statusIcon = '<i class="fas fa-check-circle"></i>';
     }
@@ -333,7 +338,7 @@ class UI {
       <div class="record-cover">
         <img src="img/img_nature.jpg">
         <div class="overlay"></div>
-        <span class="author">By: <span class="name">${record['author.firstname']} ${record['author.lastname']}</span></span>
+        <span class="author">By: <span class="name">${getFullname(author)}</span></span>
         <span class="tag tag-${type}">${type}</span>
       </div>
       <div class="record-body">
@@ -358,14 +363,20 @@ class UI {
     /* HTMLElement */
     const list = document.getElementById('record-list');
     const row = document.createElement('tr');
-    const { type, status } = record;
+    const {
+      type,
+      status,
+      createdOn,
+      author,
+    } = record;
+    const dateCreated = moment(createdOn).format('D-MM-YYYY');
 
     if (getPath() === 'admin-dashboard.html') {
       // generate for admin user
       row.innerHTML = `
         <td>${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record['author.firstname']} ${record['author.lastname']}</td>
+        <td>${getFullname(author)}</td>
         <td>
           <div class="wrapper">
             <select name="status" class="record-status">${getStatusOptions(status)}</select>
@@ -390,7 +401,7 @@ class UI {
       row.innerHTML = `
         <td class="title">${record.title}</td>
         <td><span class="tag tag-${type}">${type}</span></td>
-        <td>${record.createdOn}</td>
+        <td>${dateCreated}</td>
         <td><span class="tag">${record.status}</span></td>
         <td>
           <div class="wrapper">
@@ -449,6 +460,7 @@ class UI {
       comment,
       location,
       images,
+      author,
     } = record;
 
     const modalBody = document.querySelector('.modal--body');
@@ -461,7 +473,7 @@ class UI {
     const authorField = modalBody.querySelector('.author a');
     if (authorField) {
       authorField.href = `profile.html?user=${record.createdBy}`;
-      authorField.innerText = `${record['author.firstname']} ${record['author.lastname']}`;
+      authorField.innerText = `${getFullname(author)}`;
     }
 
     // Load media files
@@ -833,7 +845,8 @@ const renderProfile = (user, overview) => {
   const bio = !user.bio ? 'Bio not provided.' : user.bio;
   document.querySelector('.user--detail h3').innerText = getFullname(user);
   document.querySelector('.user--bio').innerText = bio;
-  document.querySelector('.user--registered').innerText = user.registered;
+  const registered = moment(user.registered).format('MMM Do, YYYY');
+  document.querySelector('.user--registered').innerText = registered;
   document.querySelector('.user--avatar img').src = user.avatar;
 
   document.querySelector('.incident-total').innerText = overview.total;

@@ -19,7 +19,8 @@
     "getFullname": true,
     "RecordAPI": true,
     "generateOverview": true,
-    "getOverview": true
+    "getOverview": true,
+    "moment": true
   },
   "rules": {
     "no-unused-vars": 0,

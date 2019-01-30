@@ -58,6 +58,8 @@ class AuthUI {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
+    const timer = 3000;
+
     try {
       const res = await AuthAPI.signup(objectify(formData));
       const { status, data, error } = await res.json();
@@ -68,14 +70,21 @@ class AuthUI {
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
         // Show notification message
-        UI.snackbar('Signup was successful, loading dashboard...');
+        Toastr(timer).fire({
+          type: 'success',
+          title: 'Signup was successful, loading dashboard...',
+        });
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = getDashboard();
-        }, 3000);
+        }, timer);
       }
     } catch (error) {
-      // TODO: handle error preview
+      const [err] = error;
+      Toastr(timer).fire({
+        type: 'error',
+        title: err.msg || error,
+      });
     }
   }
 
@@ -89,8 +98,11 @@ class AuthUI {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
+    const timer = 3000;
+
     try {
-      const res = await AuthAPI.login(objectify(formData));
+      const fData = objectify(formData);
+      const res = await AuthAPI.login(fData);
       const { status, data, error } = await res.json();
 
       if (error) throw error;
@@ -98,16 +110,22 @@ class AuthUI {
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
-
         // Show notification message
-        UI.snackbar('Login was successful, loading dashboard...');
+        Toastr(timer).fire({
+          type: 'success',
+          title: 'Login was successful, loading dashboard...',
+        });
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = getDashboard();
-        }, 3000);
+        }, timer);
       }
     } catch (error) {
-      // TODO: handle error preview
+      const [err] = error;
+      Toastr(timer).fire({
+        type: 'error',
+        title: err.msg || error,
+      });
     }
   }
 }

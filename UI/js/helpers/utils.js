@@ -94,11 +94,12 @@ const generateOverview = (records) => {
     rejected: 0,
   };
 
-  records.forEach((record) => {
-    const { status } = record;
-    overview[status] += 1;
-  });
-
+  if (records.length > 0) {
+    records.forEach((record) => {
+      const { status } = record;
+      overview[status] += 1;
+    });
+  }
   localStorage.setItem('overview', JSON.stringify(overview));
   return overview;
 };
@@ -109,3 +110,13 @@ const generateOverview = (records) => {
  * @returns {Object} Record overview
  */
 const getOverview = () => JSON.parse(localStorage.getItem('overview'));
+
+const Toastr = (timer, position = 'top-end') => {
+  const Toast = Swal.mixin({
+    toast: true,
+    showConfirmButton: false,
+    position,
+    timer,
+  });
+  return Toast;
+};

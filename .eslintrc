@@ -20,7 +20,9 @@
     "RecordAPI": true,
     "generateOverview": true,
     "getOverview": true,
-    "moment": true
+    "moment": true,
+    "Swal": true,
+    "Toastr": true
   },
   "rules": {
     "no-unused-vars": 0,

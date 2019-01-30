@@ -1,7 +1,7 @@
 // Set environment configuration
 window.env = {
   APP_ENV: 'prod',
-  API_URI: 'https://irepot.herokuapp.com',
+  API_URI: 'https://irepot-demo.herokuapp.com',
 };
 
 if (

@@ -176,7 +176,7 @@ Each response will be returned with one of the following HTTP status codes:
   | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/DELETE_id.md)                     | `DELETE`    | Delete a red-flag by ID |
   | [<code>**/api/v1/interventions**</code>](/docs/interventions/GET_list.md)                     | `GET`       | Fetch all intervention records |
   | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/GET_id.md)                  | `GET`       | Fetch all intervention records |
-  | [<code>**/api/v1/interventions**</code>](/docs/interventions/POST_create.md)                  | `POST`      | Create a new intervention recordrecord |
+  | [<code>**/api/v1/interventions**</code>](/docs/interventions/POST_create.md)                  | `POST`      | Create a new intervention record |
   | [<code>**/api/v1/interventions/{id}/location**</code>](/docs/interventions/PATCH_location.md) | `PATCH`     | Update an intervention's location |
   | [<code>**/api/v1/interventions/{id}/comment**</code>](/docs/interventions/PATCH_comment.md)   | `PATCH`     | Update an intervention's comment |
   | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/DELETE_id.md)               | `DELETE`    | Delete an intervention by ID |

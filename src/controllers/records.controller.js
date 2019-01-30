@@ -183,8 +183,9 @@ export default class RecordsController {
     try {
       const record = await Record.find({ id, type });
       if (!record) throw createError(404, 'Resource not found.');
-
-      isAuthorized(user, record);
+      if (!record.belongsTo(user) && !user.isAdmin) {
+        throw createError(403, 'Forbidden');
+      }
 
       await record.delete();
       const data = [{

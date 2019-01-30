@@ -419,6 +419,32 @@ describe('API routes', () => {
       });
     });
 
+    context(`PUT ${baseURI}/red-flags/:id`, () => {
+      const recordData = {
+        location: '-42.2078,138.0694',
+        title: 'Record title 2',
+        comment: 'Est omnis nostrum in. nobis nisi sapiente modi qui corrupti cum fuga. Quis quo corrupti.',
+        media: ['https://via.placeholder.com/650x450.jpg', 'https://res.cloudinary.com/devdb/video/upload/v1543497333/sample/video.flv'],
+        status: 'draft',
+      };
+
+      it('should update a red-flag record', (done) => {
+        request(app)
+          .put(`${baseURI}/red-flags/${record.id}`)
+          .send(recordData)
+          .set('Authorization', `Bearer ${user1Token}`)
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .expect(200)
+          .then((res) => {
+            const [data] = res.body.data;
+            data.should.have.property('id');
+            done();
+          })
+          .catch(done);
+      });
+    });
+
     context(`PATCH ${baseURI}/red-flags/:id/location`, () => {
       const data = {
         location: '-81.2078,138.0233',

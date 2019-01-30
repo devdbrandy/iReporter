@@ -99,12 +99,7 @@ export default class RecordsController {
     const videos = [];
     const { media } = body;
     if (media) {
-      media.forEach((url) => {
-        const extension = path.extname(url).toString();
-        if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
-          images.push(url);
-        }
-      });
+      RecordsController.populateMedia(media, images);
     }
 
     try {
@@ -156,12 +151,7 @@ export default class RecordsController {
       const { images } = record;
       const { media } = body;
       if (media) {
-        media.forEach((url) => {
-          const extension = path.extname(url).toString();
-          if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
-            images.push(url);
-          }
-        });
+        RecordsController.populateMedia(media, images);
         body.images = images;
       }
 
@@ -174,6 +164,24 @@ export default class RecordsController {
     } catch (error) {
       return next(error);
     }
+  }
+
+  /**
+   * Populate media contents
+   *
+   * @static
+   * @param {Array} media - The media payload
+   * @param {Array} images - The image container to populate
+   *
+   * @memberOf RecordsController
+   */
+  static populateMedia(media, images) {
+    media.forEach((url) => {
+      const extension = path.extname(url).toString();
+      if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
+        images.push(url);
+      }
+    });
   }
 
   /**

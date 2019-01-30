@@ -203,6 +203,8 @@ class RecordAPI extends ApiBase {
       'Content-Type': 'application/json',
     };
     const record = objectify(data);
+    const { media } = record;
+    record.media = JSON.parse(media);
     const { id, type } = JSON.parse(localStorage.getItem('record'));
     const res = await fetch(`${RecordAPI.uri}/${type}s/${id}`, {
       method: 'PUT',
@@ -262,9 +264,9 @@ class UI {
     // TODO: show preloader
 
     try {
-      let overview;
-      let records;
       let userId;
+      let records;
+      let overview;
       let url;
       const baseUrl = RecordAPI.uri;
 
@@ -272,7 +274,7 @@ class UI {
         case 'admin-dashboard.html':
           url = `${baseUrl}/records?published=true&order=desc`;
           records = await RecordAPI.fetchRecords(url);
-          overview = generateOverview(records);
+          overview = generateOverview([]);
           document.getElementById('total-records').innerText = overview.total;
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
           document.getElementById('resolved-count').innerText = overview.resolved;
@@ -287,6 +289,7 @@ class UI {
           url = `${baseUrl}/records?user=${userId}&order=desc`;
           records = await RecordAPI.fetchRecords(url);
           overview = generateOverview(records);
+
           // Assign record overview count
           document.getElementById('total-records').innerText = overview.total;
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
@@ -431,23 +434,44 @@ class UI {
     });
 
     row.querySelector('button.delete').addEventListener('click', (e) => {
-      UI.removeRecord(row);
+      Swal.fire({
+        title: 'Hey Captain, are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.value) {
+          UI.removeRecord(row);
+        }
+      });
     });
 
     const asyncButton = row.querySelector('.action-sync');
     if (asyncButton) {
       row.querySelector('.action-sync').addEventListener('click', async (e) => {
         const { value } = row.querySelector('select[name=status]');
+        const timer = 3000;
 
         try {
           const res = await RecordAPI.updateStatus(record, value);
-          const { status } = await res.json();
+          const { status, error } = await res.json();
+
+          if (error) throw error;
           if (status === 200) {
             // Show notification message
-            UI.snackbar('Record successfully updated.');
+            Toastr(timer, 'bottom-end').fire({
+              type: 'success',
+              title: 'Record status successfully updated.',
+            });
           }
-        } catch (error) {
-          // TODO: handle error preview
+        } catch ({ error }) {
+          Toastr(timer, 'bottom-end').fire({
+            type: 'error',
+            title: error,
+          });
         }
       });
     }
@@ -513,16 +537,23 @@ class UI {
 
     try {
       const res = await RecordAPI.create(formData);
-      const { status } = await res.json();
+      const { status, error } = await res.json();
 
+      if (error) throw error;
       if (status === 201) {
         // Show notification message
-        UI.snackbar('Successfully created a new record.');
+        Toastr(3000).fire({
+          type: 'success',
+          title: 'Successfully created a new record.',
+        });
         // Clear fields
         UI.clearFields();
       }
-    } catch (error) {
-      // TODO: handle error preview
+    } catch ({ error }) {
+      Toastr(3000).fire({
+        type: 'error',
+        title: error,
+      });
     }
   }
 
@@ -577,38 +608,50 @@ class UI {
       if (element.value === type) element.setAttribute('checked', true);
     });
 
-    /* HTMLElement */
+    // /* HTMLElement */
     document.querySelectorAll('input[name=status]').forEach((element) => {
       if (element.value === status) element.setAttribute('checked', true);
-      if (status !== 'draft' || status !== 'published') {
+      if (status !== 'draft') {
         element.setAttribute('disabled', true);
       }
     });
 
-    if (auth().user.isAdmin) {
-      if (status !== 'draft' || status !== 'published') {
-        const statusOptions = [
-          'published',
-          'under-investigation',
-          'resolved',
-          'rejected',
-        ];
-        let radioTags = '';
-        statusOptions.forEach((statusOpt) => {
-          const checked = statusOpt === status ? 'checked' : '';
-          let disabled = '';
-          if (status === 'published' && statusOpt === 'published') {
-            disabled = 'disabled';
-          }
-          radioTags += `
-            <label><input type="radio" name="status"
-              value="${statusOpt}" ${checked} ${disabled}> ${statusOpt}</label>`;
-        });
-        document.getElementById('status-container').innerHTML = radioTags;
-      }
+    if (status !== 'draft') {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'status';
+      input.value = status;
+      document.getElementById('status-container').appendChild(input);
     }
 
-    // Get location address
+    if (status !== 'draft' && !auth().user.isAdmin) {
+      document.querySelector('button[type=submit]').setAttribute('disabled', true);
+    }
+
+    // if (auth().user.isAdmin) {
+    //   if (status !== 'draft' || status !== 'published') {
+    //     const statusOptions = [
+    //       'published',
+    //       'under-investigation',
+    //       'resolved',
+    //       'rejected',
+    //     ];
+    //     let radioTags = '';
+    //     statusOptions.forEach((statusOpt) => {
+    //       const checked = statusOpt === status ? 'checked' : '';
+    //       let disabled = '';
+    //       if (status === 'published' && statusOpt === 'published') {
+    //         disabled = 'disabled';
+    //       }
+    //       radioTags += `
+    //         <label><input type="radio" name="status"
+    //           value="${statusOpt}" ${checked} ${disabled}> ${statusOpt}</label>`;
+    //     });
+    //     document.getElementById('status-container').innerHTML = radioTags;
+    //   }
+    // }
+
+    // // Get location address
     const { results } = await lookupAddress(location);
     const [place] = results;
     document.getElementById('geoautocomplete').value = place.formatted_address;
@@ -624,23 +667,32 @@ class UI {
    * @memberOf UI
    */
   static async handleUpdateRecord(e) {
-    const form = e.target;
     e.preventDefault();
+    const form = e.target;
     const formData = new FormData(form);
+    const timer = 3000;
 
     try {
       const res = await RecordAPI.update(formData);
-      const { status } = await res.json();
+      const { status, error } = await res.json();
+
+      if (error) throw error;
       if (status === 200) {
         // Show notification message
-        UI.snackbar('Record successfully updated.');
+        Toastr(timer, 'bottom-end').fire({
+          type: 'success',
+          title: 'Record successfully updated.',
+        });
         // redirect to dashboard
         setTimeout(() => {
           window.location = getDashboard();
-        }, 3000);
+        }, timer);
       }
     } catch (error) {
-      // TODO: handle error preview
+      Toastr(timer, 'bottom-end').fire({
+        type: 'error',
+        title: error,
+      });
     }
   }
 
@@ -662,7 +714,11 @@ class UI {
         // Remove list item
         el.remove();
         // Show notification message
-        UI.snackbar(`Record #${id} - Successfully removed`);
+        Swal.fire(
+          'Deleted!',
+          `Record #${id} - Successfully removed`,
+          'success',
+        );
       }
     } catch (e) {
       // TODO: handle error preview
@@ -749,6 +805,7 @@ class UI {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
+    const timer = 3000;
 
     try {
       const res = await UserAPI.update(formData);
@@ -757,14 +814,20 @@ class UI {
         const { payload } = row;
         localStorage.setItem('credentials', JSON.stringify(payload));
         // Show notification message
-        UI.snackbar('Settings successfully updated.');
+        Toastr(timer, 'bottom-end').fire({
+          type: 'success',
+          title: 'Settings successfully updated.',
+        });
         // redirect to dashboard
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, timer);
       }
-    } catch (error) {
-      // TODO: handle error preview
+    } catch ({ error }) {
+      Toastr(timer, 'bottom-end').fire({
+        type: 'error',
+        title: error,
+      });
     }
   }
 }
@@ -822,7 +885,6 @@ if (uploadWidget) {
     folder: 'ireporter',
     tags: ['incidents'],
     clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
-    theme: 'purple',
   }, UI.mediaUpload);
   uploadWidget.addEventListener('click', () => myWidget.open(), false);
 }
@@ -910,15 +972,10 @@ if (getPath() === 'settings.html') {
     folder: 'avatar',
     tags: ['avatar', 'user'],
     resourceType: 'image',
-    theme: 'purple',
   }, UI.avatarUpload);
   uploadWidget.addEventListener('click', () => myWidget.open(), false);
 
   /* Event: update settings */
   document.getElementById('settings-form')
     .addEventListener('submit', UI.handleSettingsUpdate);
-}
-
-if (getPath() === 'edit-record.html' && auth().user.isAdmin) {
-  document.getElementById('status-container').classList.add('hide');
 }

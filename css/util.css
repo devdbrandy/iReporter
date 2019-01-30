@@ -414,6 +414,14 @@ label {
   float: right;
 }
 
+.swal2-popup.swal2-toast .swal2-title {
+  font-size: 1.6rem;
+}
+
+button[disabled], button[disabled]:hover {
+  opacity: 0.5;
+}
+
 /* ----- End Modal ----- */
 
 /* ----- Snackbar ----- */

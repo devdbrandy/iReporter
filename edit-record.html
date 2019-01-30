@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Update Record - iReporter</title>
 
+  <script src="js/addons/sweetalert.js"></script>
   <script src="js/helpers/utils.js"></script>
   <script>if (!auth()) window.location = 'signin.html';</script>
   <script>
@@ -115,6 +116,21 @@
                   <input type="text" name="geoautocomplete" id="geoautocomplete" placeholder="Enter incident location">
                   <input type="hidden" name="location" id="location">
                   <input type="hidden" name="id" id="id">
+                </div>
+              </div>
+              <div class="form-control">
+                <div class="col-2"></div>
+                <div class="col-10">
+                  <div class="upload-btn-wrapper">
+                    <label>
+                      <button id="upload-widget" class="cloudinary-button" type="button">
+                        <i class="fas fa-paperclip"></i>
+                      </button>
+                      <input type="hidden" name="media" id="media" value="[]">
+                      <small>Upload media files</small>
+                    </label>
+                  </div>
+                  <ul class="media-list"></ul>
                 </div>
               </div>
               <div class="form-control">

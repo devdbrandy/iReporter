@@ -13,10 +13,18 @@
 
 # Overview
 
-iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public. Visit app url: [https://irepot.herokuapp.com](https://irepot.herokuapp.com)
+iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public. Visit iReporter live demo: [https://devdbrandy.github.com/iReporter](https://devdbrandy.github.com/iReporter).
+
+## Demo Users
+
+| Username  | Password | Access       |
+|-----------|----------|--------------|
+| `admin`   | `secret` | Admin Access |
+| `user123` | `secret` | User Access  |
 
 <!-- TOC depthFrom:2 -->
 
+- [Demo Users](#demo-users)
 - [1. :rocket: Getting Started](#1-rocket-getting-started)
   - [1.1 Prerequisites](#11-prerequisites)
   - [1.2. Run locally](#12-run-locally)
@@ -38,9 +46,10 @@ iReporter app enables users (citizen) to bring any form of corruption to the not
 
 ### 1.1 Prerequisites
 
-NodeJS: [https://nodejs.org](https://nodejs.org)
+Ensure that you have the following installed on your local machine:
 
-PostgreSQL: [https://www.postgresql.org](https://www.postgresql.org/docs/10/static/installation.html)
+- [NodeJS](https://nodejs.org/en/download/)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
 ### 1.2. Run locally
 
@@ -148,29 +157,29 @@ Each response will be returned with one of the following HTTP status codes:
 
   | URI                                                        | HTTP Method | Description    |
   |------------------------------------------------------------|:-----------:|----------------|
-  | [<code>**/auth/signup**</code>](/docs/auth/POST_signup.md) | `POST`      | Account signup |
-  | [<code>**/auth/login**</code>](/docs/auth/POST_login.md)   | `POST`      | Account login  |
+  | [<code>**/auth/signup**</code>](/docs/auth/POST_signup.md) | `POST`      | Create new account |
+  | [<code>**/auth/login**</code>](/docs/auth/POST_login.md)   | `POST`      | Login into account  |
 
 ### 6.2. API Routes
 
   | URI | HTTP Method | Description |
   |-----|:-----------:|-------------|
   | [<code>**/api/v1/users**</code>](/docs/users/GET_list.md)                           | `GET`       | Fetch all users |
-  | [<code>**/api/v1/users/{id}**</code>](/docs/users/GET_id.md)                        | `GET`       | Fetch a specific user resource |
-  | [<code>**/api/v1/users/{id}**</code>](/docs/users/PUT_id.md)                        | `PUT`       | Update a specific user resource |
-  | [<code>**/api/v1/records**</code>](/docs/records/GET_list.md)                           | `GET`       | Fetch a list of all records |
+  | [<code>**/api/v1/users/{id}**</code>](/docs/users/GET_id.md)                        | `GET`       | Fetch a single user by ID |
+  | [<code>**/api/v1/users/{id}**</code>](/docs/users/PUT_id.md)                        | `PUT`       | Update entire user resource |
+  | [<code>**/api/v1/records**</code>](/docs/records/GET_list.md)                           | `GET`       | Fetch all records |
   | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/GET_list.md)                           | `GET`       | Fetch all red-flag records |
-  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/GET_id.md)                        | `GET`       | Fetch a specific red-flag record |
-  | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/POST_create.md)                        | `POST`      | Create a red-flag record |
-  | [<code>**/api/v1/red-flags/{id}/location**</code>](/docs/red_flags/PATCH_location.md)       | `PATCH`     | Edit red-flag's location |
-  | [<code>**/api/v1/red-flags/{id}/comment**</code>](/docs/red_flags/PATCH_comment.md)         | `PATCH`     | Edit red-flag's comment |
-  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/DELETE_id.md)                     | `DELETE`    | Delete specific red-flag |
+  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/GET_id.md)                        | `GET`       | Fetch a single red-flag by ID record |
+  | [<code>**/api/v1/red-flags**</code>](/docs/red_flags/POST_create.md)                        | `POST`      | Create a new red-flag record |
+  | [<code>**/api/v1/red-flags/{id}/location**</code>](/docs/red_flags/PATCH_location.md)       | `PATCH`     | Update a red-flag's location |
+  | [<code>**/api/v1/red-flags/{id}/comment**</code>](/docs/red_flags/PATCH_comment.md)         | `PATCH`     | Update a red-flag's comment |
+  | [<code>**/api/v1/red-flags/{id}**</code>](/docs/red_flags/DELETE_id.md)                     | `DELETE`    | Delete a red-flag by ID |
   | [<code>**/api/v1/interventions**</code>](/docs/interventions/GET_list.md)                     | `GET`       | Fetch all intervention records |
-  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/GET_id.md)                  | `GET`       | Fetch a specific intervention record |
-  | [<code>**/api/v1/interventions**</code>](/docs/interventions/POST_create.md)                  | `POST`      | Create an intervention record |
-  | [<code>**/api/v1/interventions/{id}/location**</code>](/docs/interventions/PATCH_location.md) | `PATCH`     | Edit intervention's location |
-  | [<code>**/api/v1/interventions/{id}/comment**</code>](/docs/interventions/PATCH_comment.md)   | `PATCH`     | Edit intervention's comment |
-  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/DELETE_id.md)               | `DELETE`    | Delete specific intervention |
+  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/GET_id.md)                  | `GET`       | Fetch all intervention records |
+  | [<code>**/api/v1/interventions**</code>](/docs/interventions/POST_create.md)                  | `POST`      | Create a new intervention record |
+  | [<code>**/api/v1/interventions/{id}/location**</code>](/docs/interventions/PATCH_location.md) | `PATCH`     | Update an intervention's location |
+  | [<code>**/api/v1/interventions/{id}/comment**</code>](/docs/interventions/PATCH_comment.md)   | `PATCH`     | Update an intervention's comment |
+  | [<code>**/api/v1/interventions/{id}**</code>](/docs/interventions/DELETE_id.md)               | `DELETE`    | Delete an intervention by ID |
 
 ## 7. :pencil: License
 

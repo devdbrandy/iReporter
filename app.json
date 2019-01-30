@@ -1,5 +1,15 @@
 {
+  "name": "iReporter Rest API",
   "env": {
-    "NPM_CONFIG_PRODUCTION": "false"
-  }
+    "APP_KEY": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "NPM_CONFIG_PRODUCTION": "false",
+    "PORT": "80"
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "repository": "https://github.com/devdbrandy/iReporter"
 }

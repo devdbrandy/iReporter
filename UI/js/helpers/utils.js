@@ -157,5 +157,6 @@ const toggleBtnLoader = (el, hide = false) => {
  * Toggle preloader
  */
 const togglePreloader = () => {
-  document.querySelector('.preloader').classList.toggle('hide');
+  const preloader = document.querySelector('.preloader');
+  if (preloader) preloader.classList.toggle('hide');
 };

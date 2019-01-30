@@ -143,8 +143,7 @@ export default class RecordsController {
       body,
       route,
     } = request;
-    const { path } = route;
-    const [attribute] = path.split('/').slice(3);
+    const [attribute] = route.path.split('/').slice(3);
 
     const id = parseInt(request.params.id, 10);
 
@@ -153,6 +152,18 @@ export default class RecordsController {
       if (!record) throw createError(404, 'Resource not found.');
 
       isAuthorized(user, record);
+
+      const { images } = record;
+      const { media } = body;
+      if (media) {
+        media.forEach((url) => {
+          const extension = path.extname(url).toString();
+          if (extension.match(/\.(jpg|jpeg|png|gif)$/)) {
+            images.push(url);
+          }
+        });
+        body.images = images;
+      }
 
       await record.update(body);
       const data = [{

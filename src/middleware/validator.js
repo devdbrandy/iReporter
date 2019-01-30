@@ -119,7 +119,7 @@ export const validator = {
     status: {
       custom: {
         options: (value) => {
-          const status = ['draft', 'published'];
+          const status = ['draft', 'published', 'under-investigation', 'resolved', 'rejected'];
           if (!status.includes(value)) {
             throw new Error(`Invalid string value: '${value}'. Allowed values: ${status}.`);
           }

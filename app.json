@@ -5,7 +5,6 @@
       "description": "A secret key for verifying the integrity of signed cookies.",
       "generator": "secret"
     },
-    "NPM_CONFIG_PRODUCTION": "false",
     "PORT": "80"
   },
   "addons": [

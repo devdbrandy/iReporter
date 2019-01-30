@@ -449,13 +449,22 @@ button[disabled], button[disabled]:hover {
 /* ----- End Snackbar ----- */
 
 /* ----- Preloader */
-.loader {
-  border: 3px solid #f3f3f3;
+/* Preloader */
+.preload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preloader {
+  border: 5px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 3px solid #3498db;
-  width: 4rem;
-  height: 4rem;
-  -webkit-animation: spin 2s linear infinite;
+  border-top: 3px solid var(--primary-color);
+  border-bottom: 3px solid var(--primary-color);
+  width: 60px;
+  height: 60px;
+  transform: translate(-45%, -45%);
+  -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
 
@@ -469,6 +478,7 @@ button[disabled], button[disabled]:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* End Preloader */
 /* ----- End Preloader ----- */
 
 @-webkit-keyframes fadein {
@@ -497,3 +507,38 @@ button[disabled], button[disabled]:hover {
     width: 60%;
   }
 }
+
+/* Custom preloader */
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: -1px;
+    left: -1px;
+    width: 58px;
+    height: 58px;
+    opacity: 0;
+  }
+}
+

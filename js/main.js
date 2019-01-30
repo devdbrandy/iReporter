@@ -261,7 +261,8 @@ class RecordAPI extends ApiBase {
 /* UI class */
 class UI {
   static async showRecords() {
-    // TODO: show preloader
+    // Toggle preloader
+    togglePreloader();
 
     try {
       let userId;
@@ -280,8 +281,11 @@ class UI {
           document.getElementById('resolved-count').innerText = overview.resolved;
 
           if (records) {
-            // TODO: hide preloader
-            return records.forEach(record => UI.addRecordToList(record));
+            setTimeout(() => {
+              // Toggle preloader
+              togglePreloader();
+              return records.forEach(record => UI.addRecordToList(record));
+            }, 2000);
           }
           break;
         case 'dashboard.html':
@@ -328,10 +332,15 @@ class UI {
       type,
       location,
       status,
+      images,
       author,
     } = record;
+
+    let [coverImage] = images;
+    if (!coverImage) coverImage = 'img/img_nature.jpg';
+
     if (status === 'resolved') {
-      statusIcon = '<i class="fas fa-check-circle"></i>';
+      statusIcon = '<i class="fas fa-check-double"></i>';
     }
 
     // Get location name
@@ -339,19 +348,17 @@ class UI {
 
     card.innerHTML = `
       <div class="record-cover">
-        <img src="img/img_nature.jpg">
+        <img src="${coverImage}">
         <div class="overlay"></div>
         <span class="author">By: <span class="name">${getFullname(author)}</span></span>
         <span class="tag tag-${type}">${type}</span>
       </div>
       <div class="record-body">
-        <h4 class="record-title">${record.title}
-          ${statusIcon}
-        </h4>
+        <h4 class="record-title">${record.title}</h4>
         <p>${record.comment} </p>
         <span class="location"><i class="fas fa-map-marker-alt"></i> ${place}</span>
       </div>
-      <div class="record-status">${status}</div>
+      <div class="record-status">${status} ${statusIcon}</div>
     `;
     card.classList.add('card');
     card.setAttribute('data-record', JSON.stringify(record));
@@ -449,11 +456,15 @@ class UI {
       });
     });
 
-    const asyncButton = row.querySelector('.action-sync');
-    if (asyncButton) {
+    const syncButton = row.querySelector('.action-sync');
+    if (syncButton) {
       row.querySelector('.action-sync').addEventListener('click', async (e) => {
         const { value } = row.querySelector('select[name=status]');
+        const icon = e.target;
         const timer = 3000;
+
+        // Spin icon
+        icon.classList.add('fa-spin');
 
         try {
           const res = await RecordAPI.updateStatus(record, value);
@@ -461,11 +472,16 @@ class UI {
 
           if (error) throw error;
           if (status === 200) {
-            // Show notification message
-            Toastr(timer, 'bottom-end').fire({
-              type: 'success',
-              title: 'Record status successfully updated.',
-            });
+            // Delay notification
+            setTimeout(() => {
+              // Toggle spinner
+              icon.classList.remove('fa-spin');
+              // Show notification message
+              Toastr(timer).fire({
+                type: 'success',
+                title: 'Record status successfully updated.',
+              });
+            }, timer - 2000);
           }
         } catch ({ error }) {
           Toastr(timer, 'bottom-end').fire({
@@ -535,19 +551,29 @@ class UI {
     const form = e.target;
     const formData = new FormData(form);
 
+    // Button loader
+    const submitBtn = form.querySelector('button[type=submit]');
+    toggleBtnLoader(submitBtn);
+
     try {
       const res = await RecordAPI.create(formData);
       const { status, error } = await res.json();
+      const timer = 3000;
 
       if (error) throw error;
       if (status === 201) {
-        // Show notification message
-        Toastr(3000).fire({
-          type: 'success',
-          title: 'Successfully created a new record.',
-        });
-        // Clear fields
-        UI.clearFields();
+        // Delay notification
+        setTimeout(() => {
+          // Togle button loader
+          toggleBtnLoader(submitBtn, true);
+          // Show notification message
+          Toastr(timer).fire({
+            type: 'success',
+            title: 'Successfully created a new record.',
+          });
+          // Clear fields
+          UI.clearFields();
+        }, timer - 2000);
       }
     } catch ({ error }) {
       Toastr(3000).fire({
@@ -672,26 +698,37 @@ class UI {
     const formData = new FormData(form);
     const timer = 3000;
 
+    // Button loader
+    const submitBtn = form.querySelector('button[type=submit]');
+    toggleBtnLoader(submitBtn);
+
     try {
       const res = await RecordAPI.update(formData);
       const { status, error } = await res.json();
 
       if (error) throw error;
       if (status === 200) {
-        // Show notification message
-        Toastr(timer, 'bottom-end').fire({
-          type: 'success',
-          title: 'Record successfully updated.',
-        });
+        // Delay notification
+        setTimeout(() => {
+          // Togle button loader
+          toggleBtnLoader(submitBtn, true);
+          // Show notification message
+          Toastr(timer).fire({
+            type: 'success',
+            title: 'Record successfully updated.',
+          });
+        }, timer - 2000);
+
         // redirect to dashboard
         setTimeout(() => {
           window.location = getDashboard();
         }, timer);
       }
     } catch (error) {
-      Toastr(timer, 'bottom-end').fire({
+      const [err] = error;
+      Toastr(timer).fire({
         type: 'error',
-        title: error,
+        title: err.msg || error,
       });
     }
   }
@@ -807,17 +844,27 @@ class UI {
     const formData = new FormData(form);
     const timer = 3000;
 
+    // Button loader
+    const submitBtn = form.querySelector('button[type=submit]');
+    toggleBtnLoader(submitBtn);
+
     try {
       const res = await UserAPI.update(formData);
       const { status, data: [row] } = await res.json();
       if (status === 200) {
         const { payload } = row;
         localStorage.setItem('credentials', JSON.stringify(payload));
-        // Show notification message
-        Toastr(timer, 'bottom-end').fire({
-          type: 'success',
-          title: 'Settings successfully updated.',
-        });
+
+        // Delay notification
+        setTimeout(() => {
+          // Togle button loader
+          toggleBtnLoader(submitBtn, true);
+          // Show notification message
+          Toastr(timer, 'bottom-end').fire({
+            type: 'success',
+            title: 'Settings successfully updated.',
+          });
+        }, timer - 1500);
         // redirect to dashboard
         setTimeout(() => {
           window.location.reload();
@@ -828,6 +875,28 @@ class UI {
         type: 'error',
         title: error,
       });
+    }
+  }
+
+  /**
+   * Toggle password visibility
+   *
+   * @static
+   * @param {HTMLElement} el The target element
+   *
+   * @memberOf UI
+   */
+  static togglePassword(el) {
+    if (el.classList.contains('toggle-pwd')) {
+      const input = el.parentElement.querySelector('input');
+      if (input.type === 'password') {
+        input.type = 'text';
+        input.style.borderRight = 0;
+        el.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        el.classList.replace('fa-eye-slash', 'fa-eye');
+      }
     }
   }
 }
@@ -853,6 +922,17 @@ if (updateRecordForm) {
   UI.preloadData();
   updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
+
+/* Password visibility toggle */
+const form = document.querySelectorAll('form');
+if (form.length > 0) {
+  form.forEach((el) => {
+    el.addEventListener('click', (e) => {
+      UI.togglePassword(e.target);
+    });
+  });
+}
+/* End Pasword visibility toggle */
 
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');

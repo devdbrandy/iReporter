@@ -33,7 +33,7 @@ deploy:
     on:
       branch: develop
     run:
-      - "npm run db:migrate"
+      - "npm run db:refresh"
       - "npm run db:seed"
   - provider: pages
     skip-cleanup: true

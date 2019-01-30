@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Home - iReporter</title>
 
+  <script src="js/addons/sweetalert.js"></script>
   <script src="js/helpers/utils.js"></script>
   <script>if (auth()) window.location = getDashboard(auth().user);</script>
 
@@ -48,10 +49,10 @@
           <div class="home--signup">
             <form class="home--signup--form" id="signup-form">
               <div>
-                <input type="text" placeholder="First name" name="firstname" minlength="3">
+                <input type="text" placeholder="First name" name="firstname" minlength="3" required>
               </div>
               <div>
-                <input type="text" placeholder="Last name" name="lastname" minlength="3">
+                <input type="text" placeholder="Last name" name="lastname" minlength="3" required>
               </div>
               <div>
                 <input type="text" placeholder="Phone number" name="phoneNumber" id="phonenumber"
@@ -63,12 +64,13 @@
               <div>
                 <input type="email" placeholder="Email address" name="email"
                   pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$"
-                  title="The domain portion of the email address is invalid (the portion after the @).">
+                  title="The domain portion of the email address is invalid (the portion after the @)."
+                  required>
               </div>
               <div>
                 <input type="password" placeholder="Password" name="password"
                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                  title="Please include at least 1 uppercase character, 1 lowercase character, and 1 number." minlength="6" required>
+                  title="Please include at least 1 uppercase character, 1 lowercase character, and 1 number." required>
               </div>
               <div>
                 <input type="password" placeholder="Repeat Password" name="passwordConfirmation" required>

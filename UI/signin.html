@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Sign In - iReporter</title>
 
+  <script src="js/addons/sweetalert.js"></script>
   <script src="js/helpers/utils.js"></script>
   <script>if (auth()) window.location = getDashboard(auth().user);</script>
 
@@ -30,11 +31,11 @@
               <form class="signin--form" id="login-form">
                 <div>
                   <label for="username">Username</label>
-                  <input type="text" name="username">
+                  <input type="text" name="username" minlength="3" required>
                 </div>
                 <div>
                   <label for="password">Password</label>
-                  <input type="password" name="password">
+                  <input type="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Sign In</button>
               </form>
@@ -79,7 +80,7 @@
                       title="Please include at least 1 uppercase character, 1 lowercase character, and 1 number." minlength="6" required>
                 </div>
                 <div>
-                  <input type="password" name="passwordConfirmation" placeholder="Repeat Password">
+                  <input type="password" name="passwordConfirmation" placeholder="Repeat Password" required>
                 </div>
                 <button type="submit" class="btn btn-primary mb-10">Register</button>
               </form>

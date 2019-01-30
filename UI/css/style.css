@@ -290,10 +290,6 @@ main.signin {
   transition: all 0.5s;
 }
 
-button[type=submit] {
-  margin-top: 5px;
-}
-
 .signin--form input:hover,
 .signup--form input:hover,
 .home--signup--form input:hover {
@@ -419,6 +415,12 @@ hr.dash {
   margin-bottom: 0;
 }
 
+.input-wrapper {
+  display: flex;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
 .signin--form input,
 .signup--form input,
 .home--signup--form input {
@@ -429,9 +431,35 @@ hr.dash {
   color: var(--gray80);
   font-size: 1.4rem;
   padding: 1rem;
-  margin: 5px 0;
+  margin: 0;
   transition: all 0.5s;
 }
+
+.icon {
+  background: var(--primary-color);
+  min-width: 45px;
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 2;
+  border-radius: 0 2px 2px 0;
+  border: 1px solid var(--primary-color);
+  border-left: 0;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.signin--form input[type=password],
+.signup--form input[type=password],
+.home--signup--form input[type=password] {
+  border-right: 0;
+  border-radius: 2px 0 0 2px;
+}
+
+/* .fa.fa-spinner {
+  margin-left: -12px;
+  margin-right: 8px;
+} */
 /* END SIGNUP POPUP ----- */
 
 /* ----- DASHBOARD ----- */
@@ -751,11 +779,11 @@ td select {
 
 .record-status-check {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 5px;
   font-size: 2rem;
+  color: green;
   color: var(--green);
-  padding: 1px 5px;
 }
 
 .records-list .record-body {

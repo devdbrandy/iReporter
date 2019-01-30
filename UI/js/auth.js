@@ -60,12 +60,27 @@ class AuthUI {
     const formData = new FormData(form);
     const timer = 3000;
 
+    // Button loader
+    const submitBtn = form.querySelector('button[type=submit]');
+    toggleBtnLoader(submitBtn);
+
     try {
       const res = await AuthAPI.signup(objectify(formData));
       const { status, data, error } = await res.json();
 
       if (error) throw error;
       if (status === 201) {
+        // Delay notification
+        setTimeout(() => {
+          // Togle button loader
+          toggleBtnLoader(submitBtn, true);
+          // Show notification message
+          Toastr(timer).fire({
+            type: 'success',
+            title: 'Login was successful, loading dashboard...',
+          });
+        }, timer - 1500);
+
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
@@ -100,6 +115,10 @@ class AuthUI {
     const formData = new FormData(form);
     const timer = 3000;
 
+    // Button loader
+    const submitBtn = form.querySelector('button[type=submit]');
+    toggleBtnLoader(submitBtn);
+
     try {
       const fData = objectify(formData);
       const res = await AuthAPI.login(fData);
@@ -107,14 +126,20 @@ class AuthUI {
 
       if (error) throw error;
       if (status === 200) {
+        // Delay notification
+        setTimeout(() => {
+          // Togle button loader
+          toggleBtnLoader(submitBtn, true);
+          // Show notification message
+          Toastr(timer).fire({
+            type: 'success',
+            title: 'Login was successful, loading dashboard...',
+          });
+        }, timer - 1500);
+
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
-        // Show notification message
-        Toastr(timer).fire({
-          type: 'success',
-          title: 'Login was successful, loading dashboard...',
-        });
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = getDashboard();

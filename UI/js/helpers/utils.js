@@ -120,3 +120,42 @@ const Toastr = (timer, position = 'top-end') => {
   });
   return Toast;
 };
+
+/**
+ * Generate icon tag
+ *
+ * @param {Array} - Fontawesome icon classes
+ * @returns {HTMLElement} Element with `fa` class
+ */
+const generateIcon = (classes) => {
+  const icon = document.createElement('i');
+  icon.className = 'fa';
+  icon.classList.add(...classes);
+  return icon;
+};
+
+/**
+ * Render button preloader
+ *
+ * @param {HTMLElement} el - The target element
+ */
+const toggleBtnLoader = (el, hide = false) => {
+  const classes = ['fa-spinner', 'fa-spin'];
+  const elWidth = el.offsetWidth;
+
+  if (hide) {
+    const [icon] = el.children;
+    icon.classList.remove(...classes);
+    icon.classList.add('fa-check');
+  } else {
+    el.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+    el.style.width = `${elWidth}px`;
+  }
+};
+
+/**
+ * Toggle preloader
+ */
+const togglePreloader = () => {
+  document.querySelector('.preloader').classList.toggle('hide');
+};

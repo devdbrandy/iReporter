@@ -11,6 +11,7 @@
   <script src="js/helpers/utils.js"></script>
   <script>if (auth()) window.location = getDashboard(auth().user);</script>
 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
@@ -49,34 +50,37 @@
         <div class="column">
           <div class="home--signup">
             <form class="home--signup--form" id="signup-form">
-              <div>
+              <div class="input-wrapper">
                 <input type="text" placeholder="First name" name="firstname" minlength="3" required>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="text" placeholder="Last name" name="lastname" minlength="3" required>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="text" placeholder="Phone number" name="phoneNumber" id="phonenumber"
                 minlength="11" required>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="text" placeholder="Username" name="username" required>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="email" placeholder="Email address" name="email"
                   pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$"
                   title="The domain portion of the email address is invalid (the portion after the @)."
                   required>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="password" placeholder="Password" name="password"
                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                   title="Please include at least 1 uppercase character, 1 lowercase character, and 1 number." required>
+                  <i class="fas fa-eye icon toggle-pwd"></i>
               </div>
-              <div>
+              <div class="input-wrapper">
                 <input type="password" placeholder="Repeat Password" name="passwordConfirmation" required>
+                <i class="fas fa-eye icon toggle-pwd"></i>
               </div>
-              <button type="submit" class="btn btn-primary">Register</button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-spinner fa-spin hide"></i>Register</button>
             </form>
           </div>
         </div>

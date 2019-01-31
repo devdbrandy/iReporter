@@ -153,6 +153,28 @@ class AuthUI {
       });
     }
   }
+
+  /**
+   * Toggle password visibility
+   *
+   * @static
+   * @param {HTMLElement} el The target element
+   *
+   * @memberOf AuthUI
+   */
+  static togglePassword(el) {
+    if (el.classList.contains('toggle-pwd')) {
+      const input = el.parentElement.querySelector('input');
+      if (input.type === 'password') {
+        input.type = 'text';
+        input.style.borderRight = 0;
+        el.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        el.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+  }
 }
 
 /* HTMLFormElement */
@@ -163,4 +185,14 @@ signupForm.addEventListener('submit', AuthUI.handleSignup);
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
   loginForm.addEventListener('submit', AuthUI.handleLogin);
+}
+
+/* Password visibility toggle */
+const form = document.querySelectorAll('form');
+if (form.length > 0) {
+  form.forEach((el) => {
+    el.addEventListener('click', (e) => {
+      AuthUI.togglePassword(e.target);
+    });
+  });
 }

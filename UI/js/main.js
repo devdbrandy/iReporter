@@ -78,26 +78,80 @@ const getStatusOptions = (recordStatus) => {
   return statusSelectOpts;
 };
 
-/* Initialize Map */
+/**
+ * Lookup coordinates to addresses
+ *
+ * @param {String} cordinates - The location cordinates
+ * @returns {String} The reverse geocode address
+ */
 async function lookupAddress(cordinates) {
   const token = 'AIzaSyCpEcFz1UgCJxC70IVCs2JnBOctCcZkmSA';
   const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${cordinates}&key=${token}`);
-  const address = await response.json();
-  return address;
+  const { results } = await response.json();
+  const [place] = results;
+  return place.formatted_address;
 }
 
-let map;
-const mapContainer = document.getElementById('map');
-async function initMap(cordinates) {
-  const [lat, lng] = cordinates.split(',');
-
-  map = new google.maps.Map(mapContainer, {
-    center: { lat: parseFloat(lat), lng: parseFloat(lng) },
-    zoom: 8,
+/**
+ * Reverse geocoding of coordinates to addresses
+ *
+ * @param {google.maps.Geocoder} geocoder - Geocoder object
+ * @param {google.maps.Map} map - Map object
+ * @param {google.maps.InfoWindow} infowindow - InfoWindow object
+ * @param {Object} location - Cordinates format: `lat,lng`
+ * @param {HTMLElement} target - The target element to render reversed address
+ */
+function reverseGeocode(geocoder, map, infowindow, location, target) {
+  geocoder.geocode({ location }, (results, status) => {
+    if (status === 'OK') {
+      const [result] = results;
+      if (result) {
+        map.setZoom(17);
+        const marker = new google.maps.Marker({
+          position: location,
+          map,
+        });
+        target.innerText = result.formatted_address;
+        infowindow.setContent(result.formatted_address);
+        infowindow.open(map, marker);
+      } else {
+        Toastr(3000).fire({
+          type: 'error',
+          title: 'No results found',
+        });
+      }
+    } else {
+      Toastr(3000).fire({
+        type: 'error',
+        title: `Geocoder failed due to: ${status}`,
+      });
+    }
   });
-  const { results } = await lookupAddress('6.6200756,3.478314599999976');
-  const [location] = results;
-  return location.formatted_address;
+}
+
+/**
+ * Initialize map
+ *
+ * @param {String} cordinates The location cordinates
+ * @param {HTMLElement} target - The target element to render reversed address
+ */
+function initMap(cordinates, target) {
+  const [lat, lng] = cordinates.split(',');
+  const latLng = {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng),
+  };
+
+  const mapContainer = document.getElementById('map');
+  const map = new google.maps.Map(mapContainer, {
+    center: latLng,
+    zoom: 13,
+  });
+
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
+  const args = [geocoder, map, infowindow, latLng, target];
+  reverseGeocode(...args);
 }
 /* End Initialize Map */
 
@@ -279,14 +333,6 @@ class UI {
           document.getElementById('total-records').innerText = overview.total;
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
           document.getElementById('resolved-count').innerText = overview.resolved;
-
-          if (records) {
-            setTimeout(() => {
-              // Toggle preloader
-              togglePreloader();
-              return records.forEach(record => UI.addRecordToList(record));
-            }, 2000);
-          }
           break;
         case 'dashboard.html':
           userId = auth().user.id;
@@ -299,19 +345,28 @@ class UI {
           document.getElementById('investigation-count').innerText = overview['under-investigation'];
           document.getElementById('resolved-count').innerText = overview.resolved;
           document.getElementById('rejected-count').innerText = overview.rejected;
-
-          if (records) {
-            // TODO: hide preloader
-            return records.forEach(record => UI.addRecordToList(record));
-          }
           break;
         case 'records.html':
           url = `${baseUrl}/records?published=true&order=desc`;
           records = await RecordAPI.fetchRecords(url);
-          records.forEach(record => UI.listRecordCards(record));
-          break;
+
+          return setTimeout(() => {
+            // Toggle preloader
+            togglePreloader();
+            records.forEach(record => UI.listRecordCards(record));
+          }, 2000);
+
+          // return records.forEach(record => UI.listRecordCards(record));
         default:
           return false;
+      }
+
+      if (records) {
+        setTimeout(() => {
+          // Toggle preloader
+          togglePreloader();
+          records.forEach(record => UI.addRecordToList(record));
+        }, 2000);
       }
 
       return true;
@@ -343,8 +398,8 @@ class UI {
       statusIcon = '<i class="fas fa-check-double"></i>';
     }
 
-    // Get location name
-    const place = await initMap(location);
+    // Get location address
+    const place = await lookupAddress(location);
 
     card.innerHTML = `
       <div class="record-cover">
@@ -507,8 +562,7 @@ class UI {
     modalBody.querySelector('.title h4').innerText = title;
     modalBody.querySelector('.comment').innerText = comment;
 
-    const place = await initMap(location);
-    modalBody.querySelector('.location .text').innerText = place;
+    initMap(location, modalBody.querySelector('.location .text'));
 
     const authorField = modalBody.querySelector('.author a');
     if (authorField) {
@@ -678,9 +732,8 @@ class UI {
     // }
 
     // // Get location address
-    const { results } = await lookupAddress(location);
-    const [place] = results;
-    document.getElementById('geoautocomplete').value = place.formatted_address;
+    const place = await lookupAddress(location);
+    document.getElementById('geoautocomplete').value = place;
   }
 
   /**
@@ -877,28 +930,6 @@ class UI {
       });
     }
   }
-
-  /**
-   * Toggle password visibility
-   *
-   * @static
-   * @param {HTMLElement} el The target element
-   *
-   * @memberOf UI
-   */
-  static togglePassword(el) {
-    if (el.classList.contains('toggle-pwd')) {
-      const input = el.parentElement.querySelector('input');
-      if (input.type === 'password') {
-        input.type = 'text';
-        input.style.borderRight = 0;
-        el.classList.replace('fa-eye', 'fa-eye-slash');
-      } else {
-        input.type = 'password';
-        el.classList.replace('fa-eye-slash', 'fa-eye');
-      }
-    }
-  }
 }
 
 /* User dashboard */
@@ -922,17 +953,6 @@ if (updateRecordForm) {
   UI.preloadData();
   updateRecordForm.addEventListener('submit', UI.handleUpdateRecord);
 }
-
-/* Password visibility toggle */
-const form = document.querySelectorAll('form');
-if (form.length > 0) {
-  form.forEach((el) => {
-    el.addEventListener('click', (e) => {
-      UI.togglePassword(e.target);
-    });
-  });
-}
-/* End Pasword visibility toggle */
 
 /* Go Back History */
 const btnBack = document.querySelector('.btn-back');

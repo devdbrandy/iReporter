@@ -461,8 +461,8 @@ button[disabled], button[disabled]:hover {
   border-radius: 50%;
   border-top: 3px solid var(--primary-color);
   border-bottom: 3px solid var(--primary-color);
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   transform: translate(-45%, -45%);
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;

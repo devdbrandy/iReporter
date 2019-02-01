@@ -69,7 +69,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
+    "chai-http": "^4.2.1",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "editorconfig": "^0.15.2",

@@ -42,7 +42,7 @@
     "babel-polyfill": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "cleave.js": "^1.4.7",
-    "cloudinary-core": "^2.5.0",
+    "cloudinary-core": "^2.6.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

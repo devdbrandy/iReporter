@@ -50,7 +50,7 @@
     "express": "~4.16.0",
     "express-promise-router": "^3.0.3",
     "express-validator": "^5.3.0",
-    "http-errors": "~1.6.2",
+    "http-errors": "~1.7.1",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.4.0",
     "loglevel": "^1.6.1",

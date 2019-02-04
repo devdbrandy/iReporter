@@ -77,24 +77,21 @@ class AuthUI {
           // Show notification message
           Toastr(timer).fire({
             type: 'success',
-            title: 'Login was successful, loading dashboard...',
+            title: 'Signup was successful, loading dashboard...',
           });
         }, timer - 1500);
 
         const [credentials] = data;
         // Store credentials in localStorage
         localStorage.setItem('credentials', JSON.stringify(credentials));
-        // Show notification message
-        Toastr(timer).fire({
-          type: 'success',
-          title: 'Signup was successful, loading dashboard...',
-        });
         // Redirect user to dashboard
         setTimeout(() => {
           window.location = getDashboard();
         }, timer);
       }
     } catch (error) {
+      // Togle button loader
+      toggleBtnLoader(submitBtn, true, error);
       const [err] = error;
       Toastr(timer).fire({
         type: 'error',
@@ -110,6 +107,7 @@ class AuthUI {
    * @returns {void}
    */
   static async handleLogin(e) {
+    console.log('DONT');
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -146,6 +144,8 @@ class AuthUI {
         }, timer);
       }
     } catch (error) {
+      // Togle button loader
+      toggleBtnLoader(submitBtn, true, error);
       const [err] = error;
       Toastr(timer).fire({
         type: 'error',

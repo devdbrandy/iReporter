@@ -1,3 +1,11 @@
+/* Dropdown */
+const dropdownBtn = document.querySelector('.dropdown');
+if (dropdownBtn) {
+  dropdownBtn.addEventListener('click', () => {
+    document.querySelector('.dropdown--menu').classList.toggle('show');
+  });
+}
+
 /* Toggle Modal */
 const modal = document.getElementById('modal');
 const modalBtn = document.getElementById('modal-open');
@@ -967,6 +975,11 @@ if (logoutBtn) {
     localStorage.clear();
     window.location = 'index.html';
   });
+}
+
+const logoutUsername = document.querySelector('#logout span');
+if (logoutUsername) {
+  logoutUsername.innerText = `(${auth().user.username})`;
 }
 
 /* Footer copyright year pre-filling */

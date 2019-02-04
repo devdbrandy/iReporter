@@ -134,22 +134,32 @@ const generateIcon = (classes) => {
   return icon;
 };
 
+let toggleDefault;
+
 /**
  * Render button preloader
  *
  * @param {HTMLElement} el - The target element
  */
-const toggleBtnLoader = (el, hide = false) => {
+const toggleBtnLoader = (el, hide = false, err) => {
   const classes = ['fa-spinner', 'fa-spin'];
-  const elWidth = el.offsetWidth;
+  const width = el.offsetWidth;
 
-  if (hide) {
+  if (err) {
+    el.innerHTML = toggleDefault;
+    // Disable button
+    el.setAttribute('disabled', false);
+    el.toggleAttribute('disabled');
+  } else if (hide) {
     const [icon] = el.children;
     icon.classList.remove(...classes);
     icon.classList.add('fa-check');
   } else {
+    // Disable button
+    el.setAttribute('disabled', true);
+    toggleDefault = el.innerHTML;
     el.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-    el.style.width = `${elWidth}px`;
+    el.style.width = `${width}px`;
   }
 };
 

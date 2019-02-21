@@ -5,17 +5,13 @@ import path from 'path';
 import logger from 'morgan';
 import cors from 'cors';
 import { exceptionHandler } from './middleware';
-import { config } from './utils/helpers';
+import { config } from './helpers/utils';
 
 import apiRouter from './routes/api';
 import authRouter from './routes/auth';
 
 const app = express();
 const version = config('app:version');
-
-// view engine setup
-app.set('views', path.join(__dirname, '../resources/views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev', {
   skip: () => app.get('env') === 'test',

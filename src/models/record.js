@@ -25,7 +25,7 @@ export default class Record extends Model {
    * Checks if the resource belongs to the provided user
    *
    * @param {User} user - User object
-   * @returns {Boolean} True or False upon validation
+   * @returns {boolean} True or False upon validation
    *
    * @memberOf Record
    */
@@ -37,7 +37,7 @@ export default class Record extends Model {
   * Get table name for the model
   *
   * @static
-  * @returns {String} Model table name
+  * @returns {string} Model table name
   *
   * @memberOf Record
   */

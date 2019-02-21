@@ -1,6 +1,6 @@
 import chai from 'chai';
 import appConfig from '../../src/config/app';
-import { config } from '../../src/utils/helpers';
+import { config } from '../../src/helpers/utils';
 
 const should = chai.should();
 

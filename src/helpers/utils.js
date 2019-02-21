@@ -4,12 +4,15 @@ import bcrypt from 'bcryptjs';
 import appConfig from '../config';
 import { User, Record } from '../models';
 
+/** Bootstrap Console */
+export const logger = console;
+
 /**
  * Gets the value of a configuration variable
  *
- * @param {String} token the key:value to return
- * @param {(String|Number|Boolean)} defValue a default value
- * @returns {(String|Number|Boolean)} the value of the configuration var
+ * @param {string} token - The key:value to return
+ * @param {(string|number|boolean)} defValue - A default value
+ * @returns {(string|number|boolean)} The value of the configuration var
  */
 export function config(token, defValue) {
   const [key, value] = token.split(':', 2);
@@ -19,9 +22,9 @@ export function config(token, defValue) {
 /**
  * Determines if the user can modify a given `record` resource
  *
- * @param {User} user User object
- * @param {Record} record Record object
- * @returns {(Boolean|Error)} returns true if authorized
+ * @param {User} user - User object
+ * @param {Record} record - Record object
+ * @returns {(boolean|Error)} returns true if authorized
  */
 export const isAuthorized = (user, record) => {
   if (
@@ -37,24 +40,22 @@ export const isAuthorized = (user, record) => {
 /**
  * Determines if the user is valid
  *
- * @param {User} user User object
- * @param {String} password provided password to validate against
- * @returns {Boolean} returns truthy based on validation
+ * @param {User} user - User object
+ * @param {string} password - The user password to validate against
+ * @returns {boolean} returns truthy based on validation
  */
 export const isValidUser = (user, password) => bcrypt.compareSync(password, user.password);
 
 export const responseHandler = (response, data, status = 200) => {
-  response.status(status)
-    .json({
-      status,
-      data,
-    });
+  response
+    .status(status)
+    .json({ status, data });
 };
 
 /**
  * Extract and build params fields inline with WHERE query
  *
- * @param {Object} fields model field params
+ * @param {Object} fields - The model attributes params
  * @returns {Array} sorted list of params
  */
 export const extractParams = (fields) => {
@@ -75,8 +76,8 @@ export const extractParams = (fields) => {
  * Validate existing user by email or username
  *
  * @export
- * @param {Object} param User email or username
- * @returns {Boolean} Truthy dependant on user existance
+ * @param {Object} param - User email or username
+ * @returns {boolean} Truthy dependant on user existance
  */
 export const alreadyTaken = async (param) => {
   const user = await User.find(param);
@@ -86,7 +87,7 @@ export const alreadyTaken = async (param) => {
 /**
  * Handle conflict error response
  *
- * @param {String} param field parameter to respond with
+ * @param {string} param - The field parameter to respond with
  * @param {NextFunction} next error response
  */
 export const handleConflictResponse = (param, next) => {

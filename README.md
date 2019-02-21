@@ -15,30 +15,30 @@
 
 iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public. Visit iReporter live demo: [https://devdbrandy.github.io/iReporter](https://devdbrandy.github.io/iReporter).
 
-## Demo Users
-
-| Username  | Password | Access       |
-|-----------|----------|--------------|
-| `admin`   | `secret` | Admin Access |
-| `user123` | `secret` | User Access  |
+>Demo Users
+>
+>| Username  | Password | Access       |
+>|-----------|----------|--------------|
+>| `admin`   | `secret` | Admin Access |
+>| `user123` | `secret` | User Access  |
 
 <!-- TOC depthFrom:2 -->
 
-- [Demo Users](#demo-users)
-- [1. :rocket: Getting Started](#1-rocket-getting-started)
-  - [1.1 Prerequisites](#11-prerequisites)
-  - [1.2. Run locally](#12-run-locally)
-  - [1.3. Building](#13-building)
-  - [1.4. Test Locally](#14-test-locally)
-  - [1.5. Running Test](#15-running-test)
-- [2. :lock: Authentication](#2-lock-authentication)
-- [3. API Versioning](#3-api-versioning)
-- [4. HTTP Requests](#4-http-requests)
-- [5. HTTP Response Codes](#5-http-response-codes)
-- [:bookmark: 6. Resources](#bookmark-6-resources)
-  - [6.1. Authentication](#61-authentication)
-  - [6.2. API Routes](#62-api-routes)
-- [7. :pencil: License](#7-pencil-license)
+- [Overview](#overview)
+  - [1. :rocket: Getting Started](#1-rocket-getting-started)
+    - [1.1 Prerequisites](#11-prerequisites)
+    - [1.2. Run locally](#12-run-locally)
+    - [1.3. Building](#13-building)
+    - [1.4. Test Locally](#14-test-locally)
+    - [1.5. Running Test](#15-running-test)
+  - [2. :lock: Authentication](#2-lock-authentication)
+  - [3. API Versioning](#3-api-versioning)
+  - [4. HTTP Requests](#4-http-requests)
+  - [5. HTTP Response Codes](#5-http-response-codes)
+  - [:bookmark: 6. Resources](#bookmark-6-resources)
+    - [6.1. Authentication](#61-authentication)
+    - [6.2. API Routes](#62-api-routes)
+  - [7. :pencil: License](#7-pencil-license)
 
 <!-- /TOC -->
 
@@ -71,7 +71,7 @@ Ensure that you have the following installed on your local machine:
 
 - Configure `.env` environment variable with your credentials
 - Run migration `npm run migrate`
-- (Optional) Seed dummy data `npm run seed`
+- (Optional) Seed dummy data `npm run db:seed`
 - Two npm scripts are availiable to spin up the app server:
   - `npm run dev` spin up the server without watching for any file changes
   - `npm run watch` watches for any file changes and reloads the server

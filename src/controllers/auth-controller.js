@@ -2,13 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
-import { env } from '../utils';
+import { env } from '../helpers';
 import {
   isValidUser,
   responseHandler,
   alreadyTaken,
   handleConflictResponse,
-} from '../utils/helpers';
+} from '../helpers/utils';
 
 /**
  * Class representing auth controller

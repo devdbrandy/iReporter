@@ -1,5 +1,5 @@
 import db from '../config/database';
-import { extractParams } from '../utils/helpers';
+import { extractParams } from '../helpers/utils';
 
 /**
  * Class representing a model
@@ -85,8 +85,8 @@ export default class Model {
    *
    * @static
    * @async
-   * @param {String} columns - Columns to filter
-   * @param {String} order - Controls the direction of the sort `asc` or `desc`
+   * @param {string} columns - Columns to filter
+   * @param {string} order - Controls the direction of the sort `asc` or `desc`
    * @returns {Array} A list of model resources
    *
    * @memberOf Model
@@ -126,7 +126,7 @@ export default class Model {
    *
    * @static
    * @param {Object} data - The resource attributes
-   * @returns {String} Insert query string
+   * @returns {string} Insert query string
    *
    * @memberOf Model
    */
@@ -155,7 +155,7 @@ export default class Model {
    *
    * @static
    * @param {Object} data - The resource attributes
-   * @returns {String} Update query string
+   * @returns {string} Update query string
    *
    * @memberOf Model
    */
@@ -182,7 +182,7 @@ export default class Model {
    *
    * @static
    * @param {Object} options - Query builder options
-   * @returns {String} Select query string
+   * @returns {string} Select query string
    *
    * @memberOf Model
    */

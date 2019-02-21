@@ -5,10 +5,7 @@ import { checkSchema } from 'express-validator/check';
 import { AuthController } from '../controllers';
 
 /* Middleware */
-import {
-  validator,
-  validateRequest,
-} from '../middleware';
+import { validator, validateRequest } from '../middleware';
 
 const router = express.Router();
 

@@ -50,7 +50,7 @@ export default class User extends Model {
    * Get the model table name
    *
    * @static
-   * @returns {String} Model table name
+   * @returns {string} Model table name
    *
    * @memberOf User
    */

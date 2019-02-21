@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import { env } from '../utils';
+import { env } from '../helpers';
 
 /**
  * Verify user token

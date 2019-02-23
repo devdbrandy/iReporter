@@ -64,10 +64,15 @@ export const validator = {
       rtrim: { options: [[' ', '']] },
     },
     phoneNumber: {
+      customSanitizer: {
+        options: (value, { req }) => {
+          const sanitizedValue = value.replace(/\s/g, ''); // remove empty space
+          return sanitizedValue;
+        },
+      },
       isMobilePhone: {
         errorMessage: 'Phone number is invalid.',
       },
-      rtrim: { options: [[' ', '-']] },
     },
     email: {
       errorMessage: 'Provide a valid email address.',
@@ -146,10 +151,10 @@ export const validator = {
 /**
 * Validates request
 *
-* @param {Request} req Request object
-* @param {Response} res Response object
-* @param {NextFunction} next call to next middleware
-* @returns {Boolean} returns true or false on successful validation
+* @param {Request} req - Request object
+* @param {Response} res - Response object
+* @param {NextFunction} next - call to next middleware
+* @returns {boolean} returns true or false on successful validation
 *
 */
 export function validateRequest(req, res, next) {
@@ -164,9 +169,9 @@ export function validateRequest(req, res, next) {
 /**
 * Validates request type param
 *
-* @param {Request} req Request object
-* @param {Response} res Response object
-* @param {NextFunction} next call to next middleware
+* @param {Request} req - Request object
+* @param {Response} res - Response object
+* @param {NextFunction} next - call to next middleware
 * @returns {NextFunction} returns next()
 *
 */
@@ -186,9 +191,9 @@ export function validateType(req, res, next) {
 /**
 * Validates admin access
 *
-* @param {Request} req Request object
-* @param {Response} res Response object
-* @param {NextFunction} next call to next middleware
+* @param {Request} req - Request object
+* @param {Response} res - Response object
+* @param {NextFunction} next - call to next middleware
 * @returns {NextFunction} returns next()
 *
 */

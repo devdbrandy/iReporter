@@ -1,4 +1,5 @@
-import * as log from 'loglevel';
+import 'babel-polyfill';
+import { logger } from '../../helpers/utils';
 import db from '../../config/database';
 
 // Create users table
@@ -70,7 +71,7 @@ export const migrate = async () => {
     throw e;
   } finally {
     client.release();
-    log.warn('Database migration completed successfully.');
+    logger.log('Database migration completed successfully.');
     process.exit();
   }
 };

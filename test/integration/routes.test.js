@@ -2,7 +2,7 @@ import request from 'supertest';
 import chai from 'chai';
 import app from '../../src/server';
 import { User, Record } from '../../src/models';
-import { config } from '../../src/utils/helpers';
+import { config } from '../../src/helpers/utils';
 
 const should = chai.should();
 
@@ -12,7 +12,7 @@ const baseURI = `/api/${version}`;
 /**
  * Authenticate user
  *
- * @param {User} user User object
+ * @param {User} user - User object
  * @returns {string} user access token
  */
 async function auth(user) {

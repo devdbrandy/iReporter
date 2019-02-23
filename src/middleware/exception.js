@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 /**
  * Render an exception into an HTTP response
  *
- * @param {Error} err Error object
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param {Error} err - Error object
+ * @param {Request} req - Request object
+ * @param {Response} res - Response object
  * @param {NextFunction} next call to the middleware
  */
 const exceptionHandler = (err, req, res, next) => {

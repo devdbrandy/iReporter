@@ -1,4 +1,5 @@
-import * as log from 'loglevel';
+import 'babel-polyfill';
+import { logger } from '../../helpers/utils';
 import db from '../../config/database';
 
 (async () => {
@@ -86,7 +87,7 @@ import db from '../../config/database';
     throw e;
   } finally {
     client.release();
-    log.warn('Database seeding completed successfully.');
+    logger.log('Database seeding completed successfully.');
     process.exit();
   }
 })();

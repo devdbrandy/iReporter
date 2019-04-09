@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { env } from '../utils';
+import { env } from '../helpers';
 
 if (env('DATABASE_URL')) {
   const url = new URL(env('DATABASE_URL'));
@@ -21,9 +21,9 @@ if (env('DATABASE_URL')) {
 const pool = new Pool({
   host: env('DB_HOST', 'localhost'),
   port: env('DB_PORT', 5432),
-  database: env('DB_DATABASE', 'ireporter'),
-  user: env('DB_USERNAME', 'postgres'),
-  password: env('DB_PASSWORD', ''),
+  database: env('DB_DATABASE', 'postgres'),
+  user: env('DB_USERNAME', 'user'),
+  password: env('DB_PASSWORD', 'password'),
 });
 
 export default {

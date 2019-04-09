@@ -107,7 +107,6 @@ class AuthUI {
    * @returns {void}
    */
   static async handleLogin(e) {
-    console.log('DONT');
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);

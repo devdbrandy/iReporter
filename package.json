@@ -3,30 +3,31 @@
   "version": "1.0.0",
   "description": "iReporter app enables users (citizen) to bring any form of corruption to the notice of appropriate authorities and the general public",
   "private": true,
-  "main": "build/index.js",
+  "main": "build/bin/www.js",
   "config": {
     "port": "3000"
   },
   "scripts": {
     "build": "babel src -d build",
-    "dev": "node -r dotenv/config -r babel-register src/index.js",
-    "db": "babel-node src/database/migrations/index.js",
-    "db:migrate": "npm run db -- migrate",
-    "db:reset": "npm run db -- reset",
-    "db:refresh": "npm run db:reset && npm run db:migrate",
-    "db:seed": "babel-node src/database/seeds/index.js",
     "clean": "rimraf build",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "db": "npm run db:init -- src/database/migrations/index.js",
+    "db:init": "node -r @babel/register -r ./src/database/init.js",
+    "db:seed": "npm run db:init -- src/database/seeds/index.js",
+    "dev": "node -r dotenv/config -r @babel/register src/bin/www.js",
     "gh:deploy": "gh-pages -d UI",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build",
     "lint": "eslint src/",
+    "migrate": "npm run db -- migrate",
+    "migrate:reset": "npm run db -- reset",
+    "migrate:refresh": "npm run db:reset && npm run db:migrate",
     "mocha": "mocha",
     "mocha:watch": "npm run mocha -- -w",
     "prebuild": "npm run clean",
     "preserve": "npm run build",
+    "serve": "npm run start -- -r dotenv/config",
+    "start": "node build/bin/www.js",
     "test": "nyc --reporter=html --reporter=text --reporter=lcov mocha",
-    "serve": "node -r dotenv/config build/index.js",
-    "start": "node build/index.js",
     "watch": "nodemon --exec npm run dev"
   },
   "keywords": [
@@ -53,7 +54,6 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.4.0",
-    "loglevel": "^1.6.1",
     "make-runnable": "^1.3.6",
     "mocker-data-generator": "^2.6.6",
     "morgan": "~1.9.0",
@@ -62,12 +62,10 @@
     "underscore": "^1.9.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.1.6",
+    "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.1.6",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "coveralls": "^3.0.2",
@@ -90,7 +88,7 @@
   },
   "babel": {
     "presets": [
-      "env"
+      "@babel/env"
     ]
   },
   "engines": {

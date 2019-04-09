@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import path from 'path';
 import { Record } from '../models';
-import { isAuthorized, responseHandler } from '../utils/helpers';
+import { isAuthorized, responseHandler } from '../helpers/utils';
 
 /**
  * Class representing records controller

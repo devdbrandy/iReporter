@@ -16,7 +16,7 @@ const createUsersTable = `
     password VARCHAR (255) NOT NULL,
     is_admin BOOLEAN DEFAULT false,
     gender user_gender,
-    avatar VARCHAR(255) DEFAULT 'img/avatar.jpg',
+    avatar VARCHAR(255) DEFAULT 'https://res.cloudinary.com/devdb/image/upload/v1556782124/ireporter/yuibc08qscglcukoncaq.png',
     bio TEXT,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
